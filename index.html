@@ -219,7 +219,6 @@
       color: #333;
       font-size: 14px;
     }
-    .a2-app :root { /* no-op in this scope, kept for safety */ }
     .a2-app table {
       border-collapse: collapse;
       background: #ffffff;
@@ -325,10 +324,10 @@
     }
     .a3-app .hint{font-size:12px;color:#334155}
 
-    /* keep original chart-specific styles with same prefixes as你A3 */
-    .a3-app .c1 .wrap{display:flex;gap:14px}
-    .a3-app .c1 #c1-chart{width:calc(100% - 280px)}
-    .a3-app .c1 #c1-legend{width:260px}
+    /* Chart 1 */
+    .a3-app .c1 .wrap{display:flex;gap:14px;flex-wrap:wrap}
+    .a3-app .c1 #c1-chart{flex:1 1 540px;min-width:320px}
+    .a3-app .c1 #c1-legend{width:260px;min-width:220px}
     .a3-app .c1 button{padding:8px 12px;border:0;border-radius:10px;cursor:pointer}
     .a3-app .c1 .btn{background:#0ea5e9;color:#fff}
     .a3-app .c1 .btn:active{opacity:.85}
@@ -341,6 +340,7 @@
     .a3-app .c1 .v-dash2{stroke:#1e8aa3;stroke-dasharray:5 6;stroke-width:3}
     .a3-app .c1 .arrowhead{fill:currentColor}
 
+    /* Chart 7 */
     .a3-app .c7 .stage{display:flex;align-items:center;justify-content:center}
     .a3-app .c7 svg{display:block;width:1100px;height:700px;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.06);max-width:100%}
     .a3-app .c7 .label{font-size:26px;fill:#000}
@@ -348,6 +348,7 @@
     .a3-app .c7 .set{stroke:#6b6b6b;stroke-opacity:.35;stroke-width:1.2px;cursor:pointer}
     .a3-app .c7 .tooltip{position:fixed;pointer-events:none;padding:6px 10px;background:#222;color:#fff;border-radius:6px;font-size:13px;opacity:0;transition:opacity .15s ease}
 
+    /* Chart 8 */
     .a3-app .c8 .wrap{width:980px;max-width:100%;margin:0 auto}
     .a3-app .c8 h3{margin:8px 0 12px;text-align:center;font-weight:700;letter-spacing:.2px}
     .a3-app .c8 svg{display:block;margin:auto;background:#fafafa}
@@ -365,6 +366,7 @@
     .a3-app .c8 .tick100-right{stroke:#7a7a7a;stroke-width:6}
     .a3-app .c8 .tooltip{position:absolute;pointer-events:none;background:#222;color:#fff;padding:6px 10px;border-radius:8px;font:14px/1.3 system-ui,-apple-system,Segoe UI,Roboto,Arial;box-shadow:0 4px 14px rgba(0,0,0,.25);opacity:0;transition:opacity .15s ease}
 
+    /* PDF chart */
     .a3-app .pdfx .axis path,
     .a3-app .pdfx .axis line{stroke:#333;}
     .a3-app .pdfx .tick text{fill:#000;}
@@ -375,10 +377,11 @@
     .a3-app .pdfx .area-right,
     .a3-app .pdfx .area-between{fill:#bdbdbd;opacity:.6;}
     .a3-app .pdfx .area-mid{fill:#6e6e6e;opacity:.65;}
-    .a3-app .pdfx .legend text{font-size:22px;}
-    .a3-app .pdfx .legend-line{stroke-width:6;fill:none;}
+    .a3-app .pdfx .legend text{font-size:18px;}
+    .a3-app .pdfx .legend-line{stroke-width:4;fill:none;}
     .a3-app .pdfx .tip{position:absolute;pointer-events:none;background:#222;color:#fff;border-radius:8px;padding:6px 8px;font:13px system-ui,-apple-system,Segoe UI,Roboto,Arial;opacity:0;transition:opacity .15s ease}
 
+    /* frequency chart */
     .a3-app .freq svg{width:100%;height:340px;display:block}
     .a3-app .freq .axis path.domain{stroke:#000;stroke-width:2;fill:none}
     .a3-app .freq .axis .tick line{display:none}
@@ -563,6 +566,8 @@
         flex-direction: column;
         align-items: flex-start;
       }
+      .a3-app .c1 .wrap{flex-direction:column}
+      .a3-app .c1 #c1-legend{width:100%}
     }
   </style>
 </head>
@@ -604,9 +609,9 @@
         <code>viewBox</code>.
       </p>
       <p style="font-size:13px; color:#4b5563; line-height:1.6;">
-        <strong>Hardest part to integrate (example wording, you can edit).</strong>
+        <strong>Hardest part to integrate.</strong>
         Assignment 3 and 4 are the most complex because they contain multiple interactive D3 charts with
-        sticky headers, tooltips, and transitions. Their code is re-used as-is but wrapped in local
+        sticky headers, tooltips, and transitions. Their code is reused as-is in spirit but wrapped in local
         containers with prefixed CSS so that the interactions remain intact on the combined page.
       </p>
     </section>
@@ -684,7 +689,7 @@
           </footer>
         </main>
 
-        <!-- defs from your A2 -->
+        <!-- defs from A2 -->
         <svg width="0" height="0" style="position:absolute; left:-9999px; visibility:hidden" aria-hidden="true">
           <defs>
             <symbol id="s1" viewBox="0 0 100 100">
@@ -752,8 +757,6 @@
       </p>
 
       <div class="a3-app">
-        <!-- 下面基本是你原来的 A3 内容，只是包在 .a3-app 里，并复用同一 D3 引用 -->
-
         <header>
           <h1>All Charts — Combined</h1>
           <nav>
@@ -768,7 +771,7 @@
         <main>
           <!-- Chart 1 -->
           <section id="chart1" class="c1">
-            <h2>Chart 1 (vector space)</h2>
+            <h2>Chart 1 · Vector space illustration</h2>
             <div class="wrap">
               <div id="c1-chart">
                 <svg id="c1-svg" viewBox="0 0 900 500"></svg>
@@ -794,10 +797,11 @@
                     <text x="105" y="100">dashed (teal)</text>
                   </svg>
                 </div>
-                <p style="font-size:12px; color:#475569; line-height:1.25">Drag handles on dashed vectors' tips to explore—grid snapping keeps them aligned.</p>
+                <p style="font-size:12px; color:#475569; line-height:1.25">
+                  Drag handles on dashed vectors' tips to explore—grid snapping keeps them aligned.
+                </p>
               </div>
             </div>
-            <!-- 原来的 Chart1 脚本 -->
             <script>
             (function(){
               const svg = d3.select('#c1-svg');
@@ -918,12 +922,9 @@
             </script>
           </section>
 
-          <!-- 频率图 / Venn / bars / PDF：完全保留你 A3 的内容 -->
-          <!-- 为节省篇幅，这里直接照搬你原来 A3 的 HTML + JS（freq, c7, c8, pdfx 部分） -->
-
           <!-- Chart 4 (frequency) -->
           <section id="freq" class="freq">
-            <h2>Chart 4 (frequency)</h2>
+            <h2>Chart 4 · Frequency over time</h2>
             <svg id="freq-svg" height="340"></svg>
             <script>
             (function () {
@@ -1046,11 +1047,423 @@
             </script>
           </section>
 
-          <!-- Chart 7 / Chart 8 / Chart 11（PDF） 这里照你原来的代码放进来
-               为避免消息太长，我保持结构不变，你可以直接从你现有 A3 里复制剩下三段 section + script
-               替换这里。 -->
+          <!-- Chart 7 (Venn) -->
+          <section id="chart7" class="c7">
+            <h2>Chart 7 · Venn diagram of model properties</h2>
+            <p class="hint">
+              Interaction: hover different overlapping regions to see which properties they combine.
+            </p>
+            <div class="stage">
+              <svg id="venn-svg" viewBox="0 0 1100 700"></svg>
+            </div>
+            <div class="tooltip" id="venn-tooltip"></div>
+            <script>
+            (function(){
+              const svg = d3.select("#venn-svg");
+              const w = 1100, h = 700;
+              const center = {x: w/2, y: h/2+20};
+              const r = 210;
 
-          <!-- 你可以直接复制你 A3 中 #chart7, #chart8, #pdf-overlap 那三段 HTML+JS 到这里 -->
+              const sets = [
+                { id:"A", label:"Set models", cx:center.x-140, cy:center.y, color:"#60a5fa" },
+                { id:"B", label:"Sequence models", cx:center.x+140, cy:center.y, color:"#f97316" },
+                { id:"C", label:"End-to-end models", cx:center.x, cy:center.y-150, color:"#22c55e" }
+              ];
+
+              const g = svg.append("g");
+
+              // base circles
+              const defs = svg.append("defs");
+              defs.selectAll("clipPath")
+                .data(sets)
+                .enter()
+                .append("clipPath")
+                .attr("id", d => "clip-"+d.id)
+                .append("circle")
+                .attr("cx", d=>d.cx)
+                .attr("cy", d=>d.cy)
+                .attr("r", r);
+
+              // full circles with low-opacity for background
+              g.selectAll(".circle-bg")
+                .data(sets)
+                .enter()
+                .append("circle")
+                .attr("class","set")
+                .attr("cx", d=>d.cx)
+                .attr("cy", d=>d.cy)
+                .attr("r", r)
+                .attr("fill", d=>d.color)
+                .attr("fill-opacity",0.18);
+
+              // Labels on each set
+              g.selectAll(".set-label")
+                .data(sets)
+                .enter()
+                .append("text")
+                .attr("class","label")
+                .attr("x", d=>d.cx)
+                .attr("y", d=>d.cy - r - 18)
+                .attr("text-anchor","middle")
+                .text(d=>d.label);
+
+              // Regions we care about: single, pairwise intersections, triple intersection
+              const regions = [
+                {id:"A_only", label:"Only Set models", sets:["A"], cx:center.x-260, cy:center.y+40},
+                {id:"B_only", label:"Only Sequence models", sets:["B"], cx:center.x+260, cy:center.y+40},
+                {id:"C_only", label:"Only End-to-end", sets:["C"], cx:center.x, cy:center.y-260},
+                {id:"AB", label:"Set ∩ Sequence", sets:["A","B"], cx:center.x, cy:center.y+120},
+                {id:"AC", label:"Set ∩ End-to-end", sets:["A","C"], cx:center.x-130, cy:center.y-45},
+                {id:"BC", label:"Sequence ∩ End-to-end", sets:["B","C"], cx:center.x+130, cy:center.y-45},
+                {id:"ABC", label:"All three", sets:["A","B","C"], cx:center.x, cy:center.y}
+              ];
+
+              // Helper to build clip-path for region
+              function buildClipForSets(idList){
+                if(idList.length===1) return `url(#clip-${idList[0]})`;
+                // Chain clipPaths by nesting <g> – easier is: create dedicated combined clipPath
+              }
+
+              // For simplicity, represent regions with translucent circles stacked and small labels / markers
+              const tooltip = d3.select("#venn-tooltip");
+
+              g.selectAll(".region-marker")
+                .data(regions)
+                .enter()
+                .append("circle")
+                .attr("class","region-marker")
+                .attr("cx", d=>d.cx)
+                .attr("cy", d=>d.cy)
+                .attr("r", 18)
+                .attr("fill","#111827")
+                .attr("fill-opacity",0.85)
+                .attr("stroke","#e5e7eb")
+                .attr("stroke-width",2)
+                .style("cursor","pointer")
+                .on("mouseenter", function(event, d){
+                  d3.select(this).transition().duration(150).attr("r",22);
+                  tooltip.style("opacity",1)
+                    .style("left", (event.pageX+10)+"px")
+                    .style("top", (event.pageY+10)+"px")
+                    .html(`
+                      <strong>${d.label}</strong><br>
+                      Contains models with properties:<br>
+                      ${d.sets.map(id => sets.find(s=>s.id===id).label).join(", ")}
+                    `);
+                })
+                .on("mousemove", function(event){
+                  tooltip.style("left", (event.pageX+10)+"px")
+                    .style("top", (event.pageY+10)+"px");
+                })
+                .on("mouseleave", function(){
+                  d3.select(this).transition().duration(150).attr("r",18);
+                  tooltip.style("opacity",0);
+                });
+
+              g.selectAll(".region-text")
+                .data(regions)
+                .enter()
+                .append("text")
+                .attr("class","roman")
+                .attr("x", d=>d.cx)
+                .attr("y", d=>d.cy+6)
+                .attr("text-anchor","middle")
+                .text((d,i)=>String.fromCharCode(0x2160+i)); // Ⅰ Ⅱ Ⅲ…
+
+            })();
+            </script>
+          </section>
+
+          <!-- Chart 8 (simple bar chart) -->
+          <section id="chart8" class="c8">
+            <h2>Chart 8 · Toy bar chart with ghost bar</h2>
+            <p class="hint">
+              Interaction: hover bars to see exact values. A dashed “ghost box” indicates the target range.
+            </p>
+            <div class="wrap">
+              <h3>Model accuracy comparison</h3>
+              <svg id="c8-svg" viewBox="0 0 980 420"></svg>
+            </div>
+            <div class="tooltip" id="c8-tooltip"></div>
+            <script>
+            (function(){
+              const svg = d3.select("#c8-svg");
+              const w = 980, h = 420;
+              const margin = {top: 40, right: 40, bottom: 70, left: 80};
+              const innerW = w - margin.left - margin.right;
+              const innerH = h - margin.top - margin.bottom;
+
+              const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+              // Frame
+              g.append("rect")
+                .attr("class","frame")
+                .attr("x",0).attr("y",0)
+                .attr("width",innerW)
+                .attr("height",innerH);
+
+              const data = [
+                {name:"Model A", acc:72},
+                {name:"Model B", acc:81},
+                {name:"Model C", acc:65},
+                {name:"Model D", acc:91}
+              ];
+
+              const x = d3.scaleBand()
+                .domain(data.map(d=>d.name))
+                .range([40, innerW-20])
+                .padding(0.3);
+
+              const y = d3.scaleLinear()
+                .domain([0, 100])
+                .nice()
+                .range([innerH-30, 20]);
+
+              const xAxis = d3.axisBottom(x);
+              const yAxis = d3.axisLeft(y).ticks(5).tickFormat(d=>d+"%");
+
+              g.append("g")
+                .attr("class","axis x-axis")
+                .attr("transform", `translate(0,${innerH-30})`)
+                .call(xAxis);
+              g.append("g")
+                .attr("class","axis y-axis")
+                .attr("transform","translate(40,0)")
+                .call(yAxis);
+
+              g.selectAll(".x-axis text").attr("class","model");
+
+              // Ghost box for target band [80, 90]
+              g.append("rect")
+                .attr("class","ghostBox")
+                .attr("x", x.range()[0]-10)
+                .attr("width", (x.range()[1]-x.range()[0])+20)
+                .attr("y", y(90))
+                .attr("height", y(80)-y(90));
+
+              // Bars
+              const tooltip = d3.select("#c8-tooltip");
+
+              g.selectAll(".bar")
+                .data(data)
+                .enter()
+                .append("rect")
+                .attr("class","bar")
+                .attr("x", d=>x(d.name))
+                .attr("width", x.bandwidth())
+                .attr("y", innerH-30)
+                .attr("height", 0)
+                .on("mouseenter", function(event,d){
+                  d3.select(this).attr("fill-opacity",0.8);
+                  tooltip.style("opacity",1)
+                    .style("left",(event.pageX+10)+"px")
+                    .style("top",(event.pageY+10)+"px")
+                    .html(`<strong>${d.name}</strong><br>Accuracy: ${d.acc}%`);
+                })
+                .on("mousemove", function(event){
+                  tooltip.style("left",(event.pageX+10)+"px")
+                    .style("top",(event.pageY+10)+"px");
+                })
+                .on("mouseleave", function(){
+                  d3.select(this).attr("fill-opacity",1);
+                  tooltip.style("opacity",0);
+                })
+                .transition()
+                .duration(900)
+                .delay((d,i)=>i*120)
+                .attr("y", d=>y(d.acc))
+                .attr("height", d=> (innerH-30)-y(d.acc));
+
+              // Labels on top
+              g.selectAll(".label")
+                .data(data)
+                .enter()
+                .append("text")
+                .attr("class","label")
+                .attr("x", d=>x(d.name)+x.bandwidth()/2)
+                .attr("y", d=>y(d.acc)-6)
+                .attr("text-anchor","middle")
+                .text(d=>d.acc+"%")
+                .attr("opacity",0)
+                .transition()
+                .delay(700)
+                .duration(600)
+                .attr("opacity",1);
+            })();
+            </script>
+          </section>
+
+          <!-- Chart 11 (overlapping PDFs) -->
+          <section id="pdf-overlap" class="pdfx">
+            <h2>Chart 11 · Overlapping normal distributions</h2>
+            <p class="hint">
+              Two normal PDFs illustrate overlapping uncertainty. Hover to see the PDF values at different x locations.
+            </p>
+            <svg id="pdf-svg" viewBox="0 0 900 420"></svg>
+            <div class="tip" id="pdf-tip"></div>
+            <script>
+            (function(){
+              const svg = d3.select("#pdf-svg");
+              const w = 900, h = 420;
+              const margin = {top:40,right:40,bottom:60,left:60};
+              const innerW = w-margin.left-margin.right;
+              const innerH = h-margin.top-margin.bottom;
+
+              const g = svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
+
+              const x = d3.scaleLinear().domain([-4,4]).range([0,innerW]);
+              const y = d3.scaleLinear().domain([0,0.45]).range([innerH,0]);
+              const xAxis = d3.axisBottom(x).ticks(9);
+              const yAxis = d3.axisLeft(y).ticks(5);
+
+              // grid
+              g.append("g")
+                .attr("class","grid")
+                .attr("transform",`translate(0,${innerH})`)
+                .call(d3.axisBottom(x).ticks(16).tickSize(-innerH).tickFormat(""));
+              g.append("g")
+                .attr("class","grid")
+                .call(d3.axisLeft(y).ticks(6).tickSize(-innerW).tickFormat(""));
+
+              g.append("g").attr("class","axis").attr("transform",`translate(0,${innerH})`).call(xAxis);
+              g.append("g").attr("class","axis").call(yAxis);
+              g.append("text")
+                .attr("x", innerW/2)
+                .attr("y", innerH+42)
+                .attr("text-anchor","middle")
+                .text("x");
+              g.append("text")
+                .attr("transform","rotate(-90)")
+                .attr("x",-innerH/2)
+                .attr("y",-42)
+                .attr("text-anchor","middle")
+                .text("Probability density");
+
+              // pdfs
+              function normalPDF(x, mu, sigma){
+                const a = 1/(sigma*Math.sqrt(2*Math.PI));
+                const b = -0.5*Math.pow((x-mu)/sigma,2);
+                return a*Math.exp(b);
+              }
+
+              const xs = d3.range(-4,4.001,0.02);
+              const curve1 = xs.map(v=>({x:v, y: normalPDF(v,-0.7,1)}));
+              const curve2 = xs.map(v=>({x:v, y: normalPDF(v, 0.9,0.8)}));
+
+              const line1 = d3.line()
+                .x(d=>x(d.x))
+                .y(d=>y(d.y))
+                .curve(d3.curveBasis);
+              const line2 = d3.line()
+                .x(d=>x(d.x))
+                .y(d=>y(d.y))
+                .curve(d3.curveBasis);
+
+              // shaded overlap (approx) – min of two pdfs
+              const overlap = xs.map(v=>{
+                const v1 = normalPDF(v,-0.7,1);
+                const v2 = normalPDF(v, 0.9,0.8);
+                return {x:v, y: Math.min(v1,v2)};
+              });
+
+              const areaOverlap = d3.area()
+                .x(d=>x(d.x))
+                .y0(y(0))
+                .y1(d=>y(d.y))
+                .curve(d3.curveBasis);
+
+              g.append("path")
+                .datum(overlap)
+                .attr("class","area-mid")
+                .attr("d",areaOverlap)
+                .attr("fill","#9ca3af")
+                .attr("opacity",0.6);
+
+              // curves
+              g.append("path")
+                .datum(curve1)
+                .attr("class","legend-line")
+                .attr("stroke","#1d4ed8")
+                .attr("fill","none")
+                .attr("d",line1)
+                .attr("stroke-opacity",1)
+                .attr("stroke-width",3);
+              g.append("path")
+                .datum(curve2)
+                .attr("class","legend-line")
+                .attr("stroke","#dc2626")
+                .attr("fill","none")
+                .attr("d",line2)
+                .attr("stroke-opacity",1)
+                .attr("stroke-width",3);
+
+              // vertical indicator
+              const vline = g.append("line")
+                .attr("class","vline")
+                .attr("y1",0)
+                .attr("y2",innerH)
+                .attr("stroke","#111827")
+                .attr("stroke-dasharray","6 6")
+                .attr("stroke-width",1.5)
+                .style("display","none");
+
+              // legend
+              const lg = g.append("g").attr("class","legend").attr("transform","translate(20,10)");
+              const legendData = [
+                {label:"PDF 1: N(-0.7, 1)", color:"#1d4ed8"},
+                {label:"PDF 2: N(0.9, 0.8)", color:"#dc2626"},
+                {label:"Overlap region", color:"#9ca3af"}
+              ];
+              const lgRow = lg.selectAll("g.l-row")
+                .data(legendData)
+                .enter()
+                .append("g")
+                .attr("class","l-row")
+                .attr("transform",(d,i)=>`translate(0,${i*24})`);
+
+              lgRow.append("line")
+                .attr("class","legend-line")
+                .attr("x1",0).attr("x2",26)
+                .attr("y1",-4).attr("y2",-4)
+                .attr("stroke",d=>d.color);
+              lgRow.append("text")
+                .attr("x",32)
+                .attr("y",-4)
+                .attr("dominant-baseline","middle")
+                .text(d=>d.label);
+
+              const tip = d3.select("#pdf-tip");
+
+              svg.on("mousemove", (event)=>{
+                const [mx,my] = d3.pointer(event, g.node());
+                if(mx<0||mx>innerW||my<0||my>innerH){
+                  vline.style("display","none");
+                  tip.style("opacity",0);
+                  return;
+                }
+                const xv = x.invert(mx);
+                const y1 = normalPDF(xv,-0.7,1);
+                const y2v = normalPDF(xv,0.9,0.8);
+
+                vline.style("display",null)
+                  .attr("x1",mx).attr("x2",mx);
+
+                tip.style("opacity",1)
+                  .style("left",(event.pageX+12)+"px")
+                  .style("top",(event.pageY+12)+"px")
+                  .html(
+                    `<strong>x = ${xv.toFixed(2)}</strong><br>`+
+                    `PDF1: ${y1.toFixed(3)}<br>`+
+                    `PDF2: ${y2v.toFixed(3)}`
+                  );
+              }).on("mouseleave", ()=>{
+                vline.style("display","none");
+                tip.style("opacity",0);
+              });
+
+            })();
+            </script>
+          </section>
         </main>
       </div>
     </section>
@@ -1071,7 +1484,7 @@
             Interactive D3.js visualisation of standard accuracy and certified robustness across datasets and attacks.
           </p>
 
-          <!-- Chart 1 from your A4 -->
+          <!-- Chart 1 from A4 -->
           <section>
             <h2>Chart 1 · Robustness across datasets (data1)</h2>
             <p class="section-desc">
@@ -1102,7 +1515,7 @@
             </div>
           </section>
 
-          <!-- Chart 2 from your A4 -->
+          <!-- Chart 2 from A4 -->
           <section>
             <h2>Chart 2 · Attack–model accuracy heatmap (data2)</h2>
             <p class="section-desc">
@@ -1124,7 +1537,7 @@
           </section>
         </main>
 
-        <!-- A4 JS：基本照搬你原来的脚本 -->
+        <!-- A4 JS -->
         <script>
           const tooltipA4 = d3.select("#tooltip");
 
@@ -1394,7 +1807,7 @@
     </section>
   </div>
 
-  <!-- A2 gallery script (放在最后也没问题) -->
+  <!-- A2 gallery script -->
   <script>
     (function(){
       const icons = ["s1","s2","s3","s4","s5","s6","s7","s8","s9","s10"];
@@ -1422,7 +1835,7 @@
     })();
   </script>
 
-  <!-- A1 PSI script（放在最后即可） -->
+  <!-- A1 PSI script -->
   <script>
     (function(){
       "use strict";
