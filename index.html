@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>IDV Assignment 4 – Adversarial Robustness Explorer</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f7fb;
+      color: #222;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 32px auto 48px;
+      padding: 24px 32px 40px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    }
+    h1 {
+      margin-top: 0;
+      margin-bottom: 4px;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    h2 {
+      margin-top: 28px;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    p.subtitle {
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: #64748b;
+      font-size: 14px;
+    }
+    .section-desc {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 10px;
+    }
+    #controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      align-items: center;
+      margin-bottom: 12px;
+      margin-top: 8px;
+      padding: 10px 12px;
+      background: #f9fafb;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+    }
+    #controls label {
+      font-size: 13px;
+      color: #374151;
+    }
+    #controls select {
+      margin-left: 6px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid #d1d5db;
+      font-size: 13px;
+      background: #ffffff;
+    }
+    svg {
+      width: 100%;
+      height: auto;
+    }
+    .axis path,
+    .axis line {
+      stroke: #e5e7eb;
+    }
+    .axis text {
+      font-size: 11px;
+      fill: #4b5563;
+    }
+    .bar {
+      cursor: pointer;
+    }
+    .bar:hover {
+      opacity: 0.85;
+    }
+    .x-axis-label,
+    .y-axis-label {
+      font-size: 11px;
+      fill: #6b7280;
+    }
+    #legend {
+      margin-top: 6px;
+      font-size: 11px;
+      color: #6b7280;
+    }
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      margin-right: 16px;
+    }
+    .legend-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      margin-right: 4px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+    }
+    #tooltip {
+      position: absolute;
+      pointer-events: none;
+      background: rgba(15, 23, 42, 0.95);
+      color: #f9fafb;
+      padding: 6px 9px;
+      border-radius: 6px;
+      font-size: 11px;
+      line-height: 1.3;
+      opacity: 0;
+      z-index: 10;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.4);
+      max-width: 260px;
+    }
+    .heatmap-cell {
+      cursor: pointer;
+    }
+    .heatmap-cell:hover {
+      stroke: #0f172a;
+      stroke-width: 1;
+    }
+    .heatmap-legend {
+      display: flex;
+      align-items: center;
+      margin-top: 4px;
+      font-size: 11px;
+      color: #6b7280;
+    }
+    .heatmap-legend-gradient {
+      flex: 1;
+      height: 10px;
+      margin: 0 8px;
+      border-radius: 999px;
+      background: linear-gradient(to right, #eff6ff, #1d4ed8);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+    }
+    .chart-wrapper {
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px 16px 10px;
+      margin-top: 4px;
+      background: #fcfcff;
+    }
+    .chart-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .chart-caption {
+      font-size: 11px;
+      color: #9ca3af;
+    }
+    @media (max-width: 768px) {
+      .container {
+        margin: 16px;
+        padding: 18px 18px 30px;
+      }
+      h1 {
+        font-size: 22px;
+      }
+      h2 {
+        font-size: 18px;
+      }
+      #controls {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="tooltip"></div>
+
+  <main class="container">
+    <h1>Adversarial Robustness Explorer</h1>
+    <p class="subtitle">
+      Interactive D3.js visualisation of standard accuracy and certified robustness across datasets and attacks.
+    </p>
+
+    <!-- Chart 1: data1.json -->
+    <section>
+      <h2>Chart 1 · Robustness across datasets (data1)</h2>
+      <p class="section-desc">
+        Compare different training approaches under <strong>CIFAR-10/100, SVHN, MNIST</strong> by choosing
+        dataset and metric. Bars are animated when switching.
+      </p>
+
+      <div id="controls">
+        <label>
+          Dataset
+          <select id="dataset-select"></select>
+        </label>
+        <label>
+          Metric
+          <select id="metric-select">
+            <option value="Std Acc">Standard Accuracy (Std Acc)</option>
+            <option value="CRR">Certified Robustness Rate (CRR)</option>
+            <option value="CRA">Certified Robust Accuracy (CRA)</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="chart-wrapper">
+        <div class="chart-title-row">
+          <span class="chart-caption" id="chart1-caption">
+            Showing: CIFAR10 · Std Acc
+          </span>
+        </div>
+        <svg id="chart1" viewBox="0 0 900 420" preserveAspectRatio="xMidYMid meet"></svg>
+        <div id="legend"></div>
+      </div>
+    </section>
+
+    <!-- Chart 2: data2.json -->
+    <section>
+      <h2>Chart 2 · Attack–model accuracy heatmap (data2)</h2>
+      <p class="section-desc">
+        Each cell shows the accuracy (%) of a model under a specific adversarial attack. Darker cells indicate higher accuracy.
+      </p>
+      <div class="chart-wrapper">
+        <div class="chart-title-row">
+          <span class="chart-caption">
+            Rows: attacks · Columns: models · Color: accuracy (%)
+          </span>
+        </div>
+        <svg id="chart2" viewBox="0 0 900 640" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="heatmap-legend">
+          <span>Lower accuracy</span>
+          <div class="heatmap-legend-gradient"></div>
+          <span>Higher accuracy</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const tooltip = d3.select("#tooltip");
+
+    function showTooltip(html, event) {
+      tooltip
+        .html(html)
+        .style("left", (event.pageX + 12) + "px")
+        .style("top", (event.pageY + 12) + "px")
+        .transition()
+        .duration(150)
+        .style("opacity", 1);
+    }
+
+    function hideTooltip() {
+      tooltip
+        .transition()
+        .duration(150)
+        .style("opacity", 0);
+    }
+
+    Promise.all([
+      d3.json("data1.json"),
+      d3.json("data2.json")
+    ]).then(function ([data1, data2]) {
+      drawChart1(data1);
+      drawChart2(data2);
+    }).catch(function (error) {
+      console.error("Error loading JSON files:", error);
+    });
+
+    // ==========================
+    // Chart 1: data1 (bar chart)
+    // ==========================
+    function drawChart1(data1) {
+      const svg = d3.select("#chart1");
+      const width = 900;
+      const height = 420;
+      const margin = { top: 40, right: 30, bottom: 90, left: 60 };
+      const innerWidth = width - margin.left - margin.right;
+      const innerHeight = height - margin.top - margin.bottom;
+
+      const g = svg.append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+      const methods = Object.keys(data1);
+      const datasets = ["CIFAR100", "CIFAR10", "SVHN", "MNIST"];
+      const metrics = ["Std Acc", "CRR", "CRA"];
+
+      const datasetSelect = d3.select("#dataset-select");
+      datasetSelect.selectAll("option")
+        .data(datasets)
+        .enter()
+        .append("option")
+        .attr("value", d => d)
+        .text(d => d);
+
+      datasetSelect.property("value", "CIFAR10");
+
+      const xScale = d3.scaleBand()
+        .domain(methods)
+        .range([0, innerWidth])
+        .padding(0.15);
+
+      const yScale = d3.scaleLinear()
+        .domain([0, 100])
+        .range([innerHeight, 0])
+        .nice();
+
+      const baseColor = d3.scaleOrdinal()
+        .domain(methods)
+        .range([
+          "#1d4ed8", "#0f766e", "#b91c1c", "#4f46e5",
+          "#2563eb", "#065f46", "#7c2d12", "#0369a1", "#7e22ce"
+        ]);
+
+      const xAxis = d3.axisBottom(xScale);
+      const yAxis = d3.axisLeft(yScale).ticks(6).tickFormat(d => d + "%");
+
+      const xAxisGroup = g.append("g")
+        .attr("transform", `translate(0, ${innerHeight})`)
+        .attr("class", "axis")
+        .call(xAxis);
+
+      xAxisGroup.selectAll("text")
+        .attr("transform", "rotate(-35)")
+        .style("text-anchor", "end")
+        .attr("dx", "-0.5em")
+        .attr("dy", "0.1em");
+
+      const yAxisGroup = g.append("g")
+        .attr("class", "axis")
+        .call(yAxis);
+
+      g.append("text")
+        .attr("class", "y-axis-label")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -innerHeight / 2)
+        .attr("y", -42)
+        .attr("text-anchor", "middle")
+        .text("Accuracy / Robustness (%)");
+
+      g.append("text")
+        .attr("class", "x-axis-label")
+        .attr("x", innerWidth / 2)
+        .attr("y", innerHeight + 64)
+        .attr("text-anchor", "middle")
+        .text("Training approach");
+
+      const barsGroup = g.append("g").attr("class", "bars-group");
+
+      const barTransition = d3.transition().duration(800).ease(d3.easeCubicOut);
+
+      function getDatasetMetricData(dataset, metric) {
+        return methods.map(method => ({
+          method,
+          value: data1[method][metric][dataset],
+          dataset,
+          metric
+        }));
+      }
+
+      function updateLegend(metric) {
+        const legend = d3.select("#legend");
+        legend.html("");
+
+        const legendItems = [
+          {
+            label: "Std Acc",
+            color: "#1d4ed8",
+            desc: "Standard accuracy on clean test images."
+          },
+          {
+            label: "CRR",
+            color: "#0f766e",
+            desc: "Certified robustness rate: fraction of samples with certified radius > 0."
+          },
+          {
+            label: "CRA",
+            color: "#7e22ce",
+            desc: "Certified robust accuracy: accuracy restricted to certified samples."
+          }
+        ];
+
+        const item = legend.append("div")
+          .attr("class", "legend-item");
+
+        const current = legendItems.find(d => d.label === metric) || legendItems[0];
+
+        item.append("div")
+          .attr("class", "legend-swatch")
+          .style("background", current.color);
+
+        item.append("span")
+          .text(current.label + " – " + current.desc);
+      }
+
+      function metricColor(metric, method) {
+        if (metric === "Std Acc") return "#1d4ed8";
+        if (metric === "CRR") return "#0f766e";
+        if (metric === "CRA") return "#7e22ce";
+        return baseColor(method);
+      }
+
+      function updateChart(dataset, metric, initial = false) {
+        const data = getDatasetMetricData(dataset, metric);
+        const caption = d3.select("#chart1-caption");
+        caption.text(`Showing: ${dataset} · ${metric}`);
+
+        const bars = barsGroup.selectAll(".bar")
+          .data(data, d => d.method);
+
+        if (initial) {
+          bars.enter()
+            .append("rect")
+            .attr("class", "bar")
+            .attr("x", d => xScale(d.method))
+            .attr("width", xScale.bandwidth())
+            .attr("y", innerHeight)
+            .attr("height", 0)
+            .attr("fill", d => metricColor(metric, d.method))
+            .on("mouseover", function (event, d) {
+              d3.select(this).attr("opacity", 0.9);
+              const html =
+                `<strong>${d.method}</strong><br>` +
+                `Dataset: <strong>${d.dataset}</strong><br>` +
+                `Metric: <strong>${d.metric}</strong><br>` +
+                `Value: <strong>${d.value.toFixed(2)}%</strong>`;
+              showTooltip(html, event);
+            })
+            .on("mousemove", function (event) {
+              tooltip.style("left", (event.pageX + 12) + "px")
+                     .style("top", (event.pageY + 12) + "px");
+            })
+            .on("mouseout", function () {
+              d3.select(this).attr("opacity", 1.0);
+              hideTooltip();
+            })
+            .transition(barTransition)
+            .attr("y", d => yScale(d.value))
+            .attr("height", d => innerHeight - yScale(d.value));
+        } else {
+          bars.transition(barTransition)
+            .attr("x", d => xScale(d.method))
+            .attr("width", xScale.bandwidth())
+            .attr("y", d => yScale(d.value))
+            .attr("height", d => innerHeight - yScale(d.value))
+            .attr("fill", d => metricColor(metric, d.method));
+        }
+
+        bars.exit()
+          .transition(barTransition)
+          .attr("y", innerHeight)
+          .attr("height", 0)
+          .remove();
+
+        updateLegend(metric);
+      }
+
+      const initialDataset = datasetSelect.property("value");
+      const initialMetric = d3.select("#metric-select").property("value");
+      updateChart(initialDataset, initialMetric, true);
+
+      datasetSelect.on("change", function () {
+        const dataset = this.value;
+        const metric = d3.select("#metric-select").property("value");
+        updateChart(dataset, metric, false);
+      });
+
+      d3.select("#metric-select").on("change", function () {
+        const metric = this.value;
+        const dataset = datasetSelect.property("value");
+        updateChart(dataset, metric, false);
+      });
+    }
+
+    // ==========================
+    // Chart 2: data2 (heatmap)
+    // ==========================
+    function drawChart2(data2) {
+      const svg = d3.select("#chart2");
+      const width = 900;
+      const height = 640;
+      const margin = { top: 60, right: 20, bottom: 100, left: 130 };
+      const innerWidth = width - margin.left - margin.right;
+      const innerHeight = height - margin.top - margin.bottom;
+
+      const g = svg.append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+      const attacks = Object.keys(data2);
+      const models = Object.keys(data2[attacks[0]]);
+
+      const flatData = [];
+      attacks.forEach(attack => {
+        models.forEach(model => {
+          flatData.push({
+            attack,
+            model,
+            value: data2[attack][model]
+          });
+        });
+      });
+
+      const xScale = d3.scaleBand()
+        .domain(models)
+        .range([0, innerWidth])
+        .padding(0.05);
+
+      const yScale = d3.scaleBand()
+        .domain(attacks)
+        .range([0, innerHeight])
+        .padding(0.05);
+
+      const valueExtent = d3.extent(flatData, d => d.value);
+      const colorScale = d3.scaleSequential()
+        .domain([0, d3.max(flatData, d => d.value)])
+        .interpolator(d3.interpolateBlues);
+
+      const xAxis = d3.axisBottom(xScale);
+      const yAxis = d3.axisLeft(yScale);
+
+      const xAxisGroup = g.append("g")
+        .attr("class", "axis")
+        .attr("transform", `translate(0, ${innerHeight})`)
+        .call(xAxis);
+
+      xAxisGroup.selectAll("text")
+        .attr("transform", "rotate(-40)")
+        .style("text-anchor", "end")
+        .attr("dx", "-0.6em")
+        .attr("dy", "0.2em");
+
+      const yAxisGroup = g.append("g")
+        .attr("class", "axis")
+        .call(yAxis);
+
+      g.append("text")
+        .attr("class", "x-axis-label")
+        .attr("x", innerWidth / 2)
+        .attr("y", innerHeight + 78)
+        .attr("text-anchor", "middle")
+        .text("Model");
+
+      g.append("text")
+        .attr("class", "y-axis-label")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -innerHeight / 2)
+        .attr("y", -96)
+        .attr("text-anchor", "middle")
+        .text("Attack");
+
+      const initialTransition = d3.transition().duration(900).ease(d3.easeCubicOut);
+
+      g.selectAll(".heatmap-cell")
+        .data(flatData)
+        .enter()
+        .append("rect")
+        .attr("class", "heatmap-cell")
+        .attr("x", d => xScale(d.model))
+        .attr("y", d => yScale(d.attack))
+        .attr("width", xScale.bandwidth())
+        .attr("height", yScale.bandwidth())
+        .attr("rx", 3)
+        .attr("ry", 3)
+        .attr("fill", d => colorScale(d.value))
+        .attr("opacity", 0)
+        .on("mouseover", function (event, d) {
+          d3.select(this).attr("opacity", 1);
+          const html =
+            `<strong>Attack:</strong> ${d.attack}<br>` +
+            `<strong>Model:</strong> ${d.model}<br>` +
+            `<strong>Accuracy:</strong> ${d.value.toFixed(2)}%`;
+          showTooltip(html, event);
+        })
+        .on("mousemove", function (event) {
+          tooltip.style("left", (event.pageX + 12) + "px")
+                 .style("top", (event.pageY + 12) + "px");
+        })
+        .on("mouseout", function () {
+          d3.select(this).attr("opacity", 0.95);
+          hideTooltip();
+        })
+        .transition(initialTransition)
+        .attr("opacity", 0.95);
+
+      g.selectAll(".cell-value")
+        .data(flatData)
+        .enter()
+        .append("text")
+        .attr("class", "cell-value")
+        .attr("x", d => xScale(d.model) + xScale.bandwidth() / 2)
+        .attr("y", d => yScale(d.attack) + yScale.bandwidth() / 2 + 3)
+        .attr("text-anchor", "middle")
+        .attr("font-size", 8)
+        .attr("fill", d => d.value > 70 ? "#f9fafb" : "#1f2933")
+        .text(d => d.value.toFixed(1));
+    }
+  </script>
+</body>
+</html>
