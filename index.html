@@ -3,173 +3,102 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>IDV Assignment 5 - Integrated Portfolio</title>
+    <title>IDV Assignment 5 - Portfolio</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
-        /* ============================================
-           全局样式 Global Styles
-           ============================================ */
-        :root {
-            --primary-bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text-dark: #0f172a;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-            --accent-blue: #0ea5e9;
-            --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
-            --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.1);
-            --shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.12);
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
+        /* ===== 全局基础 ===== */
         body {
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: var(--primary-bg);
-            color: var(--text-dark);
-            line-height: 1.6;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
         }
 
-        /* ============================================
-           页面头部 Header & Navigation
-           ============================================ */
-        .page-header {
-            background: var(--card-bg);
-            border-bottom: 1px solid var(--border-color);
+        /* ===== 导航栏 ===== */
+        .main-nav {
+            background: #ffffff;
+            border-bottom: 2px solid #e2e8f0;
+            padding: 16px 20px;
             position: sticky;
             top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow-sm);
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-
-        .page-header .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px 24px;
-        }
-
-        .page-header h1 {
+        .main-nav h1 {
             margin: 0 0 8px 0;
-            font-size: clamp(20px, 4vw, 28px);
-            font-weight: 700;
-            color: var(--text-dark);
+            font-size: 22px;
+            color: #1e293b;
         }
-
-        .page-header .subtitle {
-            margin: 0 0 16px 0;
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-
-        .nav-links {
+        .main-nav .nav-links {
             display: flex;
+            gap: 10px;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 12px;
         }
-
-        .nav-links a {
-            padding: 6px 14px;
-            background: var(--accent-blue);
+        .main-nav .nav-links a {
+            padding: 6px 12px;
+            background: #3b82f6;
             color: white;
             text-decoration: none;
             border-radius: 6px;
             font-size: 13px;
-            font-weight: 500;
-            transition: all 0.2s ease;
+        }
+        .main-nav .nav-links a:hover {
+            background: #2563eb;
         }
 
-        .nav-links a:hover {
-            background: #0284c7;
-            transform: translateY(-1px);
-        }
-
-        /* ============================================
-           主容器 Main Container
-           ============================================ */
-        .main-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 24px;
-        }
-
-        /* ============================================
-           概述部分 Overview Section
-           ============================================ */
+        /* ===== 概述部分 ===== */
         .overview-section {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 32px;
-            border-radius: 16px;
-            margin-bottom: 32px;
-            box-shadow: var(--shadow-lg);
+            padding: 40px 24px;
         }
-
+        .overview-section .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
         .overview-section h2 {
             margin-top: 0;
             font-size: 24px;
-            font-weight: 700;
         }
-
         .overview-section p {
-            margin: 12px 0;
             line-height: 1.7;
-            opacity: 0.95;
+            margin: 12px 0;
         }
 
-        .overview-section strong {
-            font-weight: 600;
-            text-decoration: underline;
+        /* ===== A1 完整原始样式 ===== */
+        .assignment-1 {
+            background: radial-gradient(1200px 800px at 10% 10%, #0b1222 0%, #0f172a 40%, #0b1222 100%);
+            color: #e5e7eb;
+            padding: 32px 0;
         }
-
-        /* ============================================
-           Assignment卡片 Assignment Cards
-           ============================================ */
-        .assignment-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 28px;
-            margin-bottom: 32px;
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--border-color);
+        .assignment-1 .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 16px;
         }
-
-        .assignment-card h2 {
-            margin: 0 0 8px 0;
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--text-dark);
-            padding-bottom: 12px;
-            border-bottom: 3px solid var(--accent-blue);
+        .assignment-1 header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 18px;
         }
-
-        .assignment-card .description {
-            margin: 12px 0 20px 0;
-            color: var(--text-muted);
+        .assignment-1 h1 {
+            font-size: clamp(20px, 3vw, 28px);
+            margin: 0;
+            letter-spacing: 0.2px;
+        }
+        .assignment-1 .sub {
+            color: #94a3b8;
             font-size: 14px;
-            line-height: 1.6;
         }
-
-        /* ============================================
-           A1样式 - PSI Data Table
-           ============================================ */
-        .a1-card {
+        .assignment-1 .card {
             background: rgba(17,24,39,.6);
             border: 1px solid #1f2937;
             border-radius: 14px;
             box-shadow: 0 10px 30px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.02);
             overflow: hidden;
         }
-
-        .a1-toolbar {
+        .assignment-1 .toolbar {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
@@ -178,8 +107,7 @@
             border-bottom: 1px solid #1f2937;
             background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0));
         }
-
-        .a1-toolbar .pill {
+        .assignment-1 .toolbar .pill {
             background: rgba(34,211,238,.1);
             color: #22d3ee;
             padding: 6px 10px;
@@ -187,17 +115,14 @@
             font-size: 12px;
             border: 1px solid rgba(34,211,238,.25);
         }
-
-        .a1-toolbar .meta {
+        .assignment-1 .toolbar .meta {
             color: #94a3b8;
             font-size: 13px;
         }
-
-        .a1-toolbar .spacer {
+        .assignment-1 .toolbar .spacer {
             flex: 1;
         }
-
-        .a1-toolbar button {
+        .assignment-1 button {
             background: transparent;
             color: #e5e7eb;
             border: 1px solid #1f2937;
@@ -205,15 +130,12 @@
             border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 13px;
         }
-
-        .a1-toolbar button:hover {
+        .assignment-1 button:hover {
             border-color: #22d3ee;
             box-shadow: 0 0 0 2px rgba(34,211,238,.15) inset;
         }
-
-        .a1-status-dot {
+        .assignment-1 .status-dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
@@ -221,28 +143,22 @@
             margin-right: 6px;
             background: #94a3b8;
         }
-
-        .a1-status.ok { color: #10b981; }
-        .a1-status.ok .a1-status-dot { background: #10b981; }
-        .a1-status.err { color: #ef4444; }
-        .a1-status.err .a1-status-dot { background: #ef4444; }
-        .a1-status.load { color: #f59e0b; }
-        .a1-status.load .a1-status-dot { background: #f59e0b; }
-
-        .a1-table-wrap {
+        .assignment-1 .status.ok { color: #10b981; }
+        .assignment-1 .status.ok .status-dot { background: #10b981; }
+        .assignment-1 .status.err { color: #ef4444; }
+        .assignment-1 .status.err .status-dot { background: #ef4444; }
+        .assignment-1 .status.load { color: #f59e0b; }
+        .assignment-1 .status.load .status-dot { background: #f59e0b; }
+        .assignment-1 .table-wrap {
             width: 100%;
             overflow: auto;
-            max-height: 600px;
         }
-
-        .a1-table-wrap table {
+        .assignment-1 table {
             width: 100%;
             border-collapse: collapse;
             font-size: 14px;
-            color: #e5e7eb;
         }
-
-        .a1-table-wrap thead th {
+        .assignment-1 thead th {
             position: sticky;
             top: 0;
             background: #0b1222;
@@ -252,331 +168,441 @@
             padding: 10px 12px;
             white-space: nowrap;
         }
-
-        .a1-table-wrap tbody td {
+        .assignment-1 tbody td {
             border-top: 1px dashed #1f2937;
             padding: 10px 12px;
             white-space: nowrap;
         }
-
-        .a1-table-wrap tbody tr:hover {
+        .assignment-1 tbody tr:hover {
             background: rgba(255,255,255,.02);
         }
-
-        .a1-key {
+        .assignment-1 .key {
             color: #cbd5e1;
             font-weight: 600;
         }
-
-        .a1-muted {
+        .assignment-1 .muted {
             color: #94a3b8;
         }
+        .assignment-1 .footer {
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
 
-        /* ============================================
-           A2样式 - SVG Gallery
-           ============================================ */
-        .a2-table {
+        /* ===== A2 完整原始样式 ===== */
+        .assignment-2 {
+            background: #ffffff;
+            color: #111;
+            padding: 24px 0 48px;
+        }
+        .assignment-2 main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+        .assignment-2 h1 {
+            font-size: 24px;
+            margin: 0 0 12px;
+        }
+        .assignment-2 p.desc {
+            margin: 4px 0 16px;
+            color: #333;
+        }
+        .assignment-2 table {
             border-collapse: collapse;
             background: #ffffff;
             margin: 12px 0;
             table-layout: fixed;
             width: 100%;
         }
-
-        .a2-table thead th {
+        .assignment-2 thead th {
             border: 1px solid #e6e6e6;
             padding: 8px 6px;
-            background: #f9fafb;
+            background: #ffffff;
             font-size: 13px;
             font-weight: 600;
             color: #444;
             text-align: center;
         }
-
-        .a2-table td {
+        .assignment-2 td {
             border: 1px solid #e6e6e6;
             padding: 8px;
             background: #ffffff;
             vertical-align: middle;
             text-align: center;
         }
-
-        .a2-svg-thumb {
+        .assignment-2 svg.thumb {
             width: 120px;
             height: 120px;
             display: block;
-            margin: 0 auto;
             background: #ffffff;
         }
-
-        .a2-svg-thumb use {
+        .assignment-2 use {
             transform-box: fill-box;
             transform-origin: 50% 50%;
         }
-
-        .a2-mirror { transform: scaleX(-1); }
-        .a2-rot180 { transform: rotate(180deg); }
-        .a2-squash { transform: scaleY(0.5); }
-        .a2-gray { filter: grayscale(1); }
-
-        .a2-table td:hover {
-            outline: 2px solid #0ea5e9;
+        .assignment-2 .mirror { transform: scaleX(-1); }
+        .assignment-2 .rot180 { transform: rotate(180deg); }
+        .assignment-2 .squash { transform: scaleY(0.5); }
+        .assignment-2 .gray { filter: grayscale(1); }
+        .assignment-2 td:hover {
+            outline: 2px solid #cfd8dc;
             outline-offset: -2px;
         }
-
-        /* ============================================
-           A3样式 - Multiple Charts
-           ============================================ */
-        .a3-chart-container {
-            margin: 20px 0;
-            padding: 20px;
-            background: #fafbfc;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-        }
-
-        .a3-chart-container h3 {
-            margin: 0 0 12px 0;
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        .a3-hint {
+        .assignment-2 footer {
+            margin-top: 16px;
             font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 8px;
+            color: #666;
         }
 
-        /* A3 - Chart 1 (Vector Space) */
-        .a3-c1-wrap {
+        /* ===== A3 完整原始样式 ===== */
+        .assignment-3 {
+            background: #e8f0ef;
+        }
+        .assignment-3 header {
+            background: #ffffff;
+            padding: 14px 18px;
+            box-shadow: 0 2px 10px rgba(0,0,0,.05);
+        }
+        .assignment-3 header h1 {
+            margin: 0;
+            font-size: 18px;
+            color: #0f172a;
+        }
+        .assignment-3 nav {
+            margin-top: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .assignment-3 nav a {
+            padding: 8px 10px;
+            border-radius: 10px;
+            background: #0ea5e9;
+            color: #fff;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .assignment-3 main {
+            padding: 18px;
+        }
+        .assignment-3 section {
+            background: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 6px 20px rgba(0,0,0,.08);
+            padding: 16px 16px 18px;
+            margin: 18px auto;
+            max-width: 1200px;
+        }
+        .assignment-3 section h2 {
+            margin: 6px 2px 12px;
+            font-size: 18px;
+        }
+        .assignment-3 .hint {
+            font-size: 12px;
+            color: #334155;
+        }
+        .assignment-3 .c1 .wrap {
             display: flex;
             gap: 14px;
-            flex-wrap: wrap;
         }
-
-        .a3-c1-chart {
+        .assignment-3 .c1 #c1-chart {
             flex: 1;
-            min-width: 300px;
         }
-
-        .a3-c1-legend {
+        .assignment-3 .c1 #c1-legend {
             width: 260px;
-            min-width: 260px;
         }
-
-        .a3-c1-btn {
+        .assignment-3 .c1 button {
             padding: 8px 12px;
             border: 0;
             border-radius: 10px;
             cursor: pointer;
+        }
+        .assignment-3 .c1 .btn {
             background: #0ea5e9;
             color: #fff;
-            font-size: 13px;
-            font-weight: 500;
         }
-
-        .a3-c1-btn:active {
+        .assignment-3 .c1 .btn:active {
             opacity: .85;
         }
-
-        .a3-c1-grid line {
+        .assignment-3 .c1 .grid line {
             stroke: #bfc9c8;
             stroke-opacity: .6;
         }
-
-        .a3-c1-border {
+        .assignment-3 .c1 .border {
             stroke: #8aa5a2;
             fill: none;
             stroke-width: 2;
         }
-
-        .a3-c1-point {
+        .assignment-3 .c1 .point {
             fill: #0f172a;
         }
-
-        .a3-c1-label {
+        .assignment-3 .c1 .label {
             font-weight: 700;
             fill: #0f172a;
         }
-
-        /* A3 - Chart 7 (Venn) */
-        .a3-c7-stage {
+        .assignment-3 .c1 .v-solid {
+            stroke: #4b5563;
+            stroke-width: 2.5;
+        }
+        .assignment-3 .c1 .v-dash1 {
+            stroke: #223f6a;
+            stroke-dasharray: 5 6;
+            stroke-width: 3;
+        }
+        .assignment-3 .c1 .v-dash2 {
+            stroke: #1e8aa3;
+            stroke-dasharray: 5 6;
+            stroke-width: 3;
+        }
+        .assignment-3 .c1 .arrowhead {
+            fill: currentColor;
+        }
+        .assignment-3 .c7 .stage {
             display: flex;
             align-items: center;
             justify-content: center;
         }
-
-        .a3-c7-svg {
-            width: 100%;
-            max-width: 1100px;
-            height: auto;
+        .assignment-3 .c7 svg {
+            display: block;
+            width: 1100px;
+            height: 700px;
             background: #fff;
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 2px 12px rgba(0,0,0,.06);
         }
-
-        .a3-c7-label {
+        .assignment-3 .c7 .label {
             font-size: 26px;
             fill: #000;
         }
-
-        .a3-c7-roman {
+        .assignment-3 .c7 .roman {
             font-size: 30px;
             font-weight: 700;
             fill: #000;
         }
-
-        .a3-c7-set {
+        .assignment-3 .c7 .set {
             stroke: #6b6b6b;
             stroke-opacity: .35;
             stroke-width: 1.2px;
             cursor: pointer;
         }
-
-        /* A3 - Chart 8 (Bars) */
-        .a3-c8-wrap {
-            max-width: 980px;
+        .assignment-3 .c7 .tooltip {
+            position: fixed;
+            pointer-events: none;
+            padding: 6px 10px;
+            background: #222;
+            color: #fff;
+            border-radius: 6px;
+            font-size: 13px;
+            opacity: 0;
+            transition: opacity .15s ease;
+        }
+        .assignment-3 .c8 .wrap {
+            width: 980px;
             margin: 0 auto;
         }
-
-        .a3-c8-title {
+        .assignment-3 .c8 h3 {
             margin: 8px 0 12px;
             text-align: center;
             font-weight: 700;
             letter-spacing: .2px;
         }
-
-        .a3-c8-svg {
+        .assignment-3 .c8 svg {
             display: block;
             margin: auto;
             background: #fafafa;
         }
-
-        .a3-c8-frame {
+        .assignment-3 .c8 .frame {
             stroke: #7a7a7a;
             stroke-width: 4;
             fill: none;
         }
-
-        .a3-c8-axis text {
+        .assignment-3 .c8 .axis text {
             font-size: 16px;
             fill: #000;
         }
-
-        .a3-c8-axis path,
-        .a3-c8-axis line {
+        .assignment-3 .c8 .axis path,
+        .assignment-3 .c8 .axis line {
             stroke: #7a7a7a;
             stroke-width: 4;
         }
-
-        .a3-c8-bar {
+        .assignment-3 .c8 .y-axis .domain {
+            display: none;
+        }
+        .assignment-3 .c8 .x-axis .tick line {
+            display: none;
+        }
+        .assignment-3 .c8 .bar {
             fill: #e0c35a;
             stroke: #7a7a7a;
             stroke-width: 3;
         }
-
-        .a3-c8-ghostBox {
+        .assignment-3 .c8 .ghostBox {
             fill: none;
             stroke: #e0c35a;
             stroke-width: 4;
             stroke-dasharray: 10 8;
             opacity: .9;
         }
-
-        .a3-c8-label {
+        .assignment-3 .c8 .label {
             font-size: 22px;
             font-weight: 700;
             fill: #000;
             stroke: none;
         }
-
-        /* A3 - PDF Overlap */
-        .a3-pdfx-axis path,
-        .a3-pdfx-axis line {
+        .assignment-3 .c8 .model {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .assignment-3 .c8 .tick100-left,
+        .assignment-3 .c8 .tick100-right {
+            stroke: #7a7a7a;
+            stroke-width: 6;
+        }
+        .assignment-3 .c8 .tooltip {
+            position: absolute;
+            pointer-events: none;
+            background: #222;
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font: 14px/1.3 system-ui,-apple-system,Segoe UI,Roboto,Arial;
+            box-shadow: 0 4px 14px rgba(0,0,0,.25);
+            opacity: 0;
+            transition: opacity .15s ease;
+        }
+        .assignment-3 .pdfx .axis path,
+        .assignment-3 .pdfx .axis line {
             stroke: #333;
         }
-
-        .a3-pdfx-grid line {
+        .assignment-3 .pdfx .tick text {
+            fill: #000;
+        }
+        .assignment-3 .pdfx .grid line {
             stroke: #d9d9d9;
             shape-rendering: crispEdges;
         }
-
-        .a3-pdfx-vline {
+        .assignment-3 .pdfx .vline {
             stroke: #333;
             stroke-dasharray: 6 6;
         }
-
-        .a3-pdfx-area-left,
-        .a3-pdfx-area-right,
-        .a3-pdfx-area-between {
+        .assignment-3 .pdfx .baseline {
+            stroke: #333;
+            stroke-dasharray: 6 6;
+        }
+        .assignment-3 .pdfx .area-left,
+        .assignment-3 .pdfx .area-right,
+        .assignment-3 .pdfx .area-between {
             fill: #bdbdbd;
             opacity: .6;
         }
-
-        .a3-pdfx-area-mid {
+        .assignment-3 .pdfx .area-mid {
             fill: #6e6e6e;
             opacity: .65;
         }
-
-        .a3-pdfx-legend text {
+        .assignment-3 .pdfx .legend text {
             font-size: 22px;
         }
-
-        .a3-pdfx-legend-line {
+        .assignment-3 .pdfx .legend-line {
             stroke-width: 6;
             fill: none;
         }
-
-        /* A3 - Frequency */
-        .a3-freq-svg {
+        .assignment-3 .pdfx .tip {
+            position: absolute;
+            pointer-events: none;
+            background: #222;
+            color: #fff;
+            border-radius: 8px;
+            padding: 6px 8px;
+            font: 13px system-ui,-apple-system,Segoe UI,Roboto,Arial;
+            opacity: 0;
+            transition: opacity .15s ease;
+        }
+        .assignment-3 .freq svg {
             width: 100%;
             height: 340px;
             display: block;
         }
-
-        .a3-freq-axis path.domain {
+        .assignment-3 .freq .axis path.domain {
             stroke: #000;
             stroke-width: 2;
             fill: none;
         }
-
-        .a3-freq-axis .tick line {
+        .assignment-3 .freq .axis .tick line {
             display: none;
         }
-
-        .a3-freq-axis text {
+        .assignment-3 .freq .axis text {
             fill: #000;
             font-size: 14px;
         }
-
-        .a3-freq-y-label {
+        .assignment-3 .freq .y-label {
             font-size: 20px;
             fill: #000;
         }
-
-        .a3-freq-legend {
+        .assignment-3 .freq .legend {
             font-size: 20px;
         }
-
-        .a3-freq-series-area {
+        .assignment-3 .freq .series-area {
             stroke: #000;
             stroke-opacity: .25;
             stroke-width: 1;
         }
-
-        .a3-freq-series-area.dim {
+        .assignment-3 .freq .series-area.dim {
             opacity: .18;
         }
-
-        .a3-freq-series-area.highlight {
+        .assignment-3 .freq .series-area.highlight {
             opacity: .95;
             stroke-opacity: .6;
         }
+        .assignment-3 .freq .tooltip {
+            position: absolute;
+            pointer-events: none;
+            background: rgba(255,255,255,.95);
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 13px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.12);
+        }
 
-        /* ============================================
-           A4样式 - Adversarial Robustness
-           ============================================ */
-        .a4-controls {
+        /* ===== A4 完整原始样式 ===== */
+        .assignment-4 {
+            background: #f5f7fb;
+            color: #222;
+            padding: 32px 0 48px;
+        }
+        .assignment-4 .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 32px 40px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        }
+        .assignment-4 h1 {
+            margin-top: 0;
+            margin-bottom: 4px;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+        .assignment-4 h2 {
+            margin-top: 28px;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .assignment-4 p.subtitle {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #64748b;
+            font-size: 14px;
+        }
+        .assignment-4 .section-desc {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+        .assignment-4 #controls {
             display: flex;
             flex-wrap: wrap;
             gap: 12px 24px;
@@ -588,13 +614,11 @@
             border-radius: 10px;
             border: 1px solid #e5e7eb;
         }
-
-        .a4-controls label {
+        .assignment-4 #controls label {
             font-size: 13px;
             color: #374151;
         }
-
-        .a4-controls select {
+        .assignment-4 #controls select {
             margin-left: 6px;
             padding: 4px 8px;
             border-radius: 6px;
@@ -602,59 +626,75 @@
             font-size: 13px;
             background: #ffffff;
         }
-
-        .a4-chart-wrapper {
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 16px;
-            margin-top: 4px;
-            background: #fcfcff;
+        .assignment-4 svg {
+            width: 100%;
+            height: auto;
         }
-
-        .a4-chart-caption {
+        .assignment-4 .axis path,
+        .assignment-4 .axis line {
+            stroke: #e5e7eb;
+        }
+        .assignment-4 .axis text {
             font-size: 11px;
-            color: #9ca3af;
-            margin-bottom: 8px;
+            fill: #4b5563;
         }
-
-        .a4-legend {
+        .assignment-4 .bar {
+            cursor: pointer;
+        }
+        .assignment-4 .bar:hover {
+            opacity: 0.85;
+        }
+        .assignment-4 .x-axis-label,
+        .assignment-4 .y-axis-label {
+            font-size: 11px;
+            fill: #6b7280;
+        }
+        .assignment-4 #legend {
             margin-top: 6px;
             font-size: 11px;
             color: #6b7280;
         }
-
-        .a4-legend-item {
+        .assignment-4 .legend-item {
             display: inline-flex;
             align-items: center;
             margin-right: 16px;
         }
-
-        .a4-legend-swatch {
+        .assignment-4 .legend-swatch {
             width: 10px;
             height: 10px;
             border-radius: 3px;
             margin-right: 4px;
             border: 1px solid rgba(148, 163, 184, 0.7);
         }
-
-        .a4-heatmap-cell {
+        .assignment-4 #tooltip {
+            position: absolute;
+            pointer-events: none;
+            background: rgba(15, 23, 42, 0.95);
+            color: #f9fafb;
+            padding: 6px 9px;
+            border-radius: 6px;
+            font-size: 11px;
+            line-height: 1.3;
+            opacity: 0;
+            z-index: 10;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.4);
+            max-width: 260px;
+        }
+        .assignment-4 .heatmap-cell {
             cursor: pointer;
         }
-
-        .a4-heatmap-cell:hover {
+        .assignment-4 .heatmap-cell:hover {
             stroke: #0f172a;
             stroke-width: 1;
         }
-
-        .a4-heatmap-legend {
+        .assignment-4 .heatmap-legend {
             display: flex;
             align-items: center;
             margin-top: 4px;
             font-size: 11px;
             color: #6b7280;
         }
-
-        .a4-heatmap-legend-gradient {
+        .assignment-4 .heatmap-legend-gradient {
             flex: 1;
             height: 10px;
             margin: 0 8px;
@@ -662,135 +702,87 @@
             background: linear-gradient(to right, #eff6ff, #1d4ed8);
             border: 1px solid rgba(148, 163, 184, 0.7);
         }
-
-        /* ============================================
-           通用Tooltip样式 Tooltips
-           ============================================ */
-        .tooltip {
-            position: fixed;
-            pointer-events: none;
-            background: rgba(15, 23, 42, 0.95);
-            color: #f9fafb;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            line-height: 1.4;
-            opacity: 0;
-            z-index: 1000;
-            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.4);
-            max-width: 280px;
-            transition: opacity 0.15s ease;
+        .assignment-4 .chart-wrapper {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 16px 16px 10px;
+            margin-top: 4px;
+            background: #fcfcff;
+        }
+        .assignment-4 .chart-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 6px;
+        }
+        .assignment-4 .chart-caption {
+            font-size: 11px;
+            color: #9ca3af;
         }
 
-        /* ============================================
-           响应式设计 Responsive Design
-           ============================================ */
         @media (max-width: 768px) {
-            .main-container {
-                padding: 16px;
-            }
-
-            .assignment-card {
-                padding: 20px 16px;
-            }
-
-            .a3-c1-wrap {
+            .assignment-3 .c1 .wrap {
                 flex-direction: column;
             }
-
-            .a3-c1-legend {
+            .assignment-3 .c1 #c1-legend {
                 width: 100%;
             }
-
-            .nav-links {
-                gap: 6px;
-            }
-
-            .nav-links a {
-                padding: 5px 10px;
-                font-size: 12px;
-            }
-        }
-
-        /* 确保SVG响应式 */
-        svg {
-            max-width: 100%;
-            height: auto;
         }
     </style>
 </head>
 <body>
-    <!-- 全局Tooltip -->
-    <div id="global-tooltip" class="tooltip"></div>
-
-    <!-- 页面头部 -->
-    <header class="page-header">
-        <div class="container">
-            <h1>IDV Assignment 5 — Integrated Portfolio</h1>
-            <p class="subtitle">Interactive Data Visualization • Assignments 1–4 Combined</p>
-            <nav class="nav-links">
-                <a href="#overview">Overview</a>
-                <a href="#assignment1">A1: PSI Data</a>
-                <a href="#assignment2">A2: SVG Gallery</a>
-                <a href="#assignment3">A3: Charts</a>
-                <a href="#assignment4">A4: Robustness</a>
-            </nav>
+    <!-- 导航栏 -->
+    <nav class="main-nav">
+        <h1>IDV Assignment 5 — Portfolio Integration</h1>
+        <div class="nav-links">
+            <a href="#overview">Overview</a>
+            <a href="#a1">A1: PSI Data</a>
+            <a href="#a2">A2: SVG Gallery</a>
+            <a href="#a3">A3: Charts</a>
+            <a href="#a4">A4: Robustness</a>
         </div>
-    </header>
+    </nav>
 
-    <!-- 主容器 -->
-    <main class="main-container">
-        <!-- 概述部分 -->
-        <section id="overview" class="overview-section">
+    <!-- 概述 -->
+    <section id="overview" class="overview-section">
+        <div class="container">
             <h2>📋 Assignment Overview</h2>
-            <p>
-                <strong>What this page contains:</strong> This portfolio integrates all four previous assignments (A1–A4) into a single, unified web page. Each assignment maintains its original functionality while following a consistent design system.
-            </p>
-            <p>
-                <strong>How I merged the assignments:</strong> I created a modular structure where each assignment lives in its own section with scoped CSS classes (e.g., <code>.a1-</code>, <code>.a2-</code>) to prevent style conflicts. The page uses a sticky navigation header for easy access, and all JavaScript code is properly isolated to avoid variable collisions.
-            </p>
-            <p>
-                <strong>Difficulties faced:</strong> The main challenge was CSS namespace conflicts—each assignment originally used generic class names like <code>.axis</code>, <code>.bar</code>, or <code>.tooltip</code>. I resolved this by systematically prefixing all styles with assignment-specific identifiers. Another issue was ensuring D3.js charts rendered correctly when combined, particularly managing multiple tooltip instances and SVG definitions.
-            </p>
-            <p>
-                <strong>Hardest to integrate:</strong> <strong>Assignment 3 (A3)</strong> was the most stubborn because it contains five separate D3.js visualizations with complex interactions, transitions, and shared D3 scales. The vector space chart's drag interactions and the frequency chart's hover states required careful attention to ensure they didn't interfere with each other or with A4's similar patterns.
-            </p>
-            <p>
-                <strong>Solution approach:</strong> I used unique IDs for all chart containers, scoped all CSS selectors, wrapped each chart's JavaScript in an IIFE (Immediately Invoked Function Expression) to create isolated scopes, and ensured D3 selections were always specific to their target containers. The result is a cohesive page where all features work independently without conflicts.
-            </p>
-        </section>
+            <p><strong>What this page contains:</strong> This page integrates all four previous IDV assignments (A1–A4) into one unified web page. Each assignment retains its complete original functionality and styling.</p>
+            <p><strong>How I merged the assignments:</strong> I preserved each assignment's complete HTML and CSS by wrapping them in dedicated container divs (.assignment-1, .assignment-2, etc.) with scoped selectors. All JavaScript remains in isolated functions to prevent conflicts.</p>
+            <p><strong>Difficulties faced:</strong> The primary challenge was CSS selector conflicts—multiple assignments used generic class names. I resolved this by prefixing all selectors with assignment-specific classes. Managing multiple D3.js visualizations simultaneously required ensuring each chart targets only its specific container.</p>
+            <p><strong>Hardest assignment to integrate:</strong> <strong>Assignment 3</strong> was most complex because it contains five separate D3.js visualizations with sophisticated interactions including drag behavior, hover states, transitions, and tooltips.</p>
+            <p><strong>How I solved it:</strong> I used CSS scoping, unique IDs for all SVG containers, and wrapped each chart's JavaScript in IIFE to create isolated variable scopes.</p>
+        </div>
+    </section>
 
-        <!-- Assignment 1: PSI Data Table -->
-        <section id="assignment1" class="assignment-card">
-            <h2>Assignment 1 — Singapore PSI Readings (API-driven)</h2>
-            <p class="description">
-                Real-time air quality data from data.gov.sg. The table displays 12 PSI-related readings across all Singapore regions, updated dynamically via API calls.
-            </p>
-
-            <div class="a1-card">
-                <div class="a1-toolbar">
-                    <span id="a1-status" class="a1-status load">
-                        <span class="a1-status-dot"></span>
-                        <strong>Loading</strong>… fetching latest data
-                    </span>
-                    <span id="a1-meta" class="a1-toolbar meta"></span>
-                    <div class="a1-toolbar spacer"></div>
-                    <button id="a1-refreshBtn" type="button" title="Refetch the latest readings">Refresh</button>
+    <!-- A1 -->
+    <div id="a1" class="assignment-1">
+        <div class="container">
+            <header>
+                <h1>Singapore PSI Readings — Realtime</h1>
+                <span class="sub">Source: <code>https://api.data.gov.sg/v1/environment/psi</code></span>
+            </header>
+            <div class="card">
+                <div class="toolbar">
+                    <span id="status" class="status load"><span class="status-dot"></span><strong>Loading</strong>… fetching latest data</span>
+                    <span id="meta" class="meta"></span>
+                    <div class="spacer"></div>
+                    <button id="refreshBtn" type="button">Refresh</button>
                 </div>
-                <div class="a1-table-wrap" id="a1-tableWrap" aria-live="polite">
-                    <div id="a1-placeholder" class="a1-muted" style="padding:16px;">Preparing table…</div>
+                <div class="table-wrap" id="tableWrap">
+                    <div id="placeholder" class="muted" style="padding:16px;">Preparing table…</div>
                 </div>
             </div>
-        </section>
+            <p class="footer">This page lists the 12 PSI-related readings for each region, pulled in realtime from data.gov.sg.</p>
+        </div>
+    </div>
 
-        <!-- Assignment 2: SVG Transformations -->
-        <section id="assignment2" class="assignment-card">
-            <h2>Assignment 2 — SVG Transform Gallery</h2>
-            <p class="description">
-                10 distinct, non-symmetric SVG icons demonstrating CSS transformations: mirror, rotate 180°, vertical squash (50%), and grayscale filter.
-            </p>
-
-            <table class="a2-table" role="grid" aria-label="SVG effect grid (10 rows × 5 columns)">
+    <!-- A2 -->
+    <div id="a2" class="assignment-2">
+        <main>
+            <h1>IDV Assignment 2 — SVG Transform Gallery</h1>
+            <p class="desc">10 distinct, clearly <em>non-symmetric</em> SVGs. Each row shows: <strong>Original</strong>, <strong>Left-Right Mirrored</strong>, <strong>Rotated 180°</strong>, <strong>Vertically Squeezed by 50%</strong>, <strong>Grayscale</strong>.</p>
+            <table role="grid">
                 <thead>
                     <tr>
                         <th>Original</th>
@@ -800,365 +792,309 @@
                         <th>Grayscale</th>
                     </tr>
                 </thead>
-                <tbody id="a2-gallery-body"></tbody>
+                <tbody id="gallery-body"></tbody>
             </table>
+            <footer>All SVGs are inline and authored for this demo.</footer>
+        </main>
+        <svg width="0" height="0" style="position:absolute; left:-9999px; visibility:hidden">
+            <defs>
+                <symbol id="s1" viewBox="0 0 100 100">
+                    <rect x="10" y="45" width="50" height="10" fill="#e74c3c"/>
+                    <polygon points="60,20 90,50 60,80" fill="#e74c3c"/>
+                </symbol>
+                <symbol id="s2" viewBox="0 0 100 100">
+                    <polygon points="20,42 80,42 50,18" fill="#2980b9"/>
+                    <rect x="20" y="42" width="60" height="38" rx="2" fill="#3498db"/>
+                    <rect x="28" y="22" width="8" height="16" fill="#3498db"/>
+                    <rect x="30" y="54" width="15" height="16" fill="#ecf0f1"/>
+                    <rect x="55" y="54" width="20" height="16" fill="#ecf0f1"/>
+                </symbol>
+                <symbol id="s3" viewBox="0 0 100 100">
+                    <polygon points="15,70 85,70 75,80 25,80" fill="#8e44ad"/>
+                    <rect x="48" y="30" width="4" height="40" fill="#2c3e50"/>
+                    <polygon points="50,35 50,65 35,60" fill="#f1c40f"/>
+                    <polygon points="52,35 75,65 52,65" fill="#e67e22"/>
+                </symbol>
+                <symbol id="s4" viewBox="0 0 100 100">
+                    <circle cx="25" cy="50" r="12" fill="none" stroke="#2ecc71" stroke-width="8"/>
+                    <rect x="35" y="46" width="28" height="8" fill="#27ae60"/>
+                    <rect x="63" y="46" width="7" height="12" fill="#27ae60"/>
+                    <rect x="72" y="46" width="10" height="8" fill="#27ae60"/>
+                </symbol>
+                <symbol id="s5" viewBox="0 0 100 100">
+                    <rect x="60" y="20" width="4" height="40" fill="#9b59b6"/>
+                    <circle cx="50" cy="60" r="10" fill="#9b59b6"/>
+                    <path d="M64,20 L82,24 L82,30 L64,26 Z" fill="#8e44ad"/>
+                </symbol>
+                <symbol id="s6" viewBox="0 0 100 100">
+                    <rect x="20" y="15" width="4" height="70" fill="#2c3e50"/>
+                    <polygon points="24,20 70,25 55,35 70,45 24,50" fill="#e74c3c"/>
+                </symbol>
+                <symbol id="s7" viewBox="0 0 100 100">
+                    <rect x="20" y="60" width="20" height="20" fill="#1abc9c"/>
+                    <rect x="40" y="40" width="20" height="40" fill="#16a085"/>
+                    <rect x="60" y="20" width="20" height="60" fill="#0e7e6b"/>
+                    <path d="M22,22 L78,18" stroke="#34495e" stroke-width="3"/>
+                </symbol>
+                <symbol id="s8" viewBox="0 0 100 100">
+                    <polygon points="42,10 60,10 46,40 62,40 30,90 40,55 26,55" fill="#f39c12"/>
+                </symbol>
+                <symbol id="s9" viewBox="0 0 100 100">
+                    <rect x="25" y="42" width="40" height="26" rx="4" fill="#795548"/>
+                    <path d="M65,46 C78,46 78,64 65,64 C70,62 70,48 65,46 Z" fill="#8d6e63"/>
+                    <path d="M36,38 C34,34 38,32 36,28" stroke="#bdbdbd" stroke-width="2" fill="none"/>
+                    <path d="M44,38 C42,34 46,32 44,28" stroke="#bdbdbd" stroke-width="2" fill="none"/>
+                    <path d="M52,38 C50,34 54,32 52,28" stroke="#bdbdbd" stroke-width="2" fill="none"/>
+                </symbol>
+                <symbol id="s10" viewBox="0 0 100 100">
+                    <polygon points="25,20 70,50 50,50 60,80 50,80 40,50 25,50" fill="#3f51b5"/>
+                </symbol>
+            </defs>
+        </svg>
+    </div>
 
-            <!-- SVG Definitions for A2 -->
-            <svg width="0" height="0" style="position:absolute; left:-9999px; visibility:hidden" aria-hidden="true">
-                <defs>
-                    <symbol id="a2-s1" viewBox="0 0 100 100">
-                        <rect x="10" y="45" width="50" height="10" fill="#e74c3c"/>
-                        <polygon points="60,20 90,50 60,80" fill="#e74c3c"/>
-                    </symbol>
-                    <symbol id="a2-s2" viewBox="0 0 100 100">
-                        <polygon points="20,42 80,42 50,18" fill="#2980b9"/>
-                        <rect x="20" y="42" width="60" height="38" rx="2" fill="#3498db"/>
-                        <rect x="28" y="22" width="8" height="16" fill="#3498db"/>
-                        <rect x="30" y="54" width="15" height="16" fill="#ecf0f1"/>
-                        <rect x="55" y="54" width="20" height="16" fill="#ecf0f1"/>
-                    </symbol>
-                    <symbol id="a2-s3" viewBox="0 0 100 100">
-                        <polygon points="15,70 85,70 75,80 25,80" fill="#8e44ad"/>
-                        <rect x="48" y="30" width="4" height="40" fill="#2c3e50"/>
-                        <polygon points="50,35 50,65 35,60" fill="#f1c40f"/>
-                        <polygon points="52,35 75,65 52,65" fill="#e67e22"/>
-                    </symbol>
-                    <symbol id="a2-s4" viewBox="0 0 100 100">
-                        <circle cx="25" cy="50" r="12" fill="none" stroke="#2ecc71" stroke-width="8"/>
-                        <rect x="35" y="46" width="28" height="8" fill="#27ae60"/>
-                        <rect x="63" y="46" width="7" height="12" fill="#27ae60"/>
-                        <rect x="72" y="46" width="10" height="8" fill="#27ae60"/>
-                    </symbol>
-                    <symbol id="a2-s5" viewBox="0 0 100 100">
-                        <rect x="60" y="20" width="4" height="40" fill="#9b59b6"/>
-                        <circle cx="50" cy="60" r="10" fill="#9b59b6"/>
-                        <path d="M64,20 L82,24 L82,30 L64,26 Z" fill="#8e44ad"/>
-                    </symbol>
-                    <symbol id="a2-s6" viewBox="0 0 100 100">
-                        <rect x="20" y="15" width="4" height="70" fill="#2c3e50"/>
-                        <polygon points="24,20 70,25 55,35 70,45 24,50" fill="#e74c3c"/>
-                    </symbol>
-                    <symbol id="a2-s7" viewBox="0 0 100 100">
-                        <rect x="20" y="60" width="20" height="20" fill="#1abc9c"/>
-                        <rect x="40" y="40" width="20" height="40" fill="#16a085"/>
-                        <rect x="60" y="20" width="20" height="60" fill="#0e7e6b"/>
-                        <path d="M22,22 L78,18" stroke="#34495e" stroke-width="3"/>
-                    </symbol>
-                    <symbol id="a2-s8" viewBox="0 0 100 100">
-                        <polygon points="42,10 60,10 46,40 62,40 30,90 40,55 26,55" fill="#f39c12"/>
-                    </symbol>
-                    <symbol id="a2-s9" viewBox="0 0 100 100">
-                        <rect x="25" y="42" width="40" height="26" rx="4" fill="#795548"/>
-                        <path d="M65,46 C78,46 78,64 65,64 C70,62 70,48 65,46 Z" fill="#8d6e63"/>
-                        <path d="M36,38 C34,34 38,32 36,28" stroke="#bdbdbd" stroke-width="2" fill="none"/>
-                        <path d="M44,38 C42,34 46,32 44,28" stroke="#bdbdbd" stroke-width="2" fill="none"/>
-                        <path d="M52,38 C50,34 54,32 52,28" stroke="#bdbdbd" stroke-width="2" fill="none"/>
-                    </symbol>
-                    <symbol id="a2-s10" viewBox="0 0 100 100">
-                        <polygon points="25,20 70,50 50,50 60,80 50,80 40,50 25,50" fill="#3f51b5"/>
-                    </symbol>
-                </defs>
-            </svg>
-        </section>
-
-        <!-- Assignment 3: Interactive Charts -->
-        <section id="assignment3" class="assignment-card">
-            <h2>Assignment 3 — Interactive Charts with Transitions</h2>
-            <p class="description">
-                Five D3.js visualizations demonstrating complex interactions, smooth transitions, and data exploration techniques.
-            </p>
-
-            <!-- Chart 1: Vector Space -->
-            <div class="a3-chart-container">
-                <h3>Chart 1 — Vector Space with Draggable Vectors</h3>
-                <div class="a3-c1-wrap">
-                    <div class="a3-c1-chart">
-                        <svg id="a3-c1-svg" viewBox="0 0 900 500"></svg>
-                        <div class="a3-hint">Drag the teal/blue dashed vectors' endpoints to explore. Vectors animate on load.</div>
+    <!-- A3 -->
+    <div id="a3" class="assignment-3">
+        <header>
+            <h1>All Charts — Combined</h1>
+            <nav>
+                <a href="#chart1">Chart 1</a>
+                <a href="#freq">Chart 4</a>
+                <a href="#chart7">Chart 7</a>
+                <a href="#chart8">Chart 8</a>
+                <a href="#pdf-overlap">Chart 11</a>
+            </nav>
+        </header>
+        <main>
+            <section id="chart1" class="c1">
+                <h2>Chart 1 (vector space)</h2>
+                <div class="wrap">
+                    <div id="c1-chart">
+                        <svg id="c1-svg" viewBox="0 0 900 500"></svg>
+                        <div class="hint">Drag the teal/blue dashed vectors' end points.</div>
                     </div>
-                    <div class="a3-c1-legend">
-                        <div style="display:flex; gap:8px; margin-bottom:10px;">
-                            <button id="a3-c1-replay" class="a3-c1-btn">Replay</button>
-                            <button id="a3-c1-toggle" class="a3-c1-btn" style="background:#10b981">Toggle</button>
+                    <div id="c1-legend">
+                        <div style="display:flex; gap:8px; margin-bottom:10px">
+                            <button id="c1-replay" class="btn">Replay</button>
+                            <button id="c1-toggle" class="btn" style="background:#10b981">Toggle</button>
                         </div>
                         <svg width="220" height="120">
                             <defs>
-                                <marker id="a3-c1-lgArrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                                <marker id="c1-lgArrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
                                     <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"></path>
                                 </marker>
                             </defs>
-                            <line x1="15" y1="25" x2="95" y2="25" stroke="#4b5563" stroke-width="3" marker-end="url(#a3-c1-lgArrow)"/>
-                            <text x="105" y="30" font-size="13">solid vector</text>
-                            <line x1="15" y1="60" x2="95" y2="60" stroke="#223f6a" stroke-width="3" stroke-dasharray="5 6" marker-end="url(#a3-c1-lgArrow)"/>
-                            <text x="105" y="65" font-size="13">dashed (blue)</text>
-                            <line x1="15" y1="95" x2="95" y2="95" stroke="#1e8aa3" stroke-width="3" stroke-dasharray="5 6" marker-end="url(#a3-c1-lgArrow)"/>
-                            <text x="105" y="100" font-size="13">dashed (teal)</text>
+                            <line x1="15" y1="25" x2="95" y2="25" stroke="#4b5563" stroke-width="3" marker-end="url(#c1-lgArrow)"/>
+                            <text x="105" y="30">solid</text>
+                            <line x1="15" y1="60" x2="95" y2="60" stroke="#223f6a" stroke-width="3" stroke-dasharray="5 6" marker-end="url(#c1-lgArrow)"/>
+                            <text x="105" y="65">dash1</text>
+                            <line x1="15" y1="95" x2="95" y2="95" stroke="#1e8aa3" stroke-width="3" stroke-dasharray="5 6" marker-end="url(#c1-lgArrow)"/>
+                            <text x="105" y="100">dash2</text>
                         </svg>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Chart 4: Frequency Over Time -->
-            <div class="a3-chart-container">
-                <h3>Chart 4 — Frequency Over Time (Stacked Area)</h3>
-                <svg id="a3-freq-svg" class="a3-freq-svg"></svg>
-                <div class="a3-hint">Hover to see values; click legend items to toggle series visibility.</div>
-            </div>
+            <section id="freq" class="freq">
+                <h2>Chart 4 (frequency)</h2>
+                <svg id="freq-svg" height="340"></svg>
+            </section>
 
-            <!-- Chart 7: Venn Diagram -->
-            <div class="a3-chart-container">
-                <h3>Chart 7 — Venn Diagram (Three Sets)</h3>
-                <div class="a3-c7-stage">
-                    <svg id="a3-c7-venn" viewBox="0 0 1100 700" preserveAspectRatio="xMidYMid meet" class="a3-c7-svg"></svg>
+            <section id="chart7" class="c7">
+                <h2>Chart 7 (Venn)</h2>
+                <div class="stage">
+                    <svg id="c7-venn" viewBox="0 0 1100 700"></svg>
                 </div>
-                <div class="a3-hint">Hover over circles to highlight each set.</div>
-            </div>
+                <div class="tooltip" id="c7-tip"></div>
+            </section>
 
-            <!-- Chart 8: Bar Chart -->
-            <div class="a3-chart-container">
-                <h3>Chart 8 — Simple Bar Chart (Accuracy Comparison)</h3>
-                <div class="a3-c8-wrap">
-                    <h4 class="a3-c8-title">Cross Validation Accuracy (%)</h4>
-                    <div id="a3-c8-chart"></div>
+            <section id="chart8" class="c8">
+                <h2>Chart 8 (simple bars)</h2>
+                <div class="wrap">
+                    <h3>Cross Validation Accuracy (%)</h3>
+                    <div id="c8-chart"></div>
                 </div>
-                <div class="a3-hint">Hover over bars to see exact values.</div>
-            </div>
+                <div class="tooltip" id="c8-tip"></div>
+            </section>
 
-            <!-- Chart 11: PDF Overlap -->
-            <div class="a3-chart-container">
-                <h3>Chart 11 — PDF Overlap (Function Visualization)</h3>
-                <div id="a3-pdfx-chart"></div>
-                <div class="a3-hint">Move mouse to see probability density values at different x positions.</div>
-            </div>
-        </section>
+            <section id="pdf-overlap" class="pdfx">
+                <h2>Chart 11 (function)</h2>
+                <div id="pdfx-chart"></div>
+                <div id="pdfx-tip" class="tip"></div>
+            </section>
+        </main>
+    </div>
 
-        <!-- Assignment 4: Adversarial Robustness -->
-        <section id="assignment4" class="assignment-card">
-            <h2>Assignment 4 — Adversarial Robustness Explorer</h2>
-            <p class="description">
-                Complex grouped visualizations exploring model robustness across datasets and attack methods using D3.js.
-            </p>
-
-            <!-- Chart 1: Robustness Across Datasets -->
-            <div class="a3-chart-container">
-                <h3>Chart 1 — Robustness Across Datasets</h3>
-                <p style="font-size:13px; color:#6b7280; margin-bottom:10px;">
-                    Compare training approaches under different datasets and metrics. Bars animate when switching.
-                </p>
-                <div class="a4-controls">
-                    <label>
-                        Dataset
-                        <select id="a4-dataset-select"></select>
-                    </label>
-                    <label>
-                        Metric
-                        <select id="a4-metric-select">
-                            <option value="Std Acc">Standard Accuracy (Std Acc)</option>
-                            <option value="CRR">Certified Robustness Rate (CRR)</option>
-                            <option value="CRA">Certified Robust Accuracy (CRA)</option>
-                        </select>
-                    </label>
+    <!-- A4 -->
+    <div id="a4" class="assignment-4">
+        <div id="tooltip"></div>
+        <main class="container">
+            <h1>Adversarial Robustness Explorer</h1>
+            <p class="subtitle">Interactive D3.js visualisation of standard accuracy and certified robustness.</p>
+            <section>
+                <h2>Chart 1 · Robustness across datasets</h2>
+                <p class="section-desc">Compare training approaches under CIFAR-10/100, SVHN, MNIST.</p>
+                <div id="controls">
+                    <label>Dataset <select id="dataset-select"></select></label>
+                    <label>Metric <select id="metric-select">
+                        <option value="Std Acc">Standard Accuracy</option>
+                        <option value="CRR">Certified Robustness Rate</option>
+                        <option value="CRA">Certified Robust Accuracy</option>
+                    </select></label>
                 </div>
-                <div class="a4-chart-wrapper">
-                    <div class="a4-chart-caption" id="a4-chart1-caption">Showing: CIFAR10 · Std Acc</div>
-                    <svg id="a4-chart1" viewBox="0 0 900 420" preserveAspectRatio="xMidYMid meet"></svg>
-                    <div id="a4-legend" class="a4-legend"></div>
+                <div class="chart-wrapper">
+                    <div class="chart-title-row">
+                        <span class="chart-caption" id="chart1-caption">Showing: CIFAR10 · Std Acc</span>
+                    </div>
+                    <svg id="chart1" viewBox="0 0 900 420"></svg>
+                    <div id="legend"></div>
                 </div>
-            </div>
-
-            <!-- Chart 2: Attack-Model Heatmap -->
-            <div class="a3-chart-container">
-                <h3>Chart 2 — Attack–Model Accuracy Heatmap</h3>
-                <p style="font-size:13px; color:#6b7280; margin-bottom:10px;">
-                    Each cell shows model accuracy (%) under a specific adversarial attack. Darker = higher accuracy.
-                </p>
-                <div class="a4-chart-wrapper">
-                    <div class="a4-chart-caption">Rows: attacks · Columns: models · Color: accuracy (%)</div>
-                    <svg id="a4-chart2" viewBox="0 0 900 640" preserveAspectRatio="xMidYMid meet"></svg>
-                    <div class="a4-heatmap-legend">
-                        <span>Lower accuracy</span>
-                        <div class="a4-heatmap-legend-gradient"></div>
-                        <span>Higher accuracy</span>
+            </section>
+            <section>
+                <h2>Chart 2 · Attack–model heatmap</h2>
+                <p class="section-desc">Accuracy (%) of models under adversarial attacks.</p>
+                <div class="chart-wrapper">
+                    <div class="chart-title-row">
+                        <span class="chart-caption">Rows: attacks · Columns: models</span>
+                    </div>
+                    <svg id="chart2" viewBox="0 0 900 640"></svg>
+                    <div class="heatmap-legend">
+                        <span>Lower</span>
+                        <div class="heatmap-legend-gradient"></div>
+                        <span>Higher</span>
                     </div>
                 </div>
-            </div>
-        </section>
-    </main>
+            </section>
+        </main>
+    </div>
 
     <script>
-        // ============================================
-        // 全局Tooltip辅助函数
-        // ============================================
-        const globalTooltip = d3.select("#global-tooltip");
-
-        function showTooltip(html, event) {
-            globalTooltip
-                .html(html)
-                .style("left", (event.pageX + 12) + "px")
-                .style("top", (event.pageY + 12) + "px")
-                .style("opacity", 1);
-        }
-
-        function hideTooltip() {
-            globalTooltip.style("opacity", 0);
-        }
-
-        // ============================================
-        // Assignment 1: PSI Data Table
-        // ============================================
-        (function() {
-            "use strict";
+        // A1: PSI Data
+        (function(){
             const API = "https://api.data.gov.sg/v1/environment/psi";
-            const statusEl = document.getElementById("a1-status");
-            const metaEl = document.getElementById("a1-meta");
-            const tableWrap = document.getElementById("a1-tableWrap");
-            const placeholder = document.getElementById("a1-placeholder");
-            const refreshBtn = document.getElementById("a1-refreshBtn");
+            const statusEl = document.getElementById("status");
+            const metaEl = document.getElementById("meta");
+            const tableWrap = document.getElementById("tableWrap");
+            const placeholder = document.getElementById("placeholder");
+            const refreshBtn = document.getElementById("refreshBtn");
 
-            function setStatus(kind, text) {
-                statusEl.className = "a1-status " + kind;
-                statusEl.innerHTML = '<span class="a1-status-dot"></span>' + text;
+            function setStatus(kind, text){
+                statusEl.className = "status " + kind;
+                statusEl.innerHTML = '<span class="status-dot"></span>' + text;
             }
 
-            function titleCaseKey(k) {
-                const gases = { o3: "O₃", co: "CO", so2: "SO₂", no2: "NO₂", pm10: "PM10", pm25: "PM2.5", psi: "PSI" };
+            function titleCaseKey(k){
+                const gases = {o3:"O₃",co:"CO",so2:"SO₂",no2:"NO₂",pm10:"PM10",pm25:"PM2.5",psi:"PSI"};
                 const parts = k.split("_");
-                let out = parts.map(p => {
-                    if (gases[p]) return gases[p];
-                    if (p === "one") return "1";
-                    if (p === "eight") return "8";
-                    if (p === "twenty") return "24";
-                    if (p === "four") return "";
-                    if (p === "hourly") return "Hourly";
-                    if (p === "index") return "Index";
-                    return p.charAt(0).toUpperCase() + p.slice(1);
+                let out = parts.map(p=>{
+                    if(gases[p]) return gases[p];
+                    if(p==="one") return "1";
+                    if(p==="eight") return "8";
+                    if(p==="twenty") return "24";
+                    if(p==="four") return "";
+                    if(p==="hourly") return "Hourly";
+                    if(p==="index") return "Index";
+                    return p.charAt(0).toUpperCase()+p.slice(1);
                 }).filter(Boolean).join(" ");
-                out = out.replace("24 Hourly", "24-Hourly")
-                    .replace("8 Hour Max", "8-Hour Max")
-                    .replace("1 Hour Max", "1-Hour Max");
-                return out;
+                return out.replace("24 Hourly","24-Hourly").replace("8 Hour Max","8-Hour Max").replace("1 Hour Max","1-Hour Max");
             }
 
-            function makeTable(readings) {
+            function makeTable(readings){
                 const readingKeys = Object.keys(readings).sort();
-                if (readingKeys.length === 0) throw new Error("No readings found.");
-                const regions = Object.keys(readings[readingKeys[0]] || {}).sort();
-
+                const regions = Object.keys(readings[readingKeys[0]]||{}).sort();
                 const table = document.createElement("table");
                 const thead = document.createElement("thead");
                 const hr = document.createElement("tr");
                 const th0 = document.createElement("th");
                 th0.textContent = "Reading";
                 hr.appendChild(th0);
-                regions.forEach(r => {
+                regions.forEach(r=>{
                     const th = document.createElement("th");
                     th.textContent = r;
                     hr.appendChild(th);
                 });
                 thead.appendChild(hr);
-
                 const tbody = document.createElement("tbody");
-                readingKeys.forEach(key => {
+                readingKeys.forEach(key=>{
                     const tr = document.createElement("tr");
                     const tdKey = document.createElement("td");
-                    tdKey.innerHTML = `<span class="a1-key">${titleCaseKey(key)}</span><br><span class="a1-muted">${key}</span>`;
+                    tdKey.innerHTML = `<span class="key">${titleCaseKey(key)}</span><br><span class="muted">${key}</span>`;
                     tr.appendChild(tdKey);
-                    regions.forEach(r => {
+                    regions.forEach(r=>{
                         const td = document.createElement("td");
-                        let val = readings[key] && readings[key][r];
-                        if (val === null || val === undefined || Number.isNaN(val)) {
+                        let val = readings[key]&&readings[key][r];
+                        if(val===null||val===undefined||Number.isNaN(val)){
                             td.textContent = "-";
-                            td.className = "a1-muted";
-                        } else {
+                            td.className = "muted";
+                        }else{
                             const n = Number(val);
-                            td.textContent = Number.isFinite(n) ? (Math.round(n * 100) / 100).toString() : String(val);
+                            td.textContent = Number.isFinite(n)?(Math.round(n*100)/100).toString():String(val);
                         }
                         tr.appendChild(td);
                     });
                     tbody.appendChild(tr);
                 });
-
                 table.appendChild(thead);
                 table.appendChild(tbody);
                 return table;
             }
 
-            function formatSGT(isoString) {
-                try {
+            function formatSGT(isoString){
+                try{
                     const dt = new Date(isoString);
-                    return new Intl.DateTimeFormat("en-SG", {
-                        timeZone: "Asia/Singapore",
-                        year: "numeric",
-                        month: "short",
-                        day: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit",
-                        hour12: false
+                    return new Intl.DateTimeFormat("en-SG",{
+                        timeZone:"Asia/Singapore",year:"numeric",month:"short",day:"2-digit",
+                        hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false
                     }).format(dt);
-                } catch {
-                    return isoString;
-                }
+                }catch{return isoString;}
             }
 
-            async function fetchData() {
-                setStatus("load", "<strong>Loading</strong>… fetching latest data");
+            async function fetchData(){
+                setStatus("load","<strong>Loading</strong>");
                 metaEl.textContent = "";
-                placeholder && (placeholder.textContent = "Fetching…");
-                try {
-                    const url = API + (API.includes("?") ? "&" : "?") + "_ts=" + Date.now();
-                    const resp = await fetch(url, { cache: "no-store" });
-                    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                try{
+                    const url = API+(API.includes("?")?"&":"?")+"_ts="+Date.now();
+                    const resp = await fetch(url,{cache:"no-store"});
+                    if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
                     const data = await resp.json();
-                    const item = (data.items && data.items[0]) || null;
-                    if (!item || !item.readings) throw new Error("Malformed API response: missing readings");
-
+                    const item = (data.items&&data.items[0])||null;
+                    if(!item||!item.readings) throw new Error("Missing readings");
                     const table = makeTable(item.readings);
                     tableWrap.innerHTML = "";
                     tableWrap.appendChild(table);
-
-                    const ts = item.timestamp || item.update_timestamp || "";
-                    const apiStatus = data.api_info && data.api_info.status ? String(data.api_info.status) : "unknown";
-                    setStatus(apiStatus === "healthy" ? "ok" : "load", `API status: <strong>${apiStatus}</strong>`);
-                    metaEl.textContent = ts ? `Last update (SGT): ${formatSGT(ts)}` : "";
-                } catch (err) {
+                    const ts = item.timestamp||"";
+                    const apiStatus = data.api_info&&data.api_info.status||"unknown";
+                    setStatus(apiStatus==="healthy"?"ok":"load",`API: <strong>${apiStatus}</strong>`);
+                    metaEl.textContent = ts?`Last update: ${formatSGT(ts)}`:"";
+                }catch(err){
                     console.error(err);
-                    setStatus("err", "<strong>Error</strong> fetching data");
+                    setStatus("err","<strong>Error</strong>");
                     tableWrap.innerHTML = "";
                     const pre = document.createElement("pre");
-                    pre.style.whiteSpace = "pre-wrap";
                     pre.style.padding = "16px";
-                    pre.textContent = "Failed to load PSI readings.\n" + (err && err.message ? err.message : String(err));
+                    pre.textContent = "Failed to load.\n"+err.message;
                     tableWrap.appendChild(pre);
                 }
             }
-
-            refreshBtn.addEventListener("click", fetchData);
+            refreshBtn.addEventListener("click",fetchData);
             fetchData();
         })();
 
-        // ============================================
-        // Assignment 2: SVG Gallery
-        // ============================================
-        (function() {
-            const icons = ["a2-s1", "a2-s2", "a2-s3", "a2-s4", "a2-s5", "a2-s6", "a2-s7", "a2-s8", "a2-s9", "a2-s10"];
-            const effects = ["original", "a2-mirror", "a2-rot180", "a2-squash", "a2-gray"];
-            const tbody = document.getElementById("a2-gallery-body");
-
-            icons.forEach((id, rowIndex) => {
+        // A2: SVG Gallery
+        (function(){
+            const icons = ["s1","s2","s3","s4","s5","s6","s7","s8","s9","s10"];
+            const effects = ["original","mirror","rot180","squash","gray"];
+            const tbody = document.getElementById("gallery-body");
+            icons.forEach((id,i)=>{
                 const tr = document.createElement("tr");
-                effects.forEach((eff) => {
+                effects.forEach(eff=>{
                     const td = document.createElement("td");
-                    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-                    svg.setAttribute("class", "a2-svg-thumb");
-                    svg.setAttribute("viewBox", "0 0 100 100");
-                    svg.setAttribute("role", "img");
-                    svg.setAttribute("aria-label", `Row ${rowIndex + 1}, ${eff}`);
-
-                    const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
-                    use.setAttributeNS("http://www.w3.org/1999/xlink", "href", `#${id}`);
-                    use.setAttribute("class", eff);
-
+                    const svg = document.createElementNS("http://www.w3.org/2000/svg","svg");
+                    svg.setAttribute("class","thumb");
+                    svg.setAttribute("viewBox","0 0 100 100");
+                    const use = document.createElementNS("http://www.w3.org/2000/svg","use");
+                    use.setAttributeNS("http://www.w3.org/1999/xlink","href","#"+id);
+                    use.setAttribute("class",eff);
                     svg.appendChild(use);
                     td.appendChild(svg);
                     tr.appendChild(td);
@@ -1167,889 +1103,450 @@
             });
         })();
 
-        // ============================================
-        // Assignment 3: Chart 1 (Vector Space)
-        // ============================================
-        (function() {
-            const svg = d3.select('#a3-c1-svg');
-            const W = 900, H = 500, pad = 30;
-            const cols = 12, rows = 6;
-            const x = d3.scaleLinear().domain([0, cols]).range([pad, W - pad]);
-            const y = d3.scaleLinear().domain([0, rows]).range([H - pad, pad]);
-
-            const g = svg.append('g');
-            g.append('rect').attr('class', 'a3-c1-border')
-                .attr('x', x(0)).attr('y', y(rows))
-                .attr('width', x(cols) - x(0)).attr('height', y(0) - y(rows));
-
-            const grid = g.append('g').attr('class', 'a3-c1-grid');
-            for (let i = 0; i <= cols; i++)
-                grid.append('line').attr('x1', x(i)).attr('y1', y(0)).attr('x2', x(i)).attr('y2', y(rows));
-            for (let j = 0; j <= rows; j++)
-                grid.append('line').attr('x1', x(0)).attr('y1', y(j)).attr('x2', x(cols)).attr('y2', y(j));
-
-            const pts = {
-                a1: { x: 9, y: 3, label: 'e', super: 'α', sub: '1' },
-                a2: { x: 6, y: 3, label: 'e', super: 'α', sub: '2' },
-                b1: { x: 6, y: 1, label: 'e', super: 'β', sub: '1' },
-                b2: { x: 2, y: 1, label: 'e', super: 'β', sub: '2' }
-            };
-
-            function drawLabel(g, p, dx = 0, dy = 0) {
-                const t = g.append('text').attr('class', 'a3-c1-label')
-                    .attr('x', x(p.x) + dx).attr('y', y(p.y) + dy);
+        // A3: Chart 1
+        (function(){
+            const svg = d3.select('#c1-svg');
+            const W=900,H=500,pad=30,cols=12,rows=6;
+            const x=d3.scaleLinear().domain([0,cols]).range([pad,W-pad]);
+            const y=d3.scaleLinear().domain([0,rows]).range([H-pad,pad]);
+            const g=svg.append('g');
+            g.append('rect').attr('class','border').attr('x',x(0)).attr('y',y(rows))
+                .attr('width',x(cols)-x(0)).attr('height',y(0)-y(rows));
+            const grid=g.append('g').attr('class','grid');
+            for(let i=0;i<=cols;i++) grid.append('line').attr('x1',x(i)).attr('y1',y(0)).attr('x2',x(i)).attr('y2',y(rows));
+            for(let j=0;j<=rows;j++) grid.append('line').attr('x1',x(0)).attr('y1',y(j)).attr('x2',x(cols)).attr('y2',y(j));
+            const pts={a1:{x:9,y:3},a2:{x:6,y:3},b1:{x:6,y:1},b2:{x:2,y:1}};
+            function drawLabel(g,p,dx=0,dy=0){
+                const t=g.append('text').attr('class','label').attr('x',x(p.x)+dx).attr('y',y(p.y)+dy);
                 t.append('tspan').text('e');
-                t.append('tspan').text(p.super).attr('baseline-shift', 'super')
-                    .style('font-size', '70%').style('font-style', 'italic');
-                t.append('tspan').text(p.sub).attr('baseline-shift', 'sub').style('font-size', '70%');
+                t.append('tspan').text('α').attr('baseline-shift','super').style('font-size','70%');
+                t.append('tspan').text('1').attr('baseline-shift','sub').style('font-size','70%');
             }
-
-            svg.append('defs').append('marker')
-                .attr('id', 'a3-c1-arrow')
-                .attr('viewBox', '0 0 10 10')
-                .attr('refX', 10).attr('refY', 5)
-                .attr('markerWidth', 8).attr('markerHeight', 8)
-                .attr('orient', 'auto-start-reverse')
-                .append('path').attr('d', 'M 0 0 L 10 5 L 0 10 z').style('fill', 'currentColor');
-
-            const pg = svg.append('g');
-            Object.values(pts).forEach(p => {
-                pg.append('circle').attr('class', 'a3-c1-point').attr('r', 3.2)
-                    .attr('cx', x(p.x)).attr('cy', y(p.y));
-                const off = { a1: [6, -6], a2: [-4, -10], b1: [6, 12], b2: [-10, 12] };
-                const key = Object.entries(pts).find(([k, v]) => v === p)[0];
-                drawLabel(pg, p, off[key][0], off[key][1]);
+            svg.append('defs').append('marker').attr('id','c1-arrow').attr('viewBox','0 0 10 10')
+                .attr('refX',10).attr('refY',5).attr('markerWidth',8).attr('markerHeight',8)
+                .attr('orient','auto-start-reverse').append('path').attr('d','M 0 0 L 10 5 L 0 10 z').attr('class','arrowhead');
+            const pg=svg.append('g');
+            Object.values(pts).forEach(p=>{
+                pg.append('circle').attr('class','point').attr('r',3.2).attr('cx',x(p.x)).attr('cy',y(p.y));
             });
-
-            const para = svg.append('g');
-            para.append('line')
-                .attr('x1', x(pts.a2.x)).attr('y1', y(pts.a2.y))
-                .attr('x2', x(pts.a1.x)).attr('y2', y(pts.a1.y))
-                .attr('stroke', '#6b7280').attr('stroke-width', 2).attr('opacity', 0.9);
-            para.append('line')
-                .attr('x1', x(pts.b2.x)).attr('y1', y(pts.b2.y))
-                .attr('x2', x(pts.b1.x)).attr('y2', y(pts.b1.y))
-                .attr('stroke', '#6b7280').attr('stroke-width', 2).attr('opacity', 0.9);
-
-            const vectors = [
-                { id: 's1', from: pts.b1, to: pts.a1, klass: 'v-solid', color: '#4b5563' },
-                { id: 's2', from: pts.b2, to: pts.a2, klass: 'v-solid', color: '#4b5563' }
-            ];
-            const dashed = [
-                { id: 'd1', from: pts.a1, to: pts.b2, klass: 'v-dash1', color: '#223f6a' },
-                { id: 'd2', from: pts.a2, to: pts.b1, klass: 'v-dash2', color: '#1e8aa3' }
-            ];
-            const allVecs = vectors.concat(dashed);
-            const vg = svg.append('g');
-
-            function pathOf(v) {
-                return `M ${x(v.from.x)},${y(v.from.y)} L ${x(v.to.x)},${y(v.to.y)}`;
-            }
-
-            allVecs.forEach(v => {
-                const p = vg.append('path')
-                    .attr('d', pathOf(v))
-                    .attr('stroke', v.color)
-                    .attr('fill', 'none')
-                    .attr('marker-end', 'url(#a3-c1-arrow)')
-                    .attr('stroke-linecap', 'round')
-                    .attr('opacity', 0.95)
-                    .attr('stroke-width', v.klass === 'v-solid' ? 2.5 : 3);
-
-                const len = p.node().getTotalLength();
-                p.attr('stroke-dasharray', len + ' ' + len)
-                    .attr('stroke-dashoffset', len)
-                    .transition().duration(1200).ease(d3.easeCubicInOut)
-                    .attr('stroke-dashoffset', 0);
-                v.el = p;
+            const para=svg.append('g');
+            para.append('line').attr('x1',x(pts.a2.x)).attr('y1',y(pts.a2.y)).attr('x2',x(pts.a1.x)).attr('y2',y(pts.a1.y))
+                .attr('stroke','#6b7280').attr('stroke-width',2).attr('opacity',0.9);
+            para.append('line').attr('x1',x(pts.b2.x)).attr('y1',y(pts.b2.y)).attr('x2',x(pts.b1.x)).attr('y2',y(pts.b1.y))
+                .attr('stroke','#6b7280').attr('stroke-width',2).attr('opacity',0.9);
+            const vectors=[{id:'s1',from:pts.b1,to:pts.a1,klass:'v-solid',color:'#4b5563'},
+                {id:'s2',from:pts.b2,to:pts.a2,klass:'v-solid',color:'#4b5563'}];
+            const dashed=[{id:'d1',from:pts.a1,to:pts.b2,klass:'v-dash1',color:'#223f6a'},
+                {id:'d2',from:pts.a2,to:pts.b1,klass:'v-dash2',color:'#1e8aa3'}];
+            const allVecs=vectors.concat(dashed);
+            const vg=svg.append('g');
+            function pathOf(v){return `M ${x(v.from.x)},${y(v.from.y)} L ${x(v.to.x)},${y(v.to.y)}`;}
+            allVecs.forEach(v=>{
+                const p=vg.append('path').attr('class',v.klass).attr('d',pathOf(v)).attr('stroke',v.color)
+                    .attr('fill','none').attr('marker-end','url(#c1-arrow)').attr('stroke-linecap','round')
+                    .attr('opacity',0.95).attr('stroke-width',v.klass==='v-solid'?2.5:3);
+                const len=p.node().getTotalLength();
+                p.attr('stroke-dasharray',len+' '+len).attr('stroke-dashoffset',len)
+                    .transition().duration(1200).ease(d3.easeCubicInOut).attr('stroke-dashoffset',0);
+                v.el=p;
             });
-
-            const handles = svg.append('g');
-            dashed.forEach(v => {
-                const h = handles.append('circle').attr('r', 8).attr('fill', '#0ea5e9')
-                    .attr('opacity', .8)
-                    .attr('cx', x(v.to.x)).attr('cy', y(v.to.y))
-                    .style('cursor', 'grab');
+            const handles=svg.append('g');
+            dashed.forEach(v=>{
+                const h=handles.append('circle').attr('r',8).attr('fill','#0ea5e9').attr('opacity',.8)
+                    .attr('cx',x(v.to.x)).attr('cy',y(v.to.y)).style('cursor','grab');
                 h.call(d3.drag()
-                    .on('start', () => h.style('cursor', 'grabbing'))
-                    .on('drag', (event) => {
-                        const xm = Math.round(x.invert(event.x));
-                        const ym = Math.round(y.invert(event.y));
-                        v.to.x = Math.max(0, Math.min(cols, xm));
-                        v.to.y = Math.max(0, Math.min(rows, ym));
-                        h.attr('cx', x(v.to.x)).attr('cy', y(v.to.y));
-                        v.el.attr('d', pathOf(v));
+                    .on('start',()=>h.style('cursor','grabbing'))
+                    .on('drag',(event)=>{
+                        const xm=Math.round(x.invert(event.x));
+                        const ym=Math.round(y.invert(event.y));
+                        v.to.x=Math.max(0,Math.min(cols,xm));
+                        v.to.y=Math.max(0,Math.min(rows,ym));
+                        h.attr('cx',x(v.to.x)).attr('cy',y(v.to.y));
+                        v.el.attr('d',pathOf(v));
                     })
-                    .on('end', () => h.style('cursor', 'grab')));
+                    .on('end',()=>h.style('cursor','grab')));
             });
-
-            d3.select('#a3-c1-replay').on('click', () => {
-                allVecs.forEach(v => {
-                    const p = v.el;
-                    const len = p.node().getTotalLength();
-                    p.interrupt()
-                        .attr('stroke-dasharray', len + ' ' + len)
-                        .attr('stroke-dashoffset', len)
-                        .transition().duration(900).ease(d3.easeCubicInOut)
-                        .attr('stroke-dashoffset', 0);
+            d3.select('#c1-replay').on('click',()=>{
+                allVecs.forEach(v=>{
+                    const p=v.el,len=p.node().getTotalLength();
+                    p.interrupt().attr('stroke-dasharray',len+' '+len).attr('stroke-dashoffset',len)
+                        .transition().duration(900).ease(d3.easeCubicInOut).attr('stroke-dashoffset',0);
                 });
             });
-
-            let dashOn = true;
-            d3.select('#a3-c1-toggle').on('click', () => {
-                dashOn = !dashOn;
-                dashed.forEach(v => v.el.transition().duration(250).style('opacity', dashOn ? 0.95 : 0));
+            let dashOn=true;
+            d3.select('#c1-toggle').on('click',()=>{
+                dashOn=!dashOn;
+                dashed.forEach(v=>v.el.transition().duration(250).style('opacity',dashOn?0.95:0));
             });
         })();
 
-        // ============================================
-        // Assignment 3: Chart 4 (Frequency)
-        // ============================================
-        (function() {
-            const svg = d3.select("#a3-freq-svg");
-            const bbox = svg.node().getBoundingClientRect();
-            const width = (bbox && bbox.width) ? bbox.width - 66 - 28 : 1200 - 66 - 28;
-            const height = +svg.attr("height");
-            const margin = { top: 18, right: 28, bottom: 36, left: 66 };
-            const innerH = height - margin.top - margin.bottom;
-            const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
-
-            const color = d3.scaleOrdinal()
-                .domain(["Set model", "Sequence model", "Vector model", "End-to-end"])
-                .range(["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3"]);
-
-            const years = d3.range(1980, 2023);
-
-            function spikes(map) {
-                const out = new Map();
-                years.forEach(y => out.set(y, 0));
-                for (const [y, v] of map) out.set(y, v);
-                return years.map(y => ({ year: y, value: out.get(y) }));
+        // A3: Frequency
+        (function(){
+            const svg=d3.select("#freq-svg");
+            const bbox=svg.node().getBoundingClientRect();
+            const width=(bbox&&bbox.width)?bbox.width-94:1106;
+            const height=+svg.attr("height");
+            const margin={top:18,right:28,bottom:36,left:66};
+            const innerH=height-margin.top-margin.bottom;
+            const g=svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
+            const color=d3.scaleOrdinal().domain(["Set model","Sequence model","Vector model","End-to-end"])
+                .range(["#66c2a5","#fc8d62","#8da0cb","#e78ac3"]);
+            const years=d3.range(1980,2023);
+            function spikes(map){
+                const out=new Map();
+                years.forEach(y=>out.set(y,0));
+                for(const[y,v]of map) out.set(y,v);
+                return years.map(y=>({year:y,value:out.get(y)}));
             }
-
-            const data = [
-                { key: "Set model", values: spikes([[1986, 1], [1987, 0.8], [2003, 1.2], [2004, 2.0], [2005, 0.2]]) },
-                { key: "Sequence model", values: spikes([[1992, 1.0], [2005, 0.3], [2006, 1.6], [2016, 1.0], [2017, 1.2], [2018, 1.0], [2019, 0.6]]) },
-                { key: "Vector model", values: spikes([[1989, 1.0], [1999, 1.0], [2003, 0.8], [2004, 1.6], [2009, 2.0], [2013, 3.2], [2014, 4.8], [2015, 2.2], [2016, 5.0], [2017, 3.6]]) },
-                { key: "End-to-end", values: spikes([[1995, 0.8], [1996, 1.2], [1997, 1.0], [2006, 0.8], [2007, 2.0], [2012, 1.2], [2013, 5.0], [2014, 2.4], [2015, 3.0], [2016, 4.2], [2017, 4.0], [2018, 10.0], [2019, 2.2]]) }
+            const data=[
+                {key:"Set model",values:spikes([[1986,1],[1987,0.8],[2003,1.2],[2004,2.0],[2005,0.2]])},
+                {key:"Sequence model",values:spikes([[1992,1.0],[2005,0.3],[2006,1.6],[2016,1.0],[2017,1.2],[2018,1.0],[2019,0.6]])},
+                {key:"Vector model",values:spikes([[1989,1.0],[1999,1.0],[2003,0.8],[2004,1.6],[2009,2.0],[2013,3.2],[2014,4.8],[2015,2.2],[2016,5.0],[2017,3.6]])},
+                {key:"End-to-end",values:spikes([[1995,0.8],[1996,1.2],[1997,1.0],[2006,0.8],[2007,2.0],[2012,1.2],[2013,5.0],[2014,2.4],[2015,3.0],[2016,4.2],[2017,4.0],[2018,10.0],[2019,2.2]])}
             ];
+            const x=d3.scaleLinear().domain([1980,2022]).range([0,width]);
+            const y=d3.scaleLinear().domain([0,10]).nice().range([innerH,0]);
+            g.append("g").attr("class","axis x").attr("transform",`translate(0,${innerH})`)
+                .call(d3.axisBottom(x).tickValues(d3.range(1980,2025,5)).tickFormat(d3.format("d")));
+            g.append("g").attr("class","axis y").call(d3.axisLeft(y).ticks(5));
+            g.append("text").attr("class","y-label").attr("transform","rotate(-90)")
+                .attr("x",-innerH/2).attr("y",-48).attr("text-anchor","middle").text("Frequency");
+            const area=d3.area().x(d=>x(d.year)).y0(y(0)).y1(d=>y(d.value)).curve(d3.curveCatmullRom.alpha(0.7));
+            const order=["Set model","Sequence model","Vector model","End-to-end"];
+            const seriesG=g.append("g").attr("clip-path","url(#freq-clip)");
+            g.append("clipPath").attr("id","freq-clip").append("rect").attr("width",0).attr("height",innerH)
+                .transition().duration(1200).ease(d3.easeCubicOut).attr("width",width);
+            const series=seriesG.selectAll(".series").data(order.map(k=>data.find(d=>d.key===k)))
+                .join("g").attr("class","series");
+            series.append("path").attr("class","series-area").attr("fill",d=>color(d.key))
+                .attr("fill-opacity",0.6).attr("d",d=>area(d.values));
+            const legend=g.append("g").attr("class","legend").attr("transform","translate(8,10)");
+            const row=legend.selectAll("g.item").data(order).join("g").attr("class","item")
+                .attr("transform",(d,i)=>`translate(0,${i*30})`).style("cursor","pointer");
+            row.append("rect").attr("x",0).attr("y",-18).attr("width",26).attr("height",18)
+                .attr("fill",d=>color(d)).attr("fill-opacity",0.6).attr("stroke","#000").attr("stroke-opacity",.25);
+            row.append("text").attr("x",36).attr("y",-4).attr("dominant-baseline","middle").text(d=>d);
+            series.select("path").attr("transform","scale(1,0)").transition().delay(150).duration(900)
+                .ease(d3.easeCubicOut).attr("transform","scale(1,1)");
+        })();
 
-            const x = d3.scaleLinear().domain([1980, 2022]).range([0, width]);
-            const y = d3.scaleLinear().domain([0, 10]).nice().range([innerH, 0]);
-
-            const xAxis = d3.axisBottom(x).tickValues(d3.range(1980, 2025, 5)).tickFormat(d3.format("d"));
-            const yAxis = d3.axisLeft(y).ticks(5);
-
-            g.append("g").attr("class", "a3-freq-axis").attr("transform", `translate(0,${innerH})`).call(xAxis);
-            g.append("g").attr("class", "a3-freq-axis").call(yAxis);
-            g.append("text").attr("class", "a3-freq-y-label").attr("transform", "rotate(-90)")
-                .attr("x", -innerH / 2).attr("y", -48).attr("text-anchor", "middle").text("Frequency");
-
-            const area = d3.area()
-                .x(d => x(d.year))
-                .y0(y(0))
-                .y1(d => y(d.value))
-                .curve(d3.curveCatmullRom.alpha(0.7));
-
-            const order = ["Set model", "Sequence model", "Vector model", "End-to-end"];
-            const seriesG = g.append("g").attr("clip-path", "url(#a3-freq-clip)");
-            g.append("clipPath").attr("id", "a3-freq-clip")
-                .append("rect").attr("width", 0).attr("height", innerH)
-                .transition().duration(1200).ease(d3.easeCubicOut).attr("width", width);
-
-            const series = seriesG.selectAll(".a3-freq-series")
-                .data(order.map(k => data.find(d => d.key === k)))
-                .join("g").attr("class", "a3-freq-series");
-
-            series.append("path")
-                .attr("class", "a3-freq-series-area")
-                .attr("fill", d => color(d.key))
-                .attr("fill-opacity", 0.6)
-                .attr("d", d => area(d.values));
-
-            const legend = g.append("g").attr("class", "a3-freq-legend")
-                .attr("transform", "translate(8,10)");
-
-            const row = legend.selectAll("g.item")
-                .data(order).join("g").attr("class", "item")
-                .attr("transform", (d, i) => `translate(0,${i * 30})`)
-                .style("cursor", "pointer")
-                .on("mouseenter", (e, key) => highlight(key))
-                .on("mouseleave", unhighlight)
-                .on("click", (e, key) => toggle(key));
-
-            row.append("rect").attr("x", 0).attr("y", -18).attr("width", 26).attr("height", 18)
-                .attr("fill", d => color(d)).attr("fill-opacity", 0.6)
-                .attr("stroke", "#000").attr("stroke-opacity", .25);
-            row.append("text").attr("x", 36).attr("y", -4).attr("dominant-baseline", "middle")
-                .attr("font-size", "16px").text(d => d);
-
-            const focusLine = g.append("line").attr("y1", 0).attr("y2", innerH)
-                .attr("stroke", "#000").attr("stroke-opacity", .15).style("display", "none");
-
-            svg.on("mousemove", (event) => {
-                const [mx] = d3.pointer(event, g.node());
-                const year = Math.max(1980, Math.min(2022, Math.round(x.invert(mx))));
-                focusLine.attr("x1", x(year)).attr("x2", x(year)).style("display", null);
-
-                const rows = order.map(k => {
-                    const arr = data.find(d => d.key === k).values;
-                    const v = arr.find(d => d.year === year)?.value ?? 0;
-                    return { k, v };
-                });
-
-                showTooltip(
-                    `<b>${year}</b><br>` +
-                    rows.map(r => `<span style="display:inline-block;width:10px;height:10px;background:${color(r.k)};opacity:.6;margin-right:6px;border:1px solid rgba(0,0,0,.25)"></span>${r.k}: ${r.v.toFixed(1)}`).join("<br>"),
-                    event
-                );
-            }).on("mouseleave", () => {
-                hideTooltip();
-                focusLine.style("display", "none");
+        // A3: Venn
+        (function(){
+            const svg=d3.select("#c7-venn");
+            const W=1100,H=700;
+            const cx={left:380,top:590,right:730};
+            const cy={left:470,top:300,right:500};
+            const r=220;
+            const colors={left:"#b8b2d9",top:"#c9b3b3",right:"#edd88c"};
+            svg.append("rect").attr("x",40).attr("y",70).attr("width",W-80).attr("height",H-120).attr("fill","#fff");
+            const sets=[
+                {id:"left",cx:cx.left,cy:cy.left,fill:colors.left,name:"Delete"},
+                {id:"top",cx:cx.top,cy:cy.top,fill:colors.top,name:"Replace"},
+                {id:"right",cx:cx.right,cy:cy.right,fill:colors.right,name:"Rewrite"}
+            ];
+            const tip=d3.select("#c7-tip");
+            svg.selectAll("circle.set").data(sets).enter().append("circle").attr("class","set")
+                .attr("cx",d=>d.cx).attr("cy",d=>d.cy).attr("r",r).attr("fill",d=>d.fill).attr("opacity",0)
+                .transition().duration(800).attr("opacity",0.55);
+            svg.selectAll("circle.set").on("mousemove",function(e,d){
+                d3.select(this).attr("opacity",0.75);
+                tip.style("opacity",1).style("left",(e.clientX+12)+"px").style("top",(e.clientY+12)+"px").text(d.name);
+            }).on("mouseout",function(){
+                d3.select(this).attr("opacity",0.55);
+                tip.style("opacity",0);
             });
-
-            let hidden = new Set();
-
-            function updateOpacity() {
-                series.select("path").classed("dim", d => hidden.has(d.key));
+            svg.append("text").attr("class","label").attr("x",cx.top).attr("y",120).attr("text-anchor","middle").text("Replace");
+            svg.append("text").attr("class","label").attr("x",140).attr("y",cy.left+20).text("Delete");
+            svg.append("text").attr("class","label").attr("x",W-180).attr("y",cy.right+20).attr("text-anchor","end").text("Rewrite");
+            function placeRoman(txt,x,y){
+                svg.append("text").attr("class","roman").attr("x",x).attr("y",y).attr("text-anchor","middle").text(txt);
             }
-
-            function highlight(key) {
-                series.select("path")
-                    .classed("highlight", d => d.key === key && !hidden.has(d.key))
-                    .classed("dim", d => d.key !== key || hidden.has(d.key));
-            }
-
-            function unhighlight() {
-                series.select("path").classed("highlight", false).classed("dim", d => hidden.has(d.key));
-            }
-
-            function toggle(key) {
-                if (hidden.has(key)) hidden.delete(key);
-                else hidden.add(key);
-                series.filter(d => d.key === key).select("path")
-                    .transition().duration(250)
-                    .attr("fill-opacity", hidden.has(key) ? 0.05 : 0.6);
-                updateOpacity();
-            }
-
-            series.select("path")
-                .attr("transform", "translate(0," + (y(0) - y(0)) + ") scale(1,0)")
-                .transition().delay(150).duration(900).ease(d3.easeCubicOut)
-                .attr("transform", "translate(0,0) scale(1,1)");
+            placeRoman("I",cx.left-70,cy.left+130);
+            placeRoman("II",cx.top,cy.top+20);
+            placeRoman("III",cx.right+60,cy.right+110);
+            placeRoman("IV",(cx.left+cx.top)/2-30,(cy.left+cy.top)/2+10);
+            placeRoman("V",(cx.top+cx.right)/2+10,(cy.top+cy.right)/2-10);
+            placeRoman("VI",(cx.left+cx.right)/2-10,(cy.left+cy.right)/2+80);
+            placeRoman("VII",(cx.left+cx.top+cx.right)/3+5,(cy.left+cy.top+cy.right)/3+30);
         })();
 
-        // ============================================
-        // Assignment 3: Chart 7 (Venn)
-        // ============================================
-        (function() {
-            const svg = d3.select("#a3-c7-venn");
-            const W = 1100, H = 700;
-            const cx = { left: 380, top: 590, right: 730 };
-            const cy = { left: 470, top: 300, right: 500 };
-            const r = 220;
-            const colors = { left: "#b8b2d9", top: "#c9b3b3", right: "#edd88c" };
-
-            svg.append("rect").attr("x", 40).attr("y", 70)
-                .attr("width", W - 80).attr("height", H - 120).attr("fill", "#fff");
-
-            const sets = [
-                { id: "left", cx: cx.left, cy: cy.left, fill: colors.left, name: "Delete" },
-                { id: "top", cx: cx.top, cy: cy.top, fill: colors.top, name: "Replace" },
-                { id: "right", cx: cx.right, cy: cy.right, fill: colors.right, name: "Rewrite" }
-            ];
-
-            svg.selectAll("circle.a3-c7-set")
-                .data(sets).enter().append("circle")
-                .attr("class", "a3-c7-set")
-                .attr("cx", d => d.cx).attr("cy", d => d.cy).attr("r", r)
-                .attr("fill", d => d.fill).attr("opacity", 0)
-                .transition().duration(800).attr("opacity", 0.55);
-
-            svg.selectAll("circle.a3-c7-set")
-                .on("mousemove", function(e, d) {
-                    d3.select(this).attr("opacity", 0.75);
-                    showTooltip(d.name, e);
-                })
-                .on("mouseout", function() {
-                    d3.select(this).attr("opacity", 0.55);
-                    hideTooltip();
-                });
-
-            svg.append("text").attr("class", "a3-c7-label")
-                .attr("x", cx.top).attr("y", 120).attr("text-anchor", "middle").text("Replace");
-            svg.append("text").attr("class", "a3-c7-label")
-                .attr("x", 140).attr("y", cy.left + 20).text("Delete");
-            svg.append("text").attr("class", "a3-c7-label")
-                .attr("x", W - 180).attr("y", cy.right + 20).attr("text-anchor", "end").text("Rewrite");
-
-            function placeRoman(txt, x, y) {
-                svg.append("text").attr("class", "a3-c7-roman")
-                    .attr("x", x).attr("y", y).attr("text-anchor", "middle").text(txt);
-            }
-
-            placeRoman("I", cx.left - 70, cy.left + 130);
-            placeRoman("II", cx.top, cy.top + 20);
-            placeRoman("III", cx.right + 60, cy.right + 110);
-            placeRoman("IV", (cx.left + cx.top) / 2 - 30, (cy.left + cy.top) / 2 + 10);
-            placeRoman("V", (cx.top + cx.right) / 2 + 10, (cy.top + cy.right) / 2 - 10);
-            placeRoman("VI", (cx.left + cx.right) / 2 - 10, (cy.left + cy.right) / 2 + 80);
-            placeRoman("VII", (cx.left + cx.top + cx.right) / 3 + 5, (cy.left + cy.top + cy.right) / 3 + 30);
+        // A3: Bars
+        (function(){
+            const data=[{model:"BERT",solid:74.4,ghost:64.8},{model:"RoBERTa",solid:81.9,ghost:65.5},{model:"BART",solid:73.1,ghost:63.5}];
+            const outerW=900,outerH=480,margin={top:40,right:40,bottom:80,left:70};
+            const w=outerW-margin.left-margin.right,h=outerH-margin.top-margin.bottom;
+            const svg=d3.select("#c8-chart").append("svg").attr("width",outerW).attr("height",outerH);
+            const g=svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
+            g.append("rect").attr("class","frame").attr("x",0).attr("y",0).attr("width",w).attr("height",h);
+            const y=d3.scaleLinear().domain([0,100]).nice().range([h,0]);
+            g.append("g").attr("class","axis y-axis").call(d3.axisLeft(y).tickValues([0,100]).tickSize(0))
+                .selectAll("text").attr("dx",-8);
+            g.append("g").attr("transform",`translate(${w},0)`).append("line").attr("y1",0).attr("y2",h)
+                .attr("stroke","#7a7a7a").attr("stroke-width",4);
+            const y100=y(100);
+            g.append("line").attr("class","tick100-left").attr("x1",-6).attr("x2",0).attr("y1",y100).attr("y2",y100);
+            g.append("line").attr("class","tick100-right").attr("x1",w).attr("x2",w+6).attr("y1",y100).attr("y2",y100);
+            const x=d3.scaleBand().domain(data.map(d=>d.model)).range([0,w]).paddingInner(0.55).paddingOuter(0.25);
+            g.append("g").attr("class","axis x-axis").attr("transform",`translate(0,${h})`).call(d3.axisBottom(x))
+                .selectAll("text").attr("class","model").attr("dy","1.2em");
+            const barW=Math.min(70,x.bandwidth()*0.55),gap=Math.min(16,x.bandwidth()*0.18);
+            const tip=d3.select("#c8-tip");
+            g.selectAll(".ghostBox").data(data).enter().append("rect").attr("class","ghostBox").attr("rx",6).attr("ry",6)
+                .attr("x",d=>x(d.model)+barW+gap).attr("y",h).attr("width",barW).attr("height",0)
+                .on("mousemove",(ev,d)=>{tip.style("opacity",1).style("left",(ev.pageX+12)+"px").style("top",(ev.pageY-10)+"px")
+                    .html(`<b>${d.model}</b><br/>Ghost: ${d.ghost}%`);})
+                .on("mouseleave",()=>tip.style("opacity",0))
+                .transition().duration(900).delay(250).attr("y",d=>y(d.ghost)).attr("height",d=>h-y(d.ghost));
+            g.selectAll(".bar").data(data).enter().append("rect").attr("class","bar")
+                .attr("x",d=>x(d.model)).attr("y",h).attr("width",barW).attr("height",0)
+                .on("mousemove",(ev,d)=>{tip.style("opacity",1).style("left",(ev.pageX+12)+"px").style("top",(ev.pageY-10)+"px")
+                    .html(`<b>${d.model}</b><br/>Accuracy: ${d.solid}%`);})
+                .on("mouseleave",()=>tip.style("opacity",0))
+                .transition().duration(900).attr("y",d=>y(d.solid)).attr("height",d=>h-y(d.solid));
+            g.selectAll(".label.solid").data(data).enter().append("text").attr("class","label solid")
+                .attr("x",d=>x(d.model)+barW/2).attr("y",d=>y(d.solid)-10).attr("text-anchor","middle").text(d=>d.solid.toFixed(1));
+            g.selectAll(".label.ghost").data(data).enter().append("text").attr("class","label ghost")
+                .attr("x",d=>x(d.model)+barW+gap+barW/2).attr("y",d=>y(d.ghost)-10).attr("text-anchor","middle").text(d=>d.ghost.toFixed(1));
         })();
 
-        // ============================================
-        // Assignment 3: Chart 8 (Bars)
-        // ============================================
-        (function() {
-            const data = [
-                { model: "BERT", solid: 74.4, ghost: 64.8 },
-                { model: "RoBERTa", solid: 81.9, ghost: 65.5 },
-                { model: "BART", solid: 73.1, ghost: 63.5 }
-            ];
-
-            const outerW = 900, outerH = 480;
-            const margin = { top: 40, right: 40, bottom: 80, left: 70 };
-            const w = outerW - margin.left - margin.right;
-            const h = outerH - margin.top - margin.bottom;
-
-            const svg = d3.select("#a3-c8-chart").append("svg")
-                .attr("width", outerW).attr("height", outerH)
-                .attr("class", "a3-c8-svg");
-
-            const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
-
-            g.append("rect").attr("class", "a3-c8-frame")
-                .attr("x", 0).attr("y", 0).attr("width", w).attr("height", h);
-
-            const y = d3.scaleLinear().domain([0, 100]).nice().range([h, 0]);
-            const yAxis = d3.axisLeft(y).tickValues([0, 100]).tickSize(0);
-            g.append("g").attr("class", "a3-c8-axis").call(yAxis)
-                .selectAll("text").attr("dx", -8);
-
-            g.append("g").attr("transform", `translate(${w},0)`)
-                .append("line").attr("y1", 0).attr("y2", h)
-                .attr("stroke", "#7a7a7a").attr("stroke-width", 4);
-
-            const y100 = y(100);
-            g.append("line").attr("class", "tick100-left")
-                .attr("x1", -6).attr("x2", 0).attr("y1", y100).attr("y2", y100)
-                .attr("stroke", "#7a7a7a").attr("stroke-width", 6);
-            g.append("line").attr("class", "tick100-right")
-                .attr("x1", w).attr("x2", w + 6).attr("y1", y100).attr("y2", y100)
-                .attr("stroke", "#7a7a7a").attr("stroke-width", 6);
-
-            const x = d3.scaleBand()
-                .domain(data.map(d => d.model))
-                .range([0, w]).paddingInner(0.55).paddingOuter(0.25);
-
-            const xAxis = d3.axisBottom(x);
-            g.append("g").attr("class", "a3-c8-axis")
-                .attr("transform", `translate(0,${h})`).call(xAxis)
-                .selectAll("text").attr("dy", "1.2em")
-                .attr("font-size", "18px").attr("font-weight", "700");
-
-            const barW = Math.min(70, x.bandwidth() * 0.55);
-            const gap = Math.min(16, x.bandwidth() * 0.18);
-
-            g.selectAll(".a3-c8-ghostBox")
-                .data(data).enter().append("rect")
-                .attr("class", "a3-c8-ghostBox")
-                .attr("rx", 6).attr("ry", 6)
-                .attr("x", d => x(d.model) + barW + gap)
-                .attr("y", h).attr("width", barW).attr("height", 0)
-                .on("mousemove", (ev, d) => {
-                    showTooltip(`<b>${d.model}</b><br/>Ghost: ${d.ghost}%`, ev);
-                })
-                .on("mouseleave", hideTooltip)
-                .transition().duration(900).delay(250)
-                .attr("y", d => y(d.ghost))
-                .attr("height", d => h - y(d.ghost));
-
-            g.selectAll(".a3-c8-bar")
-                .data(data).enter().append("rect")
-                .attr("class", "a3-c8-bar")
-                .attr("x", d => x(d.model))
-                .attr("y", h).attr("width", barW).attr("height", 0)
-                .on("mousemove", (ev, d) => {
-                    showTooltip(`<b>${d.model}</b><br/>Accuracy: ${d.solid}%`, ev);
-                })
-                .on("mouseleave", hideTooltip)
-                .transition().duration(900)
-                .attr("y", d => y(d.solid))
-                .attr("height", d => h - y(d.solid));
-
-            g.selectAll(".a3-c8-label.solid")
-                .data(data).enter().append("text")
-                .attr("class", "a3-c8-label solid")
-                .attr("x", d => x(d.model) + barW / 2)
-                .attr("y", d => y(d.solid) - 10)
-                .attr("text-anchor", "middle")
-                .text(d => d.solid.toFixed(1));
-
-            g.selectAll(".a3-c8-label.ghost")
-                .data(data).enter().append("text")
-                .attr("class", "a3-c8-label ghost")
-                .attr("x", d => x(d.model) + barW + gap + barW / 2)
-                .attr("y", d => y(d.ghost) - 10)
-                .attr("text-anchor", "middle")
-                .text(d => d.ghost.toFixed(1));
-        })();
-
-        // ============================================
-        // Assignment 3: Chart 11 (PDF Overlap)
-        // ============================================
-        (function() {
-            const W = 1150, H = 760, m = { top: 28, right: 48, bottom: 78, left: 110 };
-            const iw = W - m.left - m.right, ih = H - m.top - m.bottom;
-            const svg = d3.select('#a3-pdfx-chart').append('svg').attr('width', W).attr('height', H);
-            const g = svg.append('g').attr('transform', `translate(${m.left},${m.top})`);
-
-            const x = d3.scaleLinear().domain([-2, 5]).range([0, iw]);
-            const y = d3.scaleLinear().domain([0, 0.35]).range([ih, 0]);
-
-            g.append('g').attr('class', 'a3-pdfx-grid')
-                .attr('transform', `translate(0,${ih})`)
+        // A3: PDF
+        (function(){
+            const W=1150,H=760,m={top:28,right:48,bottom:78,left:110};
+            const iw=W-m.left-m.right,ih=H-m.top-m.bottom;
+            const svg=d3.select('#pdfx-chart').append('svg').attr('width',W).attr('height',H);
+            const g=svg.append('g').attr('transform',`translate(${m.left},${m.top})`);
+            const x=d3.scaleLinear().domain([-2,5]).range([0,iw]);
+            const y=d3.scaleLinear().domain([0,0.35]).range([ih,0]);
+            g.append('g').attr('class','grid').attr('transform',`translate(0,${ih})`)
                 .call(d3.axisBottom(x).ticks(14).tickSize(-ih).tickFormat(''));
-            g.append('g').attr('class', 'a3-pdfx-grid')
-                .call(d3.axisLeft(y).ticks(8).tickSize(-iw).tickFormat(''));
-
-            g.append('g').attr('class', 'a3-pdfx-axis')
-                .attr('transform', `translate(0,${ih})`).call(d3.axisBottom(x).ticks(14));
-            g.append('g').attr('class', 'a3-pdfx-axis').call(d3.axisLeft(y).ticks(8));
-
-            g.append('text').attr('x', iw / 2).attr('y', ih + 52)
-                .attr('text-anchor', 'middle').attr('font-size', 28).text('x');
-            g.append('text').attr('transform', 'rotate(-90)')
-                .attr('x', -ih / 2).attr('y', -70)
-                .attr('text-anchor', 'middle').attr('font-size', 28).text('Probability Density');
-
-            g.append('line').attr('class', 'a3-pdfx-vline')
-                .attr('x1', 0).attr('y1', y(0)).attr('x2', iw).attr('y2', y(0));
-
-            const a = 0.85, b = 1.45;
-            g.append('line').attr('class', 'a3-pdfx-vline')
-                .attr('x1', x(a)).attr('x2', x(a)).attr('y1', 0).attr('y2', ih);
-            g.append('line').attr('class', 'a3-pdfx-vline')
-                .attr('x1', x(b)).attr('x2', x(b)).attr('y1', 0).attr('y2', ih);
-
-            const normal = (mu, s) => z => (1 / (s * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * ((z - mu) / s) ** 2);
-            const clampTiny = v => v < 1e-4 ? 0 : v;
-            const pdf0_raw = normal(0.0, 1.00), A0 = 0.59;
-            const pdf1_raw = normal(2.1, 0.70), A1 = 0.44;
-
-            const x0 = -1.35, x1 = -1.10;
-
-            function pdf0(xv) {
-                if (xv <= x0) return 0;
-                if (xv < x1) {
-                    const y1 = A0 * pdf0_raw(x1);
-                    const t = (xv - x0) / (x1 - x0);
-                    return t * y1;
-                }
-                return clampTiny(A0 * pdf0_raw(xv));
+            g.append('g').attr('class','grid').call(d3.axisLeft(y).ticks(8).tickSize(-iw).tickFormat(''));
+            g.append('g').attr('class','axis').attr('transform',`translate(0,${ih})`).call(d3.axisBottom(x).ticks(14));
+            g.append('g').attr('class','axis').call(d3.axisLeft(y).ticks(8));
+            g.append('text').attr('x',iw/2).attr('y',ih+52).attr('text-anchor','middle').attr('font-size',28).text('x');
+            g.append('text').attr('transform','rotate(-90)').attr('x',-ih/2).attr('y',-70)
+                .attr('text-anchor','middle').attr('font-size',28).text('Probability Density');
+            g.append('line').attr('class','baseline').attr('x1',0).attr('y1',y(0)).attr('x2',iw).attr('y2',y(0));
+            const a=0.85,b=1.45;
+            g.append('line').attr('class','vline').attr('x1',x(a)).attr('x2',x(a)).attr('y1',0).attr('y2',ih);
+            g.append('line').attr('class','vline').attr('x1',x(b)).attr('x2',x(b)).attr('y1',0).attr('y2',ih);
+            const normal=(mu,s)=>z=>(1/(s*Math.sqrt(2*Math.PI)))*Math.exp(-0.5*((z-mu)/s)**2);
+            const clampTiny=v=>v<1e-4?0:v;
+            const pdf0_raw=normal(0.0,1.00),A0=0.59;
+            const pdf1_raw=normal(2.1,0.70),A1=0.44;
+            const x0=-1.35,x1=-1.10;
+            function pdf0(xv){
+                if(xv<=x0) return 0;
+                if(xv<x1){const y1=A0*pdf0_raw(x1);return((xv-x0)/(x1-x0))*y1;}
+                return clampTiny(A0*pdf0_raw(xv));
             }
-
-            function pdf1(xv) {
-                return clampTiny(A1 * pdf1_raw(xv));
-            }
-
-            const xs = d3.range(-2, 5.0001, 0.01);
-            const data0 = [{ x: -2, y: 0 }, ...xs.map(xx => ({ x: xx, y: pdf0(xx) })), { x: 5, y: 0 }];
-            const data1 = [{ x: -2, y: 0 }, ...xs.map(xx => ({ x: xx, y: pdf1(xx) })), { x: 5, y: 0 }];
-
-            const line = d3.line().x(d => x(d.x)).y(d => y(d.y)).curve(d3.curveMonotoneX);
-            const area = d3.area().x(d => x(d.x)).y0(y(0)).y1(d => y(d.y)).curve(d3.curveMonotoneX);
-
-            const col0 = '#f0b233', col1 = '#1f8a9e';
-
-            const leftXs = xs.filter(v => v <= a);
-            const areaLeft = [{ x: -2, y: 0 }, ...leftXs.map(v => ({ x: v, y: pdf1(v) })), { x: a, y: pdf1(a) }, { x: a, y: 0 }];
-            g.append('path').datum(areaLeft).attr('class', 'a3-pdfx-area-left').attr('d', area);
-
-            const midXs = xs.filter(v => v >= a && v <= b);
-            const minArr = midXs.map(v => ({ x: v, y: Math.min(pdf0(v), pdf1(v)) }));
-            const areaMid = [{ x: a, y: 0 }, { x: a, y: Math.min(pdf0(a), pdf1(a)) }, ...minArr, { x: b, y: Math.min(pdf0(b), pdf1(b)) }, { x: b, y: 0 }];
-
-            const maxArr = midXs.map(v => ({ x: v, y: Math.max(pdf0(v), pdf1(v)) }));
-            const areaBetween = [{ x: a, y: 0 }, { x: a, y: Math.max(pdf0(a), pdf1(a)) }, ...maxArr, { x: b, y: Math.max(pdf0(b), pdf1(b)) }, { x: b, y: 0 }];
-            g.append('path').datum(areaBetween).attr('class', 'a3-pdfx-area-between').attr('d', area);
-            g.append('path').datum(areaMid).attr('class', 'a3-pdfx-area-mid').attr('d', area);
-
-            const rightXs = xs.filter(v => v >= b);
-            const areaRight = [{ x: b, y: 0 }, { x: b, y: pdf0(b) }, ...rightXs.map(v => ({ x: v, y: pdf0(v) })), { x: 5, y: 0 }];
-            g.append('path').datum(areaRight).attr('class', 'a3-pdfx-area-right').attr('d', area);
-
-            const p0 = g.append('path').datum(data0).attr('fill', 'none')
-                .attr('stroke', col0).attr('stroke-width', 4).attr('d', line);
-            const p1 = g.append('path').datum(data1).attr('fill', 'none')
-                .attr('stroke', col1).attr('stroke-width', 4).attr('d', line);
-
-            [p0, p1].forEach(path => {
-                const len = path.node().getTotalLength();
-                path.attr('stroke-dasharray', `${len} ${len}`).attr('stroke-dashoffset', len)
-                    .transition().duration(1400).ease(d3.easeCubicOut).attr('stroke-dashoffset', 0);
+            function pdf1(xv){return clampTiny(A1*pdf1_raw(xv));}
+            const xs=d3.range(-2,5.0001,0.01);
+            const data0=[{x:-2,y:0},...xs.map(xx=>({x:xx,y:pdf0(xx)})),{x:5,y:0}];
+            const data1=[{x:-2,y:0},...xs.map(xx=>({x:xx,y:pdf1(xx)})),{x:5,y:0}];
+            const line=d3.line().x(d=>x(d.x)).y(d=>y(d.y)).curve(d3.curveMonotoneX);
+            const area=d3.area().x(d=>x(d.x)).y0(y(0)).y1(d=>y(d.y)).curve(d3.curveMonotoneX);
+            const col0='#f0b233',col1='#1f8a9e';
+            const leftXs=xs.filter(v=>v<=a);
+            const areaLeft=[{x:-2,y:0},...leftXs.map(v=>({x:v,y:pdf1(v)})),{x:a,y:pdf1(a)},{x:a,y:0}];
+            g.append('path').datum(areaLeft).attr('class','area-left').attr('d',area);
+            const midXs=xs.filter(v=>v>=a&&v<=b);
+            const minArr=midXs.map(v=>({x:v,y:Math.min(pdf0(v),pdf1(v))}));
+            const areaMid=[{x:a,y:0},{x:a,y:Math.min(pdf0(a),pdf1(a))},...minArr,{x:b,y:Math.min(pdf0(b),pdf1(b))},{x:b,y:0}];
+            const maxArr=midXs.map(v=>({x:v,y:Math.max(pdf0(v),pdf1(v))}));
+            const areaBetween=[{x:a,y:0},{x:a,y:Math.max(pdf0(a),pdf1(a))},...maxArr,{x:b,y:Math.max(pdf0(b),pdf1(b))},{x:b,y:0}];
+            g.append('path').datum(areaBetween).attr('class','area-between').attr('d',area);
+            g.append('path').datum(areaMid).attr('class','area-mid').attr('d',area);
+            const rightXs=xs.filter(v=>v>=b);
+            const areaRight=[{x:b,y:0},{x:b,y:pdf0(b)},...rightXs.map(v=>({x:v,y:pdf0(v)})),{x:5,y:0}];
+            g.append('path').datum(areaRight).attr('class','area-right').attr('d',area);
+            const p0=g.append('path').datum(data0).attr('fill','none').attr('stroke',col0).attr('stroke-width',4).attr('d',line);
+            const p1=g.append('path').datum(data1).attr('fill','none').attr('stroke',col1).attr('stroke-width',4).attr('d',line);
+            [p0,p1].forEach(path=>{
+                const len=path.node().getTotalLength();
+                path.attr('stroke-dasharray',`${len} ${len}`).attr('stroke-dashoffset',len)
+                    .transition().duration(1400).ease(d3.easeCubicOut).attr('stroke-dashoffset',0);
             });
-
-            const legend = g.append('g').attr('transform', `translate(${iw - 360},10)`);
-            const l0 = legend.append('g').attr('transform', 'translate(0,14)');
-            l0.append('line').attr('class', 'a3-pdfx-legend-line')
-                .attr('x1', 0).attr('x2', 80).attr('y1', 0).attr('y2', 0).attr('stroke', col0);
-            l0.append('text').attr('x', 100).attr('y', 7).attr('font-size', '18px')
-                .html('<tspan font-style="italic">p</tspan>(x, y = 0) * <tspan font-style="italic">v</tspan>(x)')
-                .style('dominant-baseline', 'middle');
-
-            const l1 = legend.append('g').attr('transform', 'translate(0,54)');
-            l1.append('line').attr('class', 'a3-pdfx-legend-line')
-                .attr('x1', 0).attr('x2', 80).attr('y1', 0).attr('y2', 0).attr('stroke', col1);
-            l1.append('text').attr('x', 100).attr('y', 7).attr('font-size', '18px')
-                .html('<tspan font-style="italic">p</tspan>(x, y = 1) * <tspan font-style="italic">v</tspan>(x)')
-                .style('dominant-baseline', 'middle');
-
-            const focusLine = g.append('line').attr('y1', 0).attr('y2', ih)
-                .attr('stroke', '#000').attr('stroke-opacity', .2).style('display', 'none');
-            const dot0 = g.append('circle').attr('r', 4).attr('fill', col0).style('display', 'none');
-            const dot1 = g.append('circle').attr('r', 4).attr('fill', col1).style('display', 'none');
-
-            svg.on('mousemove', (ev) => {
-                const [mx] = d3.pointer(ev, g.node());
-                const xx = Math.max(-2, Math.min(5, x.invert(mx)));
-                const y0 = pdf0(xx), y1 = pdf1(xx);
-                focusLine.attr('x1', x(xx)).attr('x2', x(xx)).style('display', null);
-                dot0.attr('cx', x(xx)).attr('cy', y(y0)).style('display', null);
-                dot1.attr('cx', x(xx)).attr('cy', y(y1)).style('display', null);
-                showTooltip(
-                    `<b>x = ${xx.toFixed(2)}</b><br>` +
-                    `<span style="color:${col0}">p(x,0)*v(x)</span>: ${y0.toFixed(3)}<br>` +
-                    `<span style="color:${col1}">p(x,1)*v(x)</span>: ${y1.toFixed(3)}`,
-                    ev
-                );
-            }).on('mouseleave', () => {
-                focusLine.style('display', 'none');
-                dot0.style('display', 'none');
-                dot1.style('display', 'none');
-                hideTooltip();
+            const legend=g.append('g').attr('transform',`translate(${iw-360},10)`);
+            const l0=legend.append('g').attr('transform','translate(0,14)');
+            l0.append('line').attr('class','legend-line').attr('x1',0).attr('x2',80).attr('y1',0).attr('y2',0).attr('stroke',col0);
+            l0.append('text').attr('x',100).attr('y',7).html('<tspan font-style="italic">p</tspan>(x, y = 0)').style('dominant-baseline','middle');
+            const l1=legend.append('g').attr('transform','translate(0,54)');
+            l1.append('line').attr('class','legend-line').attr('x1',0).attr('x2',80).attr('y1',0).attr('y2',0).attr('stroke',col1);
+            l1.append('text').attr('x',100).attr('y',7).html('<tspan font-style="italic">p</tspan>(x, y = 1)').style('dominant-baseline','middle');
+            const tip=d3.select('#pdfx-tip');
+            const focusLine=g.append('line').attr('y1',0).attr('y2',ih).attr('stroke','#000').attr('stroke-opacity',.2).style('display','none');
+            const dot0=g.append('circle').attr('r',4).attr('fill',col0).style('display','none');
+            const dot1=g.append('circle').attr('r',4).attr('fill',col1).style('display','none');
+            svg.on('mousemove',(ev)=>{
+                const[mx]=d3.pointer(ev,g.node());
+                const xx=Math.max(-2,Math.min(5,x.invert(mx)));
+                const y0=pdf0(xx),y1=pdf1(xx);
+                focusLine.attr('x1',x(xx)).attr('x2',x(xx)).style('display',null);
+                dot0.attr('cx',x(xx)).attr('cy',y(y0)).style('display',null);
+                dot1.attr('cx',x(xx)).attr('cy',y(y1)).style('display',null);
+                tip.style('opacity',1).style('left',(ev.pageX+12)+'px').style('top',(ev.pageY-10)+'px')
+                    .html(`<b>x = ${xx.toFixed(2)}</b><br><span style="color:${col0}">p(x,0)</span>: ${y0.toFixed(3)}<br><span style="color:${col1}">p(x,1)</span>: ${y1.toFixed(3)}`);
+            }).on('mouseleave',()=>{
+                focusLine.style('display','none');
+                dot0.style('display','none');
+                dot1.style('display','none');
+                tip.style('opacity',0);
             });
         })();
 
-        // ============================================
-        // Assignment 4: Load data and draw charts
-        // ============================================
-        Promise.all([
-            d3.json("data1.json"),
-            d3.json("data2.json")
-        ]).then(function([data1, data2]) {
-            drawA4Chart1(data1);
-            drawA4Chart2(data2);
-        }).catch(function(error) {
-            console.error("Error loading A4 JSON files:", error);
-            alert("Failed to load Assignment 4 data files. Please ensure data1.json and data2.json are in the same directory as index.html.");
-        });
+        // A4
+        const tooltip=d3.select(".assignment-4 #tooltip");
+        function showTooltip(html,event){
+            tooltip.html(html).style("left",(event.pageX+12)+"px").style("top",(event.pageY+12)+"px")
+                .transition().duration(150).style("opacity",1);
+        }
+        function hideTooltip(){
+            tooltip.transition().duration(150).style("opacity",0);
+        }
+        Promise.all([d3.json("data1.json"),d3.json("data2.json")])
+            .then(function([data1,data2]){
+                drawChart1(data1);
+                drawChart2(data2);
+            }).catch(function(error){console.error("Error:",error);});
 
-        // ============================================
-        // Assignment 4: Chart 1 (Bar Chart)
-        // ============================================
-        function drawA4Chart1(data1) {
-            const svg = d3.select("#a4-chart1");
-            const width = 900;
-            const height = 420;
-            const margin = { top: 40, right: 30, bottom: 90, left: 60 };
-            const innerWidth = width - margin.left - margin.right;
-            const innerHeight = height - margin.top - margin.bottom;
-
-            const g = svg.append("g")
-                .attr("transform", `translate(${margin.left},${margin.top})`);
-
-            const methods = Object.keys(data1);
-            const datasets = ["CIFAR100", "CIFAR10", "SVHN", "MNIST"];
-            const metrics = ["Std Acc", "CRR", "CRA"];
-
-            const datasetSelect = d3.select("#a4-dataset-select");
-            datasetSelect.selectAll("option")
-                .data(datasets)
-                .enter()
-                .append("option")
-                .attr("value", d => d)
-                .text(d => d);
-            datasetSelect.property("value", "CIFAR10");
-
-            const xScale = d3.scaleBand()
-                .domain(methods)
-                .range([0, innerWidth])
-                .padding(0.15);
-
-            const yScale = d3.scaleLinear()
-                .domain([0, 100])
-                .range([innerHeight, 0])
-                .nice();
-
-            const xAxis = d3.axisBottom(xScale);
-            const yAxis = d3.axisLeft(yScale).ticks(6).tickFormat(d => d + "%");
-
-            const xAxisGroup = g.append("g")
-                .attr("transform", `translate(0, ${innerHeight})`)
-                .attr("class", "axis")
-                .call(xAxis);
-
-            xAxisGroup.selectAll("text")
-                .attr("transform", "rotate(-35)")
-                .style("text-anchor", "end")
-                .attr("dx", "-0.5em")
-                .attr("dy", "0.1em")
-                .attr("font-size", "11px");
-
-            const yAxisGroup = g.append("g")
-                .attr("class", "axis")
-                .call(yAxis);
-
-            g.append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("x", -innerHeight / 2)
-                .attr("y", -42)
-                .attr("text-anchor", "middle")
-                .attr("font-size", "11px")
-                .attr("fill", "#6b7280")
-                .text("Accuracy / Robustness (%)");
-
-            g.append("text")
-                .attr("x", innerWidth / 2)
-                .attr("y", innerHeight + 64)
-                .attr("text-anchor", "middle")
-                .attr("font-size", "11px")
-                .attr("fill", "#6b7280")
-                .text("Training approach");
-
-            const barsGroup = g.append("g");
-            const barTransition = d3.transition().duration(800).ease(d3.easeCubicOut);
-
-            function getDatasetMetricData(dataset, metric) {
-                return methods.map(method => ({
-                    method,
-                    value: data1[method][metric][dataset],
-                    dataset,
-                    metric
-                }));
+        function drawChart1(data1){
+            const svg=d3.select(".assignment-4 #chart1");
+            const width=900,height=420,margin={top:40,right:30,bottom:90,left:60};
+            const innerWidth=width-margin.left-margin.right,innerHeight=height-margin.top-margin.bottom;
+            const g=svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
+            const methods=Object.keys(data1);
+            const datasets=["CIFAR100","CIFAR10","SVHN","MNIST"];
+            const datasetSelect=d3.select(".assignment-4 #dataset-select");
+            datasetSelect.selectAll("option").data(datasets).enter().append("option")
+                .attr("value",d=>d).text(d=>d);
+            datasetSelect.property("value","CIFAR10");
+            const xScale=d3.scaleBand().domain(methods).range([0,innerWidth]).padding(0.15);
+            const yScale=d3.scaleLinear().domain([0,100]).range([innerHeight,0]).nice();
+            const xAxisGroup=g.append("g").attr("transform",`translate(0,${innerHeight})`).attr("class","axis")
+                .call(d3.axisBottom(xScale));
+            xAxisGroup.selectAll("text").attr("transform","rotate(-35)").style("text-anchor","end")
+                .attr("dx","-0.5em").attr("dy","0.1em");
+            g.append("g").attr("class","axis").call(d3.axisLeft(yScale).ticks(6).tickFormat(d=>d+"%"));
+            g.append("text").attr("class","y-axis-label").attr("transform","rotate(-90)")
+                .attr("x",-innerHeight/2).attr("y",-42).attr("text-anchor","middle").text("Accuracy (%)");
+            const barsGroup=g.append("g");
+            const barTransition=d3.transition().duration(800).ease(d3.easeCubicOut);
+            function getDatasetMetricData(dataset,metric){
+                return methods.map(method=>({method,value:data1[method][metric][dataset],dataset,metric}));
             }
-
-            function updateLegend(metric) {
-                const legend = d3.select("#a4-legend");
+            function updateLegend(metric){
+                const legend=d3.select(".assignment-4 #legend");
                 legend.html("");
-                const legendItems = [
-                    { label: "Std Acc", color: "#1d4ed8", desc: "Standard accuracy on clean test images." },
-                    { label: "CRR", color: "#0f766e", desc: "Certified robustness rate." },
-                    { label: "CRA", color: "#7e22ce", desc: "Certified robust accuracy." }
+                const items=[
+                    {label:"Std Acc",color:"#1d4ed8",desc:"Standard accuracy"},
+                    {label:"CRR",color:"#0f766e",desc:"Certified robustness rate"},
+                    {label:"CRA",color:"#7e22ce",desc:"Certified robust accuracy"}
                 ];
-                const item = legend.append("div").attr("class", "a4-legend-item");
-                const current = legendItems.find(d => d.label === metric) || legendItems[0];
-                item.append("div")
-                    .attr("class", "a4-legend-swatch")
-                    .style("background", current.color);
-                item.append("span").text(current.label + " – " + current.desc);
+                const item=legend.append("div").attr("class","legend-item");
+                const current=items.find(d=>d.label===metric)||items[0];
+                item.append("div").attr("class","legend-swatch").style("background",current.color);
+                item.append("span").text(current.label+" – "+current.desc);
             }
-
-            function metricColor(metric) {
-                if (metric === "Std Acc") return "#1d4ed8";
-                if (metric === "CRR") return "#0f766e";
-                if (metric === "CRA") return "#7e22ce";
+            function metricColor(metric){
+                if(metric==="Std Acc") return "#1d4ed8";
+                if(metric==="CRR") return "#0f766e";
+                if(metric==="CRA") return "#7e22ce";
                 return "#1d4ed8";
             }
-
-            function updateChart(dataset, metric, initial = false) {
-                const data = getDatasetMetricData(dataset, metric);
-                const caption = d3.select("#a4-chart1-caption");
-                caption.text(`Showing: ${dataset} · ${metric}`);
-
-                const bars = barsGroup.selectAll(".a4-bar")
-                    .data(data, d => d.method);
-
-                if (initial) {
-                    bars.enter()
-                        .append("rect")
-                        .attr("class", "a4-bar")
-                        .attr("x", d => xScale(d.method))
-                        .attr("width", xScale.bandwidth())
-                        .attr("y", innerHeight)
-                        .attr("height", 0)
-                        .attr("fill", d => metricColor(metric))
-                        .attr("cursor", "pointer")
-                        .on("mouseover", function(event, d) {
-                            d3.select(this).attr("opacity", 0.85);
-                            const html = `<strong>${d.method}</strong><br>` +
-                                `Dataset: <strong>${d.dataset}</strong><br>` +
-                                `Metric: <strong>${d.metric}</strong><br>` +
-                                `Value: <strong>${d.value.toFixed(2)}%</strong>`;
-                            showTooltip(html, event);
+            function updateChart(dataset,metric,initial=false){
+                const data=getDatasetMetricData(dataset,metric);
+                d3.select(".assignment-4 #chart1-caption").text(`Showing: ${dataset} · ${metric}`);
+                const bars=barsGroup.selectAll(".bar").data(data,d=>d.method);
+                if(initial){
+                    bars.enter().append("rect").attr("class","bar")
+                        .attr("x",d=>xScale(d.method)).attr("width",xScale.bandwidth())
+                        .attr("y",innerHeight).attr("height",0).attr("fill",d=>metricColor(metric))
+                        .on("mouseover",function(event,d){
+                            d3.select(this).attr("opacity",0.9);
+                            showTooltip(`<strong>${d.method}</strong><br>Value: ${d.value.toFixed(2)}%`,event);
                         })
-                        .on("mousemove", function(event) {
-                            globalTooltip.style("left", (event.pageX + 12) + "px")
-                                .style("top", (event.pageY + 12) + "px");
+                        .on("mousemove",function(event){
+                            tooltip.style("left",(event.pageX+12)+"px").style("top",(event.pageY+12)+"px");
                         })
-                        .on("mouseout", function() {
-                            d3.select(this).attr("opacity", 1.0);
+                        .on("mouseout",function(){
+                            d3.select(this).attr("opacity",1.0);
                             hideTooltip();
                         })
                         .transition(barTransition)
-                        .attr("y", d => yScale(d.value))
-                        .attr("height", d => innerHeight - yScale(d.value));
-                } else {
+                        .attr("y",d=>yScale(d.value))
+                        .attr("height",d=>innerHeight-yScale(d.value));
+                }else{
                     bars.transition(barTransition)
-                        .attr("x", d => xScale(d.method))
-                        .attr("width", xScale.bandwidth())
-                        .attr("y", d => yScale(d.value))
-                        .attr("height", d => innerHeight - yScale(d.value))
-                        .attr("fill", d => metricColor(metric));
+                        .attr("y",d=>yScale(d.value))
+                        .attr("height",d=>innerHeight-yScale(d.value))
+                        .attr("fill",d=>metricColor(metric));
                 }
-
-                bars.exit()
-                    .transition(barTransition)
-                    .attr("y", innerHeight)
-                    .attr("height", 0)
-                    .remove();
-
+                bars.exit().transition(barTransition).attr("y",innerHeight).attr("height",0).remove();
                 updateLegend(metric);
             }
-
-            const initialDataset = datasetSelect.property("value");
-            const initialMetric = d3.select("#a4-metric-select").property("value");
-            updateChart(initialDataset, initialMetric, true);
-
-            datasetSelect.on("change", function() {
-                const dataset = this.value;
-                const metric = d3.select("#a4-metric-select").property("value");
-                updateChart(dataset, metric, false);
+            const initialDataset=datasetSelect.property("value");
+            const initialMetric=d3.select(".assignment-4 #metric-select").property("value");
+            updateChart(initialDataset,initialMetric,true);
+            datasetSelect.on("change",function(){
+                const dataset=this.value;
+                const metric=d3.select(".assignment-4 #metric-select").property("value");
+                updateChart(dataset,metric,false);
             });
-
-            d3.select("#a4-metric-select").on("change", function() {
-                const metric = this.value;
-                const dataset = datasetSelect.property("value");
-                updateChart(dataset, metric, false);
+            d3.select(".assignment-4 #metric-select").on("change",function(){
+                const metric=this.value;
+                const dataset=datasetSelect.property("value");
+                updateChart(dataset,metric,false);
             });
         }
 
-        // ============================================
-        // Assignment 4: Chart 2 (Heatmap)
-        // ============================================
-        function drawA4Chart2(data2) {
-            const svg = d3.select("#a4-chart2");
-            const width = 900;
-            const height = 640;
-            const margin = { top: 60, right: 20, bottom: 100, left: 130 };
-            const innerWidth = width - margin.left - margin.right;
-            const innerHeight = height - margin.top - margin.bottom;
-
-            const g = svg.append("g")
-                .attr("transform", `translate(${margin.left},${margin.top})`);
-
-            const attacks = Object.keys(data2);
-            const models = Object.keys(data2[attacks[0]]);
-
-            const flatData = [];
-            attacks.forEach(attack => {
-                models.forEach(model => {
-                    flatData.push({
-                        attack,
-                        model,
-                        value: data2[attack][model]
-                    });
+        function drawChart2(data2){
+            const svg=d3.select(".assignment-4 #chart2");
+            const width=900,height=640,margin={top:60,right:20,bottom:100,left:130};
+            const innerWidth=width-margin.left-margin.right,innerHeight=height-margin.top-margin.bottom;
+            const g=svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
+            const attacks=Object.keys(data2);
+            const models=Object.keys(data2[attacks[0]]);
+            const flatData=[];
+            attacks.forEach(attack=>{
+                models.forEach(model=>{
+                    flatData.push({attack,model,value:data2[attack][model]});
                 });
             });
-
-            const xScale = d3.scaleBand()
-                .domain(models)
-                .range([0, innerWidth])
-                .padding(0.05);
-
-            const yScale = d3.scaleBand()
-                .domain(attacks)
-                .range([0, innerHeight])
-                .padding(0.05);
-
-            const colorScale = d3.scaleSequential()
-                .domain([0, d3.max(flatData, d => d.value)])
-                .interpolator(d3.interpolateBlues);
-
-            const xAxis = d3.axisBottom(xScale);
-            const yAxis = d3.axisLeft(yScale);
-
-            const xAxisGroup = g.append("g")
-                .attr("class", "axis")
-                .attr("transform", `translate(0, ${innerHeight})`)
-                .call(xAxis);
-
-            xAxisGroup.selectAll("text")
-                .attr("transform", "rotate(-40)")
-                .style("text-anchor", "end")
-                .attr("dx", "-0.6em")
-                .attr("dy", "0.2em")
-                .attr("font-size", "11px");
-
-            const yAxisGroup = g.append("g")
-                .attr("class", "axis")
-                .call(yAxis);
-
-            yAxisGroup.selectAll("text")
-                .attr("font-size", "11px");
-
-            g.append("text")
-                .attr("x", innerWidth / 2)
-                .attr("y", innerHeight + 78)
-                .attr("text-anchor", "middle")
-                .attr("font-size", "11px")
-                .attr("fill", "#6b7280")
-                .text("Model");
-
-            g.append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("x", -innerHeight / 2)
-                .attr("y", -96)
-                .attr("text-anchor", "middle")
-                .attr("font-size", "11px")
-                .attr("fill", "#6b7280")
-                .text("Attack");
-
-            const initialTransition = d3.transition().duration(900).ease(d3.easeCubicOut);
-
-            g.selectAll(".a4-heatmap-cell")
-                .data(flatData)
-                .enter()
-                .append("rect")
-                .attr("class", "a4-heatmap-cell")
-                .attr("x", d => xScale(d.model))
-                .attr("y", d => yScale(d.attack))
-                .attr("width", xScale.bandwidth())
-                .attr("height", yScale.bandwidth())
-                .attr("rx", 3)
-                .attr("ry", 3)
-                .attr("fill", d => colorScale(d.value))
-                .attr("opacity", 0)
-                .on("mouseover", function(event, d) {
-                    d3.select(this).attr("opacity", 1);
-                    const html = `<strong>Attack:</strong> ${d.attack}<br>` +
-                        `<strong>Model:</strong> ${d.model}<br>` +
-                        `<strong>Accuracy:</strong> ${d.value.toFixed(2)}%`;
-                    showTooltip(html, event);
+            const xScale=d3.scaleBand().domain(models).range([0,innerWidth]).padding(0.05);
+            const yScale=d3.scaleBand().domain(attacks).range([0,innerHeight]).padding(0.05);
+            const colorScale=d3.scaleSequential().domain([0,d3.max(flatData,d=>d.value)]).interpolator(d3.interpolateBlues);
+            const xAxisGroup=g.append("g").attr("class","axis").attr("transform",`translate(0,${innerHeight})`)
+                .call(d3.axisBottom(xScale));
+            xAxisGroup.selectAll("text").attr("transform","rotate(-40)").style("text-anchor","end")
+                .attr("dx","-0.6em").attr("dy","0.2em");
+            g.append("g").attr("class","axis").call(d3.axisLeft(yScale));
+            g.append("text").attr("class","x-axis-label").attr("x",innerWidth/2).attr("y",innerHeight+78)
+                .attr("text-anchor","middle").text("Model");
+            g.append("text").attr("class","y-axis-label").attr("transform","rotate(-90)")
+                .attr("x",-innerHeight/2).attr("y",-96).attr("text-anchor","middle").text("Attack");
+            const initialTransition=d3.transition().duration(900).ease(d3.easeCubicOut);
+            g.selectAll(".heatmap-cell").data(flatData).enter().append("rect").attr("class","heatmap-cell")
+                .attr("x",d=>xScale(d.model)).attr("y",d=>yScale(d.attack))
+                .attr("width",xScale.bandwidth()).attr("height",yScale.bandwidth())
+                .attr("rx",3).attr("ry",3).attr("fill",d=>colorScale(d.value)).attr("opacity",0)
+                .on("mouseover",function(event,d){
+                    d3.select(this).attr("opacity",1);
+                    showTooltip(`<strong>Attack:</strong> ${d.attack}<br><strong>Model:</strong> ${d.model}<br><strong>Accuracy:</strong> ${d.value.toFixed(2)}%`,event);
                 })
-                .on("mousemove", function(event) {
-                    globalTooltip.style("left", (event.pageX + 12) + "px")
-                        .style("top", (event.pageY + 12) + "px");
+                .on("mousemove",function(event){
+                    tooltip.style("left",(event.pageX+12)+"px").style("top",(event.pageY+12)+"px");
                 })
-                .on("mouseout", function() {
-                    d3.select(this).attr("opacity", 0.95);
+                .on("mouseout",function(){
+                    d3.select(this).attr("opacity",0.95);
                     hideTooltip();
                 })
-                .transition(initialTransition)
-                .attr("opacity", 0.95);
-
-            g.selectAll(".a4-cell-value")
-                .data(flatData)
-                .enter()
-                .append("text")
-                .attr("class", "a4-cell-value")
-                .attr("x", d => xScale(d.model) + xScale.bandwidth() / 2)
-                .attr("y", d => yScale(d.attack) + yScale.bandwidth() / 2 + 3)
-                .attr("text-anchor", "middle")
-                .attr("font-size", 8)
-                .attr("fill", d => d.value > 70 ? "#f9fafb" : "#1f2933")
-                .text(d => d.value.toFixed(1));
+                .transition(initialTransition).attr("opacity",0.95);
+            g.selectAll(".cell-value").data(flatData).enter().append("text").attr("class","cell-value")
+                .attr("x",d=>xScale(d.model)+xScale.bandwidth()/2)
+                .attr("y",d=>yScale(d.attack)+yScale.bandwidth()/2+3)
+                .attr("text-anchor","middle").attr("font-size",8)
+                .attr("fill",d=>d.value>70?"#f9fafb":"#1f2933")
+                .text(d=>d.value.toFixed(1));
         }
     </script>
 </body>
