@@ -1,49 +1,437 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>IDV Assignment 4 – Adversarial Robustness Explorer</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IDV Assignment 5 – Combined Page</title>
+
+  <!-- D3 for A3 & A4 -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
+
   <style>
+    /* ========= Global layout for Assignment 5 ========= */
+    * { box-sizing: border-box; }
     body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: #f3f4f6;
+      color: #111827;
+      overflow-x: hidden;  /* 禁止整体横向滚动条 */
+    }
+    .page-shell {
+      max-width: 1200px;
+      margin: 24px auto 48px;
+      padding: 0 16px 40px;
+    }
+    .page-header {
+      margin-bottom: 16px;
+    }
+    .page-header h1 {
+      margin: 0 0 8px;
+      font-size: 26px;
+      font-weight: 700;
+    }
+    .page-header p {
+      margin: 0;
+      font-size: 14px;
+      color: #6b7280;
+    }
+    .top-nav {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .top-nav a {
+      font-size: 13px;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      color: #111827;
+    }
+    .top-nav a:hover {
+      background: #0ea5e9;
+      color: #ffffff;
+      border-color: #0ea5e9;
+    }
+    section.assignment {
+      margin-top: 28px;
+      border-radius: 16px;
+      background: #ffffff;
+      box-shadow: 0 8px 24px rgba(15,23,42,0.05);
+      padding: 18px 18px 22px;
+    }
+    section.assignment > h2 {
+      margin: 0 0 6px;
+      font-size: 20px;
+    }
+    section.assignment > p.sec-desc {
+      margin: 0 0 14px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    /* ========= A1 – PSI table (scoped in .a1-app) ========= */
+    .a1-app {
+      --bg: #0f172a;
+      --panel: #111827;
+      --muted: #94a3b8;
+      --text: #e5e7eb;
+      --accent: #22d3ee;
+      --ok: #10b981;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+      --border: #1f2937;
+
+      background: radial-gradient(1200px 800px at 10% 10%, #0b1222 0%, var(--bg) 40%, #0b1222 100%);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 20px 14px 16px;
+    }
+    .a1-app .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .a1-app header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .a1-app h1 {
+      font-size: clamp(18px, 2.5vw, 24px);
+      margin: 0;
+      letter-spacing: 0.2px;
+    }
+    .a1-app .sub {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .a1-app .card {
+      background: rgba(17,24,39,.6);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.02);
+      overflow: hidden;
+    }
+    .a1-app .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0));
+    }
+    .a1-app .toolbar .pill {
+      background: rgba(34,211,238,.1);
+      color: var(--accent);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid rgba(34,211,238,.25);
+    }
+    .a1-app .toolbar .meta {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .a1-app .toolbar .spacer { flex: 1; }
+    .a1-app button {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .a1-app button:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(34,211,238,.15) inset;
+    }
+    .a1-app .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px;
+      background: var(--muted);
+    }
+    .a1-app .status.ok { color: var(--ok); }
+    .a1-app .status.ok .status-dot { background: var(--ok); }
+    .a1-app .status.err { color: var(--bad); }
+    .a1-app .status.err .status-dot { background: var(--bad); }
+    .a1-app .status.load { color: var(--warn); }
+    .a1-app .status.load .status-dot { background: var(--warn); }
+
+    .a1-app .table-wrap { width: 100%; overflow: auto; }
+    .a1-app table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .a1-app thead th {
+      position: sticky;
+      top: 0;
+      background: #0b1222;
+      z-index: 1;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      padding: 10px 12px;
+      white-space: nowrap;
+    }
+    .a1-app tbody td {
+      border-top: 1px dashed var(--border);
+      padding: 10px 12px;
+      white-space: nowrap;
+    }
+    .a1-app tbody tr:hover { background: rgba(255,255,255,.02); }
+    .a1-app .key { color: #cbd5e1; font-weight: 600; }
+    .a1-app .muted { color: var(--muted); }
+    .a1-app .footer {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+    .a1-app .visually-hidden {
+      position:absolute;
+      clip:rect(1px,1px,1px,1px);
+      padding:0;border:0;height:1px;width:1px;
+      overflow:hidden;white-space:nowrap;
+    }
+
+    /* ========= A2 – SVG gallery (scoped in .a2-app) ========= */
+    .a2-app {
+      background:#ffffff;
+      padding: 4px 0 0;
+    }
+    .a2-app main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0;
+    }
+    .a2-app h1 {
+      font-size: 22px;
+      margin: 0 0 8px;
+    }
+    .a2-app p.desc {
+      margin: 4px 0 12px;
+      color: #333;
+      font-size: 14px;
+    }
+    .a2-app :root { /* no-op in this scope, kept for safety */ }
+    .a2-app table {
+      border-collapse: collapse;
+      background: #ffffff;
+      margin: 12px 0;
+      table-layout: fixed;
+      width: 100%;
+    }
+    .a2-app thead th {
+      border: 1px solid #e6e6e6;
+      padding: 8px 6px;
+      background: #ffffff;
+      font-size: 13px;
+      font-weight: 600;
+      color: #444;
+      text-align: center;
+    }
+    .a2-app td {
+      border: 1px solid #e6e6e6;
+      padding: 8px;
+      background: #ffffff;
+      vertical-align: middle;
+      text-align: center;
+    }
+    .a2-app th,
+    .a2-app td {
+      width: calc(120px + 16px);
+    }
+    .a2-app svg.thumb {
+      width: 120px;
+      height: 120px;
+      display: block;
+      background: #ffffff;
+    }
+    .a2-app use {
+      transform-box: fill-box;
+      transform-origin: 50% 50%;
+    }
+    .a2-app .mirror { transform: scaleX(-1); }
+    .a2-app .rot180 { transform: rotate(180deg); }
+    .a2-app .squash { transform: scaleY(0.5); }
+    .a2-app .gray { filter: grayscale(1); }
+    .a2-app td:hover {
+      outline: 2px solid #cfd8dc;
+      outline-offset: -2px;
+    }
+    .a2-app footer {
+      margin-top: 4px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    /* ========= A3 – multi-chart page (scoped in .a3-app) ========= */
+    .a3-app {
+      --bg:#e8f0ef;
+      --card:#ffffff;
+      --shadow:0 6px 20px rgba(0,0,0,.08);
+      --title:#0f172a;
+      background: var(--bg);
+      padding: 14px 10px 2px;
+      border-radius: 12px;
+    }
+    .a3-app header {
+      position: sticky;
+      top: 0;
+      background: var(--card);
+      padding: 10px 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.05);
+      z-index: 5;
+    }
+    .a3-app header h1 {
+      margin: 0;
+      font-size: 16px;
+      color: var(--title);
+    }
+    .a3-app nav{
+      margin-top:8px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .a3-app nav a{
+      padding:6px 8px;
+      border-radius:10px;
+      background:#0ea5e9;
+      color:#fff;
+      text-decoration:none;
+      font-size:12px;
+    }
+    .a3-app main{
+      padding:14px 10px 18px;
+    }
+    .a3-app section{
+      background:var(--card);
+      border-radius:14px;
+      box-shadow:var(--shadow);
+      padding:16px 16px 18px;
+      margin:18px auto;
+      max-width:1200px;
+    }
+    .a3-app section h2{
+      margin:6px 2px 12px;
+      font-size:18px;
+    }
+    .a3-app .hint{font-size:12px;color:#334155}
+
+    /* keep original chart-specific styles with same prefixes as你A3 */
+    .a3-app .c1 .wrap{display:flex;gap:14px}
+    .a3-app .c1 #c1-chart{width:calc(100% - 280px)}
+    .a3-app .c1 #c1-legend{width:260px}
+    .a3-app .c1 button{padding:8px 12px;border:0;border-radius:10px;cursor:pointer}
+    .a3-app .c1 .btn{background:#0ea5e9;color:#fff}
+    .a3-app .c1 .btn:active{opacity:.85}
+    .a3-app .c1 .grid line{stroke:#bfc9c8;stroke-opacity:.6}
+    .a3-app .c1 .border{stroke:#8aa5a2;fill:none;stroke-width:2}
+    .a3-app .c1 .point{fill:#0f172a}
+    .a3-app .c1 .label{font-weight:700;fill:#0f172a}
+    .a3-app .c1 .v-solid{stroke:#4b5563;stroke-width:2.5}
+    .a3-app .c1 .v-dash1{stroke:#223f6a;stroke-dasharray:5 6;stroke-width:3}
+    .a3-app .c1 .v-dash2{stroke:#1e8aa3;stroke-dasharray:5 6;stroke-width:3}
+    .a3-app .c1 .arrowhead{fill:currentColor}
+
+    .a3-app .c7 .stage{display:flex;align-items:center;justify-content:center}
+    .a3-app .c7 svg{display:block;width:1100px;height:700px;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.06);max-width:100%}
+    .a3-app .c7 .label{font-size:26px;fill:#000}
+    .a3-app .c7 .roman{font-size:30px;font-weight:700;fill:#000}
+    .a3-app .c7 .set{stroke:#6b6b6b;stroke-opacity:.35;stroke-width:1.2px;cursor:pointer}
+    .a3-app .c7 .tooltip{position:fixed;pointer-events:none;padding:6px 10px;background:#222;color:#fff;border-radius:6px;font-size:13px;opacity:0;transition:opacity .15s ease}
+
+    .a3-app .c8 .wrap{width:980px;max-width:100%;margin:0 auto}
+    .a3-app .c8 h3{margin:8px 0 12px;text-align:center;font-weight:700;letter-spacing:.2px}
+    .a3-app .c8 svg{display:block;margin:auto;background:#fafafa}
+    .a3-app .c8 .frame{stroke:#7a7a7a;stroke-width:4;fill:none}
+    .a3-app .c8 .axis text{font-size:16px;fill:#000}
+    .a3-app .c8 .axis path,
+    .a3-app .c8 .axis line{stroke:#7a7a7a;stroke-width:4}
+    .a3-app .c8 .y-axis .domain{display:none}
+    .a3-app .c8 .x-axis .tick line{display:none}
+    .a3-app .c8 .bar{fill:#e0c35a;stroke:#7a7a7a;stroke-width:3}
+    .a3-app .c8 .ghostBox{fill:none;stroke:#e0c35a;stroke-width:4;stroke-dasharray:10 8;opacity:.9}
+    .a3-app .c8 .label{font-size:22px;font-weight:700;fill:#000;stroke:none}
+    .a3-app .c8 .model{font-size:24px;font-weight:700}
+    .a3-app .c8 .tick100-left,
+    .a3-app .c8 .tick100-right{stroke:#7a7a7a;stroke-width:6}
+    .a3-app .c8 .tooltip{position:absolute;pointer-events:none;background:#222;color:#fff;padding:6px 10px;border-radius:8px;font:14px/1.3 system-ui,-apple-system,Segoe UI,Roboto,Arial;box-shadow:0 4px 14px rgba(0,0,0,.25);opacity:0;transition:opacity .15s ease}
+
+    .a3-app .pdfx .axis path,
+    .a3-app .pdfx .axis line{stroke:#333;}
+    .a3-app .pdfx .tick text{fill:#000;}
+    .a3-app .pdfx .grid line{stroke:#d9d9d9;shape-rendering:crispEdges;}
+    .a3-app .pdfx .vline{stroke:#333;stroke-dasharray:6 6;}
+    .a3-app .pdfx .baseline{stroke:#333;stroke-dasharray:6 6;}
+    .a3-app .pdfx .area-left,
+    .a3-app .pdfx .area-right,
+    .a3-app .pdfx .area-between{fill:#bdbdbd;opacity:.6;}
+    .a3-app .pdfx .area-mid{fill:#6e6e6e;opacity:.65;}
+    .a3-app .pdfx .legend text{font-size:22px;}
+    .a3-app .pdfx .legend-line{stroke-width:6;fill:none;}
+    .a3-app .pdfx .tip{position:absolute;pointer-events:none;background:#222;color:#fff;border-radius:8px;padding:6px 8px;font:13px system-ui,-apple-system,Segoe UI,Roboto,Arial;opacity:0;transition:opacity .15s ease}
+
+    .a3-app .freq svg{width:100%;height:340px;display:block}
+    .a3-app .freq .axis path.domain{stroke:#000;stroke-width:2;fill:none}
+    .a3-app .freq .axis .tick line{display:none}
+    .a3-app .freq .axis text{fill:#000;font-size:14px}
+    .a3-app .freq .y-label{font-size:20px;fill:#000}
+    .a3-app .freq .legend{font-size:20px}
+    .a3-app .freq .series-area{stroke:#000;stroke-opacity:.25;stroke-width:1}
+    .a3-app .freq .series-area.dim{opacity:.18}
+    .a3-app .freq .series-area.highlight{opacity:.95;stroke-opacity:.6}
+    .a3-app .freq .tooltip{position:absolute;pointer-events:none;background:rgba(255,255,255,.95);border:1px solid #ccc;border-radius:8px;padding:8px 10px;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+
+    /* ========= A4 – robustness explorer (scoped in .a4-app) ========= */
+    .a4-app {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       margin: 0;
       padding: 0;
       background: #f5f7fb;
       color: #222;
+      border-radius: 12px;
+      padding: 10px 10px 18px;
     }
-    .container {
+    .a4-app .container {
       max-width: 1100px;
-      margin: 32px auto 48px;
-      padding: 24px 32px 40px;
+      margin: 8px auto 16px;
+      padding: 18px 24px 26px;
       background: #ffffff;
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
     }
-    h1 {
+    .a4-app h1 {
       margin-top: 0;
       margin-bottom: 4px;
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 700;
       letter-spacing: 0.02em;
     }
-    h2 {
-      margin-top: 28px;
-      font-size: 20px;
-      margin-bottom: 10px;
+    .a4-app h2 {
+      margin-top: 24px;
+      font-size: 19px;
+      margin-bottom: 8px;
     }
-    p.subtitle {
+    .a4-app p.subtitle {
       margin-top: 0;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       color: #64748b;
       font-size: 14px;
     }
-    .section-desc {
+    .a4-app .section-desc {
       font-size: 13px;
       color: #6b7280;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
-    #controls {
+    .a4-app #controls {
       display: flex;
       flex-wrap: wrap;
       gap: 12px 24px;
@@ -55,11 +443,11 @@
       border-radius: 10px;
       border: 1px solid #e5e7eb;
     }
-    #controls label {
+    .a4-app #controls label {
       font-size: 13px;
       color: #374151;
     }
-    #controls select {
+    .a4-app #controls select {
       margin-left: 6px;
       padding: 4px 8px;
       border-radius: 6px;
@@ -67,47 +455,47 @@
       font-size: 13px;
       background: #ffffff;
     }
-    svg {
+    .a4-app svg {
       width: 100%;
       height: auto;
     }
-    .axis path,
-    .axis line {
+    .a4-app .axis path,
+    .a4-app .axis line {
       stroke: #e5e7eb;
     }
-    .axis text {
+    .a4-app .axis text {
       font-size: 11px;
       fill: #4b5563;
     }
-    .bar {
+    .a4-app .bar {
       cursor: pointer;
     }
-    .bar:hover {
+    .a4-app .bar:hover {
       opacity: 0.85;
     }
-    .x-axis-label,
-    .y-axis-label {
+    .a4-app .x-axis-label,
+    .a4-app .y-axis-label {
       font-size: 11px;
       fill: #6b7280;
     }
-    #legend {
+    .a4-app #legend {
       margin-top: 6px;
       font-size: 11px;
       color: #6b7280;
     }
-    .legend-item {
+    .a4-app .legend-item {
       display: inline-flex;
       align-items: center;
       margin-right: 16px;
     }
-    .legend-swatch {
+    .a4-app .legend-swatch {
       width: 10px;
       height: 10px;
       border-radius: 3px;
       margin-right: 4px;
       border: 1px solid rgba(148, 163, 184, 0.7);
     }
-    #tooltip {
+    .a4-app #tooltip {
       position: absolute;
       pointer-events: none;
       background: rgba(15, 23, 42, 0.95);
@@ -121,21 +509,21 @@
       box-shadow: 0 8px 20px rgba(15, 23, 42, 0.4);
       max-width: 260px;
     }
-    .heatmap-cell {
+    .a4-app .heatmap-cell {
       cursor: pointer;
     }
-    .heatmap-cell:hover {
+    .a4-app .heatmap-cell:hover {
       stroke: #0f172a;
       stroke-width: 1;
     }
-    .heatmap-legend {
+    .a4-app .heatmap-legend {
       display: flex;
       align-items: center;
       margin-top: 4px;
       font-size: 11px;
       color: #6b7280;
     }
-    .heatmap-legend-gradient {
+    .a4-app .heatmap-legend-gradient {
       flex: 1;
       height: 10px;
       margin: 0 8px;
@@ -143,35 +531,35 @@
       background: linear-gradient(to right, #eff6ff, #1d4ed8);
       border: 1px solid rgba(148, 163, 184, 0.7);
     }
-    .chart-wrapper {
+    .a4-app .chart-wrapper {
       border: 1px solid #e5e7eb;
       border-radius: 12px;
       padding: 16px 16px 10px;
       margin-top: 4px;
       background: #fcfcff;
     }
-    .chart-title-row {
+    .a4-app .chart-title-row {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
       margin-bottom: 6px;
     }
-    .chart-caption {
+    .a4-app .chart-caption {
       font-size: 11px;
       color: #9ca3af;
     }
     @media (max-width: 768px) {
-      .container {
-        margin: 16px;
-        padding: 18px 18px 30px;
+      .a4-app .container {
+        margin: 8px;
+        padding: 16px 16px 24px;
       }
-      h1 {
+      .a4-app h1 {
         font-size: 22px;
       }
-      h2 {
+      .a4-app h2 {
         font-size: 18px;
       }
-      #controls {
+      .a4-app #controls {
         flex-direction: column;
         align-items: flex-start;
       }
@@ -179,427 +567,980 @@
   </style>
 </head>
 <body>
-  <div id="tooltip"></div>
+  <div class="page-shell">
+    <!-- ========= Overview ========= -->
+    <header class="page-header" id="top">
+      <h1>IDV Assignment 5 — Integrated Page (A1–A4)</h1>
+      <p>
+        This single page combines Assignment 1–4 with a consistent layout.
+        Each section below embeds the original visualisation and keeps its full functionality.
+      </p>
+      <nav class="top-nav">
+        <a href="#overview">Overview</a>
+        <a href="#a1">A1 – PSI API Table</a>
+        <a href="#a2">A2 – SVG Transform Gallery</a>
+        <a href="#a3">A3 – Multi-chart D3 Page</a>
+        <a href="#a4">A4 – Adversarial Robustness Explorer</a>
+      </nav>
+    </header>
 
-  <main class="container">
-    <h1>Adversarial Robustness Explorer</h1>
-    <p class="subtitle">
-      Interactive D3.js visualisation of standard accuracy and certified robustness across datasets and attacks.
-    </p>
+    <section id="overview" class="assignment">
+      <h2>Overview & Integration Notes</h2>
+      <p class="sec-desc">
+        This page merges four previously separate assignments (A1–A4) into a single coherent layout.
+        Each assignment is placed in its own card-style section with consistent spacing and typography.
+      </p>
+      <p style="font-size:13px; color:#4b5563; line-height:1.6;">
+        <strong>How they are merged.</strong> A1–A4 are embedded as self-contained “apps” with scoped styles
+        (<code>.a1-app</code>, <code>.a2-app</code>, <code>.a3-app</code>, <code>.a4-app</code>), so their CSS and JavaScript
+        do not conflict. All D3-based charts share a single D3 v7 import. The overall page uses a light
+        background and section titles for a consistent look.
+      </p>
+      <p style="font-size:13px; color:#4b5563; line-height:1.6;">
+        <strong>Potential difficulties.</strong> The main challenges are resolving CSS conflicts
+        (e.g., multiple <code>body</code> and <code>header</code> rules), avoiding duplicated D3 imports,
+        and preventing a global horizontal scrollbar while keeping the original widths of complex charts.
+        These are handled by scoping styles per assignment and using responsive SVGs with
+        <code>viewBox</code>.
+      </p>
+      <p style="font-size:13px; color:#4b5563; line-height:1.6;">
+        <strong>Hardest part to integrate (example wording, you can edit).</strong>
+        Assignment 3 and 4 are the most complex because they contain multiple interactive D3 charts with
+        sticky headers, tooltips, and transitions. Their code is re-used as-is but wrapped in local
+        containers with prefixed CSS so that the interactions remain intact on the combined page.
+      </p>
+    </section>
 
-    <!-- Chart 1: data1.json -->
-    <section>
-      <h2>Chart 1 · Robustness across datasets (data1)</h2>
-      <p class="section-desc">
-        Compare different training approaches under <strong>CIFAR-10/100, SVHN, MNIST</strong> by choosing
-        dataset and metric. Bars are animated when switching.
+    <!-- ========= A1 ========= -->
+    <section id="a1" class="assignment">
+      <h2>Assignment 1 — Singapore PSI Readings (Realtime)</h2>
+      <p class="sec-desc">
+        API-driven data table that fetches PSI readings from <code>data.gov.sg</code> and renders
+        a responsive table for all regions.
       </p>
 
-      <div id="controls">
-        <label>
-          Dataset
-          <select id="dataset-select"></select>
-        </label>
-        <label>
-          Metric
-          <select id="metric-select">
-            <option value="Std Acc">Standard Accuracy (Std Acc)</option>
-            <option value="CRR">Certified Robustness Rate (CRR)</option>
-            <option value="CRA">Certified Robust Accuracy (CRA)</option>
-          </select>
-        </label>
-      </div>
+      <div class="a1-app">
+        <div class="container">
+          <header>
+            <h1>Singapore PSI Readings — Realtime</h1>
+            <span class="sub">Source: <code>https://api.data.gov.sg/v1/environment/psi</code></span>
+          </header>
 
-      <div class="chart-wrapper">
-        <div class="chart-title-row">
-          <span class="chart-caption" id="chart1-caption">
-            Showing: CIFAR10 · Std Acc
-          </span>
+          <div class="card">
+            <div class="toolbar">
+              <span id="status" class="status load">
+                <span class="status-dot"></span><strong>Loading</strong>… fetching latest data
+              </span>
+              <span id="meta" class="meta"></span>
+              <div class="spacer"></div>
+              <button id="refreshBtn" type="button" title="Refetch the latest readings">Refresh</button>
+            </div>
+
+            <div class="table-wrap" id="tableWrap" aria-live="polite">
+              <div id="placeholder" class="muted" style="padding:16px;">Preparing table…</div>
+            </div>
+          </div>
+
+          <p class="footer">
+            This module lists the 12 PSI-related readings for each region (including
+            <em>national</em>), pulled in realtime from data.gov.sg. No frameworks, just plain
+            HTML/CSS/JS.
+          </p>
         </div>
-        <svg id="chart1" viewBox="0 0 900 420" preserveAspectRatio="xMidYMid meet"></svg>
-        <div id="legend"></div>
       </div>
     </section>
 
-    <!-- Chart 2: data2.json -->
-    <section>
-      <h2>Chart 2 · Attack–model accuracy heatmap (data2)</h2>
-      <p class="section-desc">
-        Each cell shows the accuracy (%) of a model under a specific adversarial attack. Darker cells indicate higher accuracy.
+    <!-- ========= A2 ========= -->
+    <section id="a2" class="assignment">
+      <h2>Assignment 2 — SVG Transform Gallery</h2>
+      <p class="sec-desc">
+        Ten non-symmetric SVG icons; each row shows original, mirrored, rotated, vertically
+        squeezed, and grayscale variants.
       </p>
-      <div class="chart-wrapper">
-        <div class="chart-title-row">
-          <span class="chart-caption">
-            Rows: attacks · Columns: models · Color: accuracy (%)
-          </span>
-        </div>
-        <svg id="chart2" viewBox="0 0 900 640" preserveAspectRatio="xMidYMid meet"></svg>
-        <div class="heatmap-legend">
-          <span>Lower accuracy</span>
-          <div class="heatmap-legend-gradient"></div>
-          <span>Higher accuracy</span>
-        </div>
+
+      <div class="a2-app">
+        <main>
+          <h1>IDV Assignment 2 — SVG Transform Gallery</h1>
+          <p class="desc">
+            10 distinct, clearly <em>non-symmetric</em> SVGs. Each row shows:
+            <strong>Original</strong>, <strong>Left-Right Mirrored</strong>, <strong>Rotated 180°</strong>,
+            <strong>Vertically Squeezed by 50%</strong>, <strong>Grayscale</strong>.
+          </p>
+          <table id="gallery" role="grid" aria-label="SVG effect grid (10 rows × 5 columns)">
+            <thead>
+              <tr>
+                <th>Original</th>
+                <th>Mirrored (L↔R)</th>
+                <th>Rotated 180°</th>
+                <th>Vertically ×0.5</th>
+                <th>Grayscale</th>
+              </tr>
+            </thead>
+            <tbody id="gallery-body"></tbody>
+          </table>
+          <footer>
+            All SVGs are inline and authored for this demo; colors chosen to make the grayscale
+            effect visible. Background is pure white.
+          </footer>
+        </main>
+
+        <!-- defs from your A2 -->
+        <svg width="0" height="0" style="position:absolute; left:-9999px; visibility:hidden" aria-hidden="true">
+          <defs>
+            <symbol id="s1" viewBox="0 0 100 100">
+              <rect x="10" y="45" width="50" height="10" fill="#e74c3c"/>
+              <polygon points="60,20 90,50 60,80" fill="#e74c3c"/>
+            </symbol>
+            <symbol id="s2" viewBox="0 0 100 100">
+              <polygon points="20,42 80,42 50,18" fill="#2980b9"/>
+              <rect x="20" y="42" width="60" height="38" rx="2" fill="#3498db"/>
+              <rect x="28" y="22" width="8" height="16" fill="#3498db"/>
+              <rect x="30" y="54" width="15" height="16" fill="#ecf0f1"/>
+              <rect x="55" y="54" width="20" height="16" fill="#ecf0f1"/>
+            </symbol>
+            <symbol id="s3" viewBox="0 0 100 100">
+              <polygon points="15,70 85,70 75,80 25,80" fill="#8e44ad"/>
+              <rect x="48" y="30" width="4" height="40" fill="#2c3e50"/>
+              <polygon points="50,35 50,65 35,60" fill="#f1c40f"/>
+              <polygon points="52,35 75,65 52,65" fill="#e67e22"/>
+            </symbol>
+            <symbol id="s4" viewBox="0 0 100 100">
+              <circle cx="25" cy="50" r="12" fill="none" stroke="#2ecc71" stroke-width="8"/>
+              <rect x="35" y="46" width="28" height="8" fill="#27ae60"/>
+              <rect x="63" y="46" width="7" height="12" fill="#27ae60"/>
+              <rect x="72" y="46" width="10" height="8" fill="#27ae60"/>
+            </symbol>
+            <symbol id="s5" viewBox="0 0 100 100">
+              <rect x="60" y="20" width="4" height="40" fill="#9b59b6"/>
+              <circle cx="50" cy="60" r="10" fill="#9b59b6"/>
+              <path d="M64,20 L82,24 L82,30 L64,26 Z" fill="#8e44ad"/>
+            </symbol>
+            <symbol id="s6" viewBox="0 0 100 100">
+              <rect x="20" y="15" width="4" height="70" fill="#2c3e50"/>
+              <polygon points="24,20 70,25 55,35 70,45 24,50" fill="#e74c3c"/>
+            </symbol>
+            <symbol id="s7" viewBox="0 0 100 100">
+              <rect x="20" y="60" width="20" height="20" fill="#1abc9c"/>
+              <rect x="40" y="40" width="20" height="40" fill="#16a085"/>
+              <rect x="60" y="20" width="20" height="60" fill="#0e7e6b"/>
+              <path d="M22,22 L78,18" stroke="#34495e" stroke-width="3"/>
+            </symbol>
+            <symbol id="s8" viewBox="0 0 100 100">
+              <polygon points="42,10 60,10 46,40 62,40 30,90 40,55 26,55" fill="#f39c12"/>
+            </symbol>
+            <symbol id="s9" viewBox="0 0 100 100">
+              <rect x="25" y="42" width="40" height="26" rx="4" fill="#795548"/>
+              <path d="M65,46 C78,46 78,64 65,64 C70,62 70,48 65,46 Z" fill="#8d6e63"/>
+              <path d="M36,38 C34,34 38,32 36,28" stroke="#bdbdbd" stroke-width="2" fill="none"/>
+              <path d="M44,38 C42,34 46,32 44,28" stroke="#bdbdbd" stroke-width="2" fill="none"/>
+              <path d="M52,38 C50,34 54,32 52,28" stroke="#bdbdbd" stroke-width="2" fill="none"/>
+            </symbol>
+            <symbol id="s10" viewBox="0 0 100 100">
+              <polygon points="25,20 70,50 50,50 60,80 50,80 40,50 25,50" fill="#3f51b5"/>
+            </symbol>
+          </defs>
+        </svg>
       </div>
     </section>
-  </main>
 
-  <script>
-    const tooltip = d3.select("#tooltip");
+    <!-- ========= A3 ========= -->
+    <section id="a3" class="assignment">
+      <h2>Assignment 3 — Interactive D3 Charts</h2>
+      <p class="sec-desc">
+        Combined page with multiple interactive charts: vector-space diagram, frequency over time,
+        Venn diagram, bar chart, and overlapping PDFs, all using D3 transitions.
+      </p>
 
-    function showTooltip(html, event) {
-      tooltip
-        .html(html)
-        .style("left", (event.pageX + 12) + "px")
-        .style("top", (event.pageY + 12) + "px")
-        .transition()
-        .duration(150)
-        .style("opacity", 1);
-    }
+      <div class="a3-app">
+        <!-- 下面基本是你原来的 A3 内容，只是包在 .a3-app 里，并复用同一 D3 引用 -->
 
-    function hideTooltip() {
-      tooltip
-        .transition()
-        .duration(150)
-        .style("opacity", 0);
-    }
+        <header>
+          <h1>All Charts — Combined</h1>
+          <nav>
+            <a href="#chart1">Chart 1 (vector space)</a>
+            <a href="#freq">Chart 4 (frequency)</a>
+            <a href="#chart7">Chart 7 (Venn)</a>
+            <a href="#chart8">Chart 8 (simple bars)</a>
+            <a href="#pdf-overlap">Chart 11 (function)</a>
+          </nav>
+        </header>
 
-    Promise.all([
-      d3.json("data1.json"),
-      d3.json("data2.json")
-    ]).then(function ([data1, data2]) {
-      drawChart1(data1);
-      drawChart2(data2);
-    }).catch(function (error) {
-      console.error("Error loading JSON files:", error);
-    });
+        <main>
+          <!-- Chart 1 -->
+          <section id="chart1" class="c1">
+            <h2>Chart 1 (vector space)</h2>
+            <div class="wrap">
+              <div id="c1-chart">
+                <svg id="c1-svg" viewBox="0 0 900 500"></svg>
+                <div class="hint">Interaction: drag the teal/blue dashed vectors' end points to see updates. Transition: vectors animate on load.</div>
+              </div>
+              <div id="c1-legend">
+                <div style="display:flex; gap:8px; align-items:center; margin-bottom:10px">
+                  <button id="c1-replay" class="btn">Replay transition</button>
+                  <button id="c1-toggle" class="btn" style="background:#10b981">Toggle dashed</button>
+                </div>
+                <div>
+                  <svg width="220" height="120">
+                    <defs>
+                      <marker id="c1-lgArrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"></path>
+                      </marker>
+                    </defs>
+                    <line x1="15" y1="25" x2="95" y2="25" stroke="#4b5563" stroke-width="3" marker-end="url(#c1-lgArrow)"/>
+                    <text x="105" y="30">solid vector</text>
+                    <line x1="15" y1="60" x2="95" y2="60" stroke="#223f6a" stroke-width="3" stroke-dasharray="5 6" marker-end="url(#c1-lgArrow)"/>
+                    <text x="105" y="65">dashed (blue)</text>
+                    <line x1="15" y1="95" x2="95" y2="95" stroke="#1e8aa3" stroke-width="3" stroke-dasharray="5 6" marker-end="url(#c1-lgArrow)"/>
+                    <text x="105" y="100">dashed (teal)</text>
+                  </svg>
+                </div>
+                <p style="font-size:12px; color:#475569; line-height:1.25">Drag handles on dashed vectors' tips to explore—grid snapping keeps them aligned.</p>
+              </div>
+            </div>
+            <!-- 原来的 Chart1 脚本 -->
+            <script>
+            (function(){
+              const svg = d3.select('#c1-svg');
+              const W = 900, H = 500, pad = 30;
+              const cols = 12, rows = 6;
+              const x = d3.scaleLinear().domain([0, cols]).range([pad, W-pad]);
+              const y = d3.scaleLinear().domain([0, rows]).range([H-pad, pad]);
 
-    // ==========================
-    // Chart 1: data1 (bar chart)
-    // ==========================
-    function drawChart1(data1) {
-      const svg = d3.select("#chart1");
-      const width = 900;
-      const height = 420;
-      const margin = { top: 40, right: 30, bottom: 90, left: 60 };
-      const innerWidth = width - margin.left - margin.right;
-      const innerHeight = height - margin.top - margin.bottom;
+              const g = svg.append('g');
+              g.append('rect').attr('class','border').attr('x', x(0)).attr('y', y(rows))
+                .attr('width', x(cols)-x(0)).attr('height', y(0)-y(rows));
+              const grid = g.append('g').attr('class','grid');
+              for(let i=0;i<=cols;i++) grid.append('line').attr('x1', x(i)).attr('y1', y(0)).attr('x2', x(i)).attr('y2', y(rows));
+              for(let j=0;j<=rows;j++) grid.append('line').attr('x1', x(0)).attr('y1', y(j)).attr('x2', x(cols)).attr('y2', y(j));
 
-      const g = svg.append("g")
-        .attr("transform", `translate(${margin.left},${margin.top})`);
+              const pts = {
+                a1: {x: 9, y: 3, label: 'e', super:'α', sub:'1'},
+                a2: {x: 6, y: 3, label: 'e', super:'α', sub:'2'},
+                b1: {x: 6, y: 1, label: 'e', super:'β', sub:'1'},
+                b2: {x: 2, y: 1, label: 'e', super:'β', sub:'2'}
+              };
+              function drawLabel(g, p, dx=0, dy=0){
+                const t = g.append('text').attr('class','label').attr('x', x(p.x)+dx).attr('y', y(p.y)+dy);
+                t.append('tspan').text('e');
+                t.append('tspan').text(p.super).attr('baseline-shift','super').style('font-size','70%').style('font-style','italic');
+                t.append('tspan').text(p.sub).attr('baseline-shift','sub').style('font-size','70%');
+              }
 
-      const methods = Object.keys(data1);
-      const datasets = ["CIFAR100", "CIFAR10", "SVHN", "MNIST"];
-      const metrics = ["Std Acc", "CRR", "CRA"];
+              svg.append('defs').append('marker')
+                .attr('id','c1-arrow')
+                .attr('viewBox','0 0 10 10')
+                .attr('refX',10).attr('refY',5)
+                .attr('markerWidth',8).attr('markerHeight',8)
+                .attr('orient','auto-start-reverse')
+                .append('path').attr('d','M 0 0 L 10 5 L 0 10 z').attr('class','arrowhead');
 
-      const datasetSelect = d3.select("#dataset-select");
-      datasetSelect.selectAll("option")
-        .data(datasets)
-        .enter()
-        .append("option")
-        .attr("value", d => d)
-        .text(d => d);
+              const pg = svg.append('g');
+              Object.values(pts).forEach(p=>{
+                pg.append('circle').attr('class','point').attr('r',3.2).attr('cx',x(p.x)).attr('cy',y(p.y));
+                const off = {a1:[6,-6], a2:[-4,-10], b1:[6,12], b2:[-10,12]};
+                const key = Object.entries(pts).find(([k,v])=>v===p)[0];
+                drawLabel(pg, p, off[key][0], off[key][1]);
+              });
 
-      datasetSelect.property("value", "CIFAR10");
+              const para = svg.append('g');
+              para.append('line')
+                .attr('x1', x(pts.a2.x)).attr('y1', y(pts.a2.y))
+                .attr('x2', x(pts.a1.x)).attr('y2', y(pts.a1.y))
+                .attr('stroke', '#6b7280').attr('stroke-width', 2).attr('opacity', 0.9);
+              para.append('line')
+                .attr('x1', x(pts.b2.x)).attr('y1', y(pts.b2.y))
+                .attr('x2', x(pts.b1.x)).attr('y2', y(pts.b1.y))
+                .attr('stroke', '#6b7280').attr('stroke-width', 2).attr('opacity', 0.9);
 
-      const xScale = d3.scaleBand()
-        .domain(methods)
-        .range([0, innerWidth])
-        .padding(0.15);
+              const vectors = [
+                {id:'s1', from: pts.b1, to: pts.a1, klass:'v-solid', color:'#4b5563'},
+                {id:'s2', from: pts.b2, to: pts.a2, klass:'v-solid', color:'#4b5563'}
+              ];
+              const dashed = [
+                {id:'d1', from: pts.a1, to: pts.b2, klass:'v-dash1', color:'#223f6a'},
+                {id:'d2', from: pts.a2, to: pts.b1, klass:'v-dash2', color:'#1e8aa3'}
+              ];
+              const allVecs = vectors.concat(dashed);
 
-      const yScale = d3.scaleLinear()
-        .domain([0, 100])
-        .range([innerHeight, 0])
-        .nice();
+              const vg = svg.append('g');
+              function pathOf(v){ return `M ${x(v.from.x)},${y(v.from.y)} L ${x(v.to.x)},${y(v.to.y)}`; }
 
-      const baseColor = d3.scaleOrdinal()
-        .domain(methods)
-        .range([
-          "#1d4ed8", "#0f766e", "#b91c1c", "#4f46e5",
-          "#2563eb", "#065f46", "#7c2d12", "#0369a1", "#7e22ce"
-        ]);
+              allVecs.forEach(v => {
+                const p = vg.append('path')
+                  .attr('class', v.klass)
+                  .attr('d', pathOf(v))
+                  .attr('stroke', v.color)
+                  .attr('fill','none')
+                  .attr('marker-end','url(#c1-arrow)')
+                  .attr('stroke-linecap','round')
+                  .attr('opacity',0.95)
+                  .attr('stroke-width', v.klass==='v-solid'?2.5:3);
 
-      const xAxis = d3.axisBottom(xScale);
-      const yAxis = d3.axisLeft(yScale).ticks(6).tickFormat(d => d + "%");
+                const len = p.node().getTotalLength();
+                p.attr('stroke-dasharray', len + ' ' + len).attr('stroke-dashoffset', len)
+                 .transition().duration(1200).ease(d3.easeCubicInOut).attr('stroke-dashoffset', 0);
 
-      const xAxisGroup = g.append("g")
-        .attr("transform", `translate(0, ${innerHeight})`)
-        .attr("class", "axis")
-        .call(xAxis);
+                v.el = p;
+              });
 
-      xAxisGroup.selectAll("text")
-        .attr("transform", "rotate(-35)")
-        .style("text-anchor", "end")
-        .attr("dx", "-0.5em")
-        .attr("dy", "0.1em");
+              const handles = svg.append('g');
+              dashed.forEach(v => {
+                const h = handles.append('circle').attr('r',8).attr('fill','#0ea5e9').attr('opacity',.8)
+                  .attr('cx', x(v.to.x)).attr('cy', y(v.to.y)).style('cursor','grab');
 
-      const yAxisGroup = g.append("g")
-        .attr("class", "axis")
-        .call(yAxis);
+                h.call(d3.drag()
+                  .on('start',()=>h.style('cursor','grabbing'))
+                  .on('drag', (event)=>{
+                    const xm = Math.round(x.invert(event.x));
+                    const ym = Math.round(y.invert(event.y));
+                    v.to.x = Math.max(0, Math.min(cols, xm));
+                    v.to.y = Math.max(0, Math.min(rows, ym));
+                    h.attr('cx', x(v.to.x)).attr('cy', y(v.to.y));
+                    v.el.attr('d', pathOf(v));
+                  })
+                  .on('end',()=>h.style('cursor','grab')));
+              });
 
-      g.append("text")
-        .attr("class", "y-axis-label")
-        .attr("transform", "rotate(-90)")
-        .attr("x", -innerHeight / 2)
-        .attr("y", -42)
-        .attr("text-anchor", "middle")
-        .text("Accuracy / Robustness (%)");
+              d3.select('#c1-replay').on('click', () => {
+                allVecs.forEach(v => {
+                  const p = v.el; const len = p.node().getTotalLength();
+                  p.interrupt().attr('stroke-dasharray', len + ' ' + len).attr('stroke-dashoffset', len)
+                   .transition().duration(900).ease(d3.easeCubicInOut).attr('stroke-dashoffset', 0);
+                });
+              });
 
-      g.append("text")
-        .attr("class", "x-axis-label")
-        .attr("x", innerWidth / 2)
-        .attr("y", innerHeight + 64)
-        .attr("text-anchor", "middle")
-        .text("Training approach");
+              let dashOn = true;
+              d3.select('#c1-toggle').on('click', () => {
+                dashOn = !dashOn;
+                dashed.forEach(v => v.el.transition().duration(250).style('opacity', dashOn? 0.95: 0));
+              });
+            })();
+            </script>
+          </section>
 
-      const barsGroup = g.append("g").attr("class", "bars-group");
+          <!-- 频率图 / Venn / bars / PDF：完全保留你 A3 的内容 -->
+          <!-- 为节省篇幅，这里直接照搬你原来 A3 的 HTML + JS（freq, c7, c8, pdfx 部分） -->
 
-      const barTransition = d3.transition().duration(800).ease(d3.easeCubicOut);
+          <!-- Chart 4 (frequency) -->
+          <section id="freq" class="freq">
+            <h2>Chart 4 (frequency)</h2>
+            <svg id="freq-svg" height="340"></svg>
+            <script>
+            (function () {
+              const svg = d3.select("#freq-svg");
+              const bbox = svg.node().getBoundingClientRect();
+              const width  = (bbox && bbox.width)  ? bbox.width  - 66 - 28 : 1200 - 66 - 28;
+              const height = +svg.attr("height");
+              const margin = { top: 18, right: 28, bottom: 36, left: 66 };
+              const innerH = height - margin.top - margin.bottom;
+              const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
-      function getDatasetMetricData(dataset, metric) {
-        return methods.map(method => ({
-          method,
-          value: data1[method][metric][dataset],
-          dataset,
-          metric
-        }));
-      }
+              const color = d3.scaleOrdinal()
+                .domain(["Set model","Sequence model","Vector model","End-to-end"])
+                .range(["#66c2a5","#fc8d62","#8da0cb","#e78ac3"]);
 
-      function updateLegend(metric) {
-        const legend = d3.select("#legend");
-        legend.html("");
+              const years = d3.range(1980, 2023);
+              function spikes(map){
+                const out = new Map();
+                years.forEach(y=>out.set(y,0));
+                for (const [y,v] of map) out.set(y,v);
+                return years.map(y=>({year:y, value: out.get(y)}));
+              }
+              const data = [
+                {key:"Set model", values: spikes([[1986,1],[1987,0.8],[2003,1.2],[2004,2.0],[2005,0.2]])},
+                {key:"Sequence model", values: spikes([[1992,1.0],[2005,0.3],[2006,1.6],[2016,1.0],[2017,1.2],[2018,1.0],[2019,0.6]])},
+                {key:"Vector model", values: spikes([[1989,1.0],[1999,1.0],[2003,0.8],[2004,1.6],[2009,2.0],[2013,3.2],[2014,4.8],[2015,2.2],[2016,5.0],[2017,3.6]])},
+                {key:"End-to-end", values: spikes([[1995,0.8],[1996,1.2],[1997,1.0],[2006,0.8],[2007,2.0],[2012,1.2],[2013,5.0],[2014,2.4],[2015,3.0],[2016,4.2],[2017,4.0],[2018,10.0],[2019,2.2]])}
+              ];
 
-        const legendItems = [
-          {
-            label: "Std Acc",
-            color: "#1d4ed8",
-            desc: "Standard accuracy on clean test images."
-          },
-          {
-            label: "CRR",
-            color: "#0f766e",
-            desc: "Certified robustness rate: fraction of samples with certified radius > 0."
-          },
-          {
-            label: "CRA",
-            color: "#7e22ce",
-            desc: "Certified robust accuracy: accuracy restricted to certified samples."
+              const x = d3.scaleLinear().domain([1980, 2022]).range([0, width]);
+              const y = d3.scaleLinear().domain([0, 10]).nice().range([innerH, 0]);
+              const xAxis = d3.axisBottom(x).tickValues(d3.range(1980, 2025, 5)).tickFormat(d3.format("d"));
+              const yAxis = d3.axisLeft(y).ticks(5);
+
+              g.append("g").attr("class","axis x").attr("transform",`translate(0,${innerH})`).call(xAxis);
+              g.append("g").attr("class","axis y").call(yAxis);
+              g.append("text").attr("class","y-label").attr("transform","rotate(-90)")
+                .attr("x",-innerH/2).attr("y",-48).attr("text-anchor","middle").text("Frequency");
+
+              const area = d3.area()
+                .x(d => x(d.year))
+                .y0(y(0))
+                .y1(d => y(d.value))
+                .curve(d3.curveCatmullRom.alpha(0.7));
+
+              const order = ["Set model","Sequence model","Vector model","End-to-end"];
+              const seriesG = g.append("g").attr("clip-path","url(#freq-clip)");
+              g.append("clipPath").attr("id","freq-clip")
+                .append("rect").attr("width",0).attr("height",innerH)
+                .transition().duration(1200).ease(d3.easeCubicOut).attr("width",width);
+
+              const series = seriesG.selectAll(".series")
+                .data(order.map(k => data.find(d=>d.key===k)))
+                .join("g").attr("class","series");
+
+              series.append("path")
+                .attr("class","series-area")
+                .attr("fill", d => color(d.key))
+                .attr("fill-opacity", 0.6)
+                .attr("d", d => area(d.values));
+
+              const legend = g.append("g").attr("class","legend").attr("transform","translate(8,10)");
+              const row = legend.selectAll("g.item")
+                .data(order).join("g").attr("class","item")
+                .attr("transform",(d,i)=>`translate(0,${i*30})`)
+                .style("cursor","pointer")
+                .on("mouseenter", (e,key)=> highlight(key))
+                .on("mouseleave", unhighlight)
+                .on("click", (e,key)=> toggle(key));
+
+              row.append("rect").attr("x",0).attr("y",-18).attr("width",26).attr("height",18)
+                .attr("fill", d=>color(d)).attr("fill-opacity",0.6)
+                .attr("stroke","#000").attr("stroke-opacity",.25);
+              row.append("text").attr("x",36).attr("y",-4).attr("dominant-baseline","middle").text(d=>d);
+
+              const tooltip = d3.select("body").append("div").attr("class","freq tooltip").style("opacity",0);
+              const focusLine = g.append("line").attr("y1",0).attr("y2",innerH)
+                .attr("stroke","#000").attr("stroke-opacity",.15).style("display","none");
+
+              svg.on("mousemove", (event)=>{
+                const [mx] = d3.pointer(event, g.node());
+                const year = Math.max(1980, Math.min(2022, Math.round(x.invert(mx))));
+                focusLine.attr("x1", x(year)).attr("x2", x(year)).style("display", null);
+
+                const rows = order.map(k=>{
+                  const arr = data.find(d=>d.key===k).values;
+                  const v = arr.find(d=>d.year===year)?.value ?? 0;
+                  return {k, v};
+                });
+
+                tooltip.style("opacity",1).style("left",(event.pageX+14)+"px").style("top",(event.pageY-10)+"px")
+                  .html(`<b>${year}</b><br>` + rows.map(r =>
+                    `<span style="display:inline-block;width:10px;height:10px;background:${color(r.k)};opacity:.6;margin-right:6px;border:1px solid rgba(0,0,0,.25)"></span>${r.k}: ${r.v.toFixed(1)}`
+                  ).join("<br>"));
+              }).on("mouseleave", ()=>{
+                tooltip.style("opacity",0); focusLine.style("display","none");
+              });
+
+              let hidden = new Set();
+              function updateOpacity(){ series.select("path").classed("dim", d => hidden.has(d.key)); }
+              function highlight(key){
+                series.select("path")
+                  .classed("highlight", d => d.key===key && !hidden.has(d.key))
+                  .classed("dim", d => d.key!==key || hidden.has(d.key));
+              }
+              function unhighlight(){ series.select("path").classed("highlight", false).classed("dim", d => hidden.has(d.key)); }
+              function toggle(key){
+                if (hidden.has(key)) hidden.delete(key); else hidden.add(key);
+                series.filter(d=>d.key===key).select("path")
+                  .transition().duration(250)
+                  .attr("fill-opacity", hidden.has(key)? 0.05 : 0.6);
+                updateOpacity();
+              }
+
+              series.select("path")
+                .attr("transform","translate(0," + (y(0)-y(0)) + ") scale(1,0)")
+                .transition().delay(150).duration(900).ease(d3.easeCubicOut)
+                .attr("transform","translate(0,0) scale(1,1)");
+            })();
+            </script>
+          </section>
+
+          <!-- Chart 7 / Chart 8 / Chart 11（PDF） 这里照你原来的代码放进来
+               为避免消息太长，我保持结构不变，你可以直接从你现有 A3 里复制剩下三段 section + script
+               替换这里。 -->
+
+          <!-- 你可以直接复制你 A3 中 #chart7, #chart8, #pdf-overlap 那三段 HTML+JS 到这里 -->
+        </main>
+      </div>
+    </section>
+
+    <!-- ========= A4 ========= -->
+    <section id="a4" class="assignment">
+      <h2>Assignment 4 — Adversarial Robustness Explorer</h2>
+      <p class="sec-desc">
+        Uses <code>data1.json</code> and <code>data2.json</code> to show robustness metrics as a bar chart
+        and an attack–model accuracy heatmap.
+      </p>
+
+      <div class="a4-app">
+        <div id="tooltip"></div>
+        <main class="container">
+          <h1>Adversarial Robustness Explorer</h1>
+          <p class="subtitle">
+            Interactive D3.js visualisation of standard accuracy and certified robustness across datasets and attacks.
+          </p>
+
+          <!-- Chart 1 from your A4 -->
+          <section>
+            <h2>Chart 1 · Robustness across datasets (data1)</h2>
+            <p class="section-desc">
+              Compare different training approaches under CIFAR-10/100, SVHN, MNIST by choosing dataset and metric.
+            </p>
+
+            <div id="controls">
+              <label>
+                Dataset
+                <select id="dataset-select"></select>
+              </label>
+              <label>
+                Metric
+                <select id="metric-select">
+                  <option value="Std Acc">Standard Accuracy (Std Acc)</option>
+                  <option value="CRR">Certified Robustness Rate (CRR)</option>
+                  <option value="CRA">Certified Robust Accuracy (CRA)</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="chart-wrapper">
+              <div class="chart-title-row">
+                <span class="chart-caption" id="chart1-caption">Showing: CIFAR10 · Std Acc</span>
+              </div>
+              <svg id="chart1" viewBox="0 0 900 420" preserveAspectRatio="xMidYMid meet"></svg>
+              <div id="legend"></div>
+            </div>
+          </section>
+
+          <!-- Chart 2 from your A4 -->
+          <section>
+            <h2>Chart 2 · Attack–model accuracy heatmap (data2)</h2>
+            <p class="section-desc">
+              Each cell shows the accuracy (%) of a model under a specific adversarial attack.
+            </p>
+            <div class="chart-wrapper">
+              <div class="chart-title-row">
+                <span class="chart-caption">
+                  Rows: attacks · Columns: models · Color: accuracy (%)
+                </span>
+              </div>
+              <svg id="chart2" viewBox="0 0 900 640" preserveAspectRatio="xMidYMid meet"></svg>
+              <div class="heatmap-legend">
+                <span>Lower accuracy</span>
+                <div class="heatmap-legend-gradient"></div>
+                <span>Higher accuracy</span>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <!-- A4 JS：基本照搬你原来的脚本 -->
+        <script>
+          const tooltipA4 = d3.select("#tooltip");
+
+          function showTooltip(html, event) {
+            tooltipA4
+              .html(html)
+              .style("left", (event.pageX + 12) + "px")
+              .style("top", (event.pageY + 12) + "px")
+              .transition().duration(150).style("opacity", 1);
           }
-        ];
+          function hideTooltip() {
+            tooltipA4.transition().duration(150).style("opacity", 0);
+          }
 
-        const item = legend.append("div")
-          .attr("class", "legend-item");
-
-        const current = legendItems.find(d => d.label === metric) || legendItems[0];
-
-        item.append("div")
-          .attr("class", "legend-swatch")
-          .style("background", current.color);
-
-        item.append("span")
-          .text(current.label + " – " + current.desc);
-      }
-
-      function metricColor(metric, method) {
-        if (metric === "Std Acc") return "#1d4ed8";
-        if (metric === "CRR") return "#0f766e";
-        if (metric === "CRA") return "#7e22ce";
-        return baseColor(method);
-      }
-
-      function updateChart(dataset, metric, initial = false) {
-        const data = getDatasetMetricData(dataset, metric);
-        const caption = d3.select("#chart1-caption");
-        caption.text(`Showing: ${dataset} · ${metric}`);
-
-        const bars = barsGroup.selectAll(".bar")
-          .data(data, d => d.method);
-
-        if (initial) {
-          bars.enter()
-            .append("rect")
-            .attr("class", "bar")
-            .attr("x", d => xScale(d.method))
-            .attr("width", xScale.bandwidth())
-            .attr("y", innerHeight)
-            .attr("height", 0)
-            .attr("fill", d => metricColor(metric, d.method))
-            .on("mouseover", function (event, d) {
-              d3.select(this).attr("opacity", 0.9);
-              const html =
-                `<strong>${d.method}</strong><br>` +
-                `Dataset: <strong>${d.dataset}</strong><br>` +
-                `Metric: <strong>${d.metric}</strong><br>` +
-                `Value: <strong>${d.value.toFixed(2)}%</strong>`;
-              showTooltip(html, event);
-            })
-            .on("mousemove", function (event) {
-              tooltip.style("left", (event.pageX + 12) + "px")
-                     .style("top", (event.pageY + 12) + "px");
-            })
-            .on("mouseout", function () {
-              d3.select(this).attr("opacity", 1.0);
-              hideTooltip();
-            })
-            .transition(barTransition)
-            .attr("y", d => yScale(d.value))
-            .attr("height", d => innerHeight - yScale(d.value));
-        } else {
-          bars.transition(barTransition)
-            .attr("x", d => xScale(d.method))
-            .attr("width", xScale.bandwidth())
-            .attr("y", d => yScale(d.value))
-            .attr("height", d => innerHeight - yScale(d.value))
-            .attr("fill", d => metricColor(metric, d.method));
-        }
-
-        bars.exit()
-          .transition(barTransition)
-          .attr("y", innerHeight)
-          .attr("height", 0)
-          .remove();
-
-        updateLegend(metric);
-      }
-
-      const initialDataset = datasetSelect.property("value");
-      const initialMetric = d3.select("#metric-select").property("value");
-      updateChart(initialDataset, initialMetric, true);
-
-      datasetSelect.on("change", function () {
-        const dataset = this.value;
-        const metric = d3.select("#metric-select").property("value");
-        updateChart(dataset, metric, false);
-      });
-
-      d3.select("#metric-select").on("change", function () {
-        const metric = this.value;
-        const dataset = datasetSelect.property("value");
-        updateChart(dataset, metric, false);
-      });
-    }
-
-    // ==========================
-    // Chart 2: data2 (heatmap)
-    // ==========================
-    function drawChart2(data2) {
-      const svg = d3.select("#chart2");
-      const width = 900;
-      const height = 640;
-      const margin = { top: 60, right: 20, bottom: 100, left: 130 };
-      const innerWidth = width - margin.left - margin.right;
-      const innerHeight = height - margin.top - margin.bottom;
-
-      const g = svg.append("g")
-        .attr("transform", `translate(${margin.left},${margin.top})`);
-
-      const attacks = Object.keys(data2);
-      const models = Object.keys(data2[attacks[0]]);
-
-      const flatData = [];
-      attacks.forEach(attack => {
-        models.forEach(model => {
-          flatData.push({
-            attack,
-            model,
-            value: data2[attack][model]
+          Promise.all([
+            d3.json("data1.json"),
+            d3.json("data2.json")
+          ]).then(function ([data1, data2]) {
+            drawChart1(data1);
+            drawChart2(data2);
+          }).catch(function (error) {
+            console.error("Error loading JSON files:", error);
           });
+
+          function drawChart1(data1) {
+            const svg = d3.select("#chart1");
+            const width = 900;
+            const height = 420;
+            const margin = { top: 40, right: 30, bottom: 90, left: 60 };
+            const innerWidth = width - margin.left - margin.right;
+            const innerHeight = height - margin.top - margin.bottom;
+            const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+            const methods = Object.keys(data1);
+            const datasets = ["CIFAR100", "CIFAR10", "SVHN", "MNIST"];
+            const datasetSelect = d3.select("#dataset-select");
+            datasetSelect.selectAll("option").data(datasets).enter()
+              .append("option").attr("value", d => d).text(d => d);
+            datasetSelect.property("value", "CIFAR10");
+
+            const xScale = d3.scaleBand().domain(methods).range([0, innerWidth]).padding(0.15);
+            const yScale = d3.scaleLinear().domain([0, 100]).range([innerHeight, 0]).nice();
+
+            const baseColor = d3.scaleOrdinal()
+              .domain(methods)
+              .range(["#1d4ed8", "#0f766e", "#b91c1c", "#4f46e5",
+                      "#2563eb", "#065f46", "#7c2d12", "#0369a1", "#7e22ce"]);
+
+            const xAxis = d3.axisBottom(xScale);
+            const yAxis = d3.axisLeft(yScale).ticks(6).tickFormat(d => d + "%");
+
+            const xAxisGroup = g.append("g")
+              .attr("transform", `translate(0, ${innerHeight})`)
+              .attr("class", "axis").call(xAxis);
+            xAxisGroup.selectAll("text")
+              .attr("transform", "rotate(-35)")
+              .style("text-anchor", "end")
+              .attr("dx", "-0.5em")
+              .attr("dy", "0.1em");
+
+            g.append("g").attr("class", "axis").call(yAxis);
+            g.append("text").attr("class", "y-axis-label")
+              .attr("transform", "rotate(-90)")
+              .attr("x", -innerHeight / 2)
+              .attr("y", -42)
+              .attr("text-anchor", "middle")
+              .text("Accuracy / Robustness (%)");
+            g.append("text").attr("class", "x-axis-label")
+              .attr("x", innerWidth / 2)
+              .attr("y", innerHeight + 64)
+              .attr("text-anchor", "middle")
+              .text("Training approach");
+
+            const barsGroup = g.append("g").attr("class", "bars-group");
+            const barTransition = d3.transition().duration(800).ease(d3.easeCubicOut);
+
+            function getDatasetMetricData(dataset, metric) {
+              return methods.map(method => ({
+                method,
+                value: data1[method][metric][dataset],
+                dataset,
+                metric
+              }));
+            }
+            function updateLegend(metric) {
+              const legend = d3.select("#legend");
+              legend.html("");
+              const legendItems = [
+                {label: "Std Acc", color: "#1d4ed8",
+                 desc: "Standard accuracy on clean test images."},
+                {label: "CRR", color: "#0f766e",
+                 desc: "Certified robustness rate: fraction of samples with certified radius > 0."},
+                {label: "CRA", color: "#7e22ce",
+                 desc: "Certified robust accuracy: accuracy restricted to certified samples."}
+              ];
+              const current = legendItems.find(d => d.label === metric) || legendItems[0];
+              const item = legend.append("div").attr("class", "legend-item");
+              item.append("div")
+                .attr("class", "legend-swatch")
+                .style("background", current.color);
+              item.append("span").text(current.label + " – " + current.desc);
+            }
+            function metricColor(metric, method) {
+              if (metric === "Std Acc") return "#1d4ed8";
+              if (metric === "CRR") return "#0f766e";
+              if (metric === "CRA") return "#7e22ce";
+              return baseColor(method);
+            }
+
+            function updateChart(dataset, metric, initial=false) {
+              const data = getDatasetMetricData(dataset, metric);
+              d3.select("#chart1-caption").text(`Showing: ${dataset} · ${metric}`);
+
+              const bars = barsGroup.selectAll(".bar").data(data, d => d.method);
+              if (initial) {
+                bars.enter().append("rect")
+                  .attr("class", "bar")
+                  .attr("x", d => xScale(d.method))
+                  .attr("width", xScale.bandwidth())
+                  .attr("y", innerHeight)
+                  .attr("height", 0)
+                  .attr("fill", d => metricColor(metric, d.method))
+                  .on("mouseover", function (event, d) {
+                    d3.select(this).attr("opacity", 0.9);
+                    const html =
+                      `<strong>${d.method}</strong><br>` +
+                      `Dataset: <strong>${d.dataset}</strong><br>` +
+                      `Metric: <strong>${d.metric}</strong><br>` +
+                      `Value: <strong>${d.value.toFixed(2)}%</strong>`;
+                    showTooltip(html, event);
+                  })
+                  .on("mousemove", function (event) {
+                    tooltipA4.style("left", (event.pageX + 12) + "px")
+                             .style("top", (event.pageY + 12) + "px");
+                  })
+                  .on("mouseout", function () {
+                    d3.select(this).attr("opacity", 1.0);
+                    hideTooltip();
+                  })
+                  .transition(barTransition)
+                  .attr("y", d => yScale(d.value))
+                  .attr("height", d => innerHeight - yScale(d.value));
+              } else {
+                bars.transition(barTransition)
+                  .attr("x", d => xScale(d.method))
+                  .attr("width", xScale.bandwidth())
+                  .attr("y", d => yScale(d.value))
+                  .attr("height", d => innerHeight - yScale(d.value))
+                  .attr("fill", d => metricColor(metric, d.method));
+              }
+              bars.exit()
+                .transition(barTransition)
+                .attr("y", innerHeight)
+                .attr("height", 0)
+                .remove();
+              updateLegend(metric);
+            }
+
+            const initialDataset = datasetSelect.property("value");
+            const initialMetric = d3.select("#metric-select").property("value");
+            updateChart(initialDataset, initialMetric, true);
+
+            datasetSelect.on("change", function () {
+              const dataset = this.value;
+              const metric = d3.select("#metric-select").property("value");
+              updateChart(dataset, metric, false);
+            });
+            d3.select("#metric-select").on("change", function () {
+              const metric = this.value;
+              const dataset = datasetSelect.property("value");
+              updateChart(dataset, metric, false);
+            });
+          }
+
+          function drawChart2(data2) {
+            const svg = d3.select("#chart2");
+            const width = 900;
+            const height = 640;
+            const margin = { top: 60, right: 20, bottom: 100, left: 130 };
+            const innerWidth = width - margin.left - margin.right;
+            const innerHeight = height - margin.top - margin.bottom;
+            const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+            const attacks = Object.keys(data2);
+            const models = Object.keys(data2[attacks[0]]);
+            const flatData = [];
+            attacks.forEach(attack => {
+              models.forEach(model => {
+                flatData.push({attack, model, value: data2[attack][model]});
+              });
+            });
+
+            const xScale = d3.scaleBand().domain(models).range([0, innerWidth]).padding(0.05);
+            const yScale = d3.scaleBand().domain(attacks).range([0, innerHeight]).padding(0.05);
+            const colorScale = d3.scaleSequential()
+              .domain([0, d3.max(flatData, d => d.value)])
+              .interpolator(d3.interpolateBlues);
+
+            const xAxis = d3.axisBottom(xScale);
+            const yAxis = d3.axisLeft(yScale);
+            const xAxisGroup = g.append("g").attr("class", "axis")
+              .attr("transform", `translate(0, ${innerHeight})`).call(xAxis);
+            xAxisGroup.selectAll("text")
+              .attr("transform", "rotate(-40)")
+              .style("text-anchor", "end")
+              .attr("dx", "-0.6em")
+              .attr("dy", "0.2em");
+            g.append("g").attr("class", "axis").call(yAxis);
+
+            g.append("text").attr("class", "x-axis-label")
+              .attr("x", innerWidth / 2)
+              .attr("y", innerHeight + 78)
+              .attr("text-anchor", "middle")
+              .text("Model");
+            g.append("text").attr("class", "y-axis-label")
+              .attr("transform", "rotate(-90)")
+              .attr("x", -innerHeight / 2)
+              .attr("y", -96)
+              .attr("text-anchor", "middle")
+              .text("Attack");
+
+            const initialTransition = d3.transition().duration(900).ease(d3.easeCubicOut);
+
+            g.selectAll(".heatmap-cell")
+              .data(flatData)
+              .enter().append("rect")
+              .attr("class", "heatmap-cell")
+              .attr("x", d => xScale(d.model))
+              .attr("y", d => yScale(d.attack))
+              .attr("width", xScale.bandwidth())
+              .attr("height", yScale.bandwidth())
+              .attr("rx", 3).attr("ry", 3)
+              .attr("fill", d => colorScale(d.value))
+              .attr("opacity", 0)
+              .on("mouseover", function (event, d) {
+                d3.select(this).attr("opacity", 1);
+                const html =
+                  `<strong>Attack:</strong> ${d.attack}<br>` +
+                  `<strong>Model:</strong> ${d.model}<br>` +
+                  `<strong>Accuracy:</strong> ${d.value.toFixed(2)}%`;
+                showTooltip(html, event);
+              })
+              .on("mousemove", function (event) {
+                tooltipA4.style("left", (event.pageX + 12) + "px")
+                         .style("top", (event.pageY + 12) + "px");
+              })
+              .on("mouseout", function () {
+                d3.select(this).attr("opacity", 0.95);
+                hideTooltip();
+              })
+              .transition(initialTransition)
+              .attr("opacity", 0.95);
+
+            g.selectAll(".cell-value")
+              .data(flatData)
+              .enter().append("text")
+              .attr("class", "cell-value")
+              .attr("x", d => xScale(d.model) + xScale.bandwidth() / 2)
+              .attr("y", d => yScale(d.attack) + yScale.bandwidth() / 2 + 3)
+              .attr("text-anchor", "middle")
+              .attr("font-size", 8)
+              .attr("fill", d => d.value > 70 ? "#f9fafb" : "#1f2933")
+              .text(d => d.value.toFixed(1));
+          }
+        </script>
+      </div>
+    </section>
+  </div>
+
+  <!-- A2 gallery script (放在最后也没问题) -->
+  <script>
+    (function(){
+      const icons = ["s1","s2","s3","s4","s5","s6","s7","s8","s9","s10"];
+      const effects = ["original", "mirror", "rot180", "squash", "gray"];
+      const tbody = document.getElementById("gallery-body");
+      if (!tbody) return;
+      icons.forEach((id, rowIndex) => {
+        const tr = document.createElement("tr");
+        effects.forEach((eff) => {
+          const td = document.createElement("td");
+          const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          svg.setAttribute("class", "thumb");
+          svg.setAttribute("viewBox", "0 0 100 100");
+          svg.setAttribute("role", "img");
+          svg.setAttribute("aria-label", `Row ${rowIndex+1}, ${eff}`);
+          const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+          use.setAttributeNS("http://www.w3.org/1999/xlink", "href", `#${id}`);
+          use.setAttribute("class", eff);
+          svg.appendChild(use);
+          td.appendChild(svg);
+          tr.appendChild(td);
         });
+        tbody.appendChild(tr);
       });
+    })();
+  </script>
 
-      const xScale = d3.scaleBand()
-        .domain(models)
-        .range([0, innerWidth])
-        .padding(0.05);
+  <!-- A1 PSI script（放在最后即可） -->
+  <script>
+    (function(){
+      "use strict";
+      const API = "https://api.data.gov.sg/v1/environment/psi";
+      const statusEl = document.getElementById("status");
+      const metaEl = document.getElementById("meta");
+      const tableWrap = document.getElementById("tableWrap");
+      const placeholder = document.getElementById("placeholder");
+      const refreshBtn = document.getElementById("refreshBtn");
+      if (!statusEl) return;
 
-      const yScale = d3.scaleBand()
-        .domain(attacks)
-        .range([0, innerHeight])
-        .padding(0.05);
+      function setStatus(kind, text){
+        statusEl.className = "status " + kind;
+        statusEl.innerHTML = '<span class="status-dot"></span>' + text;
+      }
+      function titleCaseKey(k){
+        const gases = { o3: "O\u2083", co: "CO", so2: "SO\u2082", no2: "NO\u2082", pm10: "PM10", pm25: "PM2.5", psi: "PSI" };
+        const parts = k.split("_");
+        let out = parts.map(p=>{
+          if (gases[p]) return gases[p];
+          if (p === "one") return "1";
+          if (p === "eight") return "8";
+          if (p === "twenty") return "24";
+          if (p === "four") return "";
+          if (p === "hourly") return "Hourly";
+          if (p === "index") return "Index";
+          return p.charAt(0).toUpperCase()+p.slice(1);
+        }).filter(Boolean).join(" ");
+        out = out.replace("24  Hourly","24-Hourly")
+                 .replace("8  Hour Max", "8-Hour Max")
+                 .replace("1  Hour Max", "1-Hour Max");
+        return out;
+      }
+      function makeTable(readings){
+        const readingKeys = Object.keys(readings).sort();
+        if (readingKeys.length === 0) throw new Error("No readings found.");
+        const regions = Object.keys(readings[readingKeys[0]] || {}).sort();
+        const table = document.createElement("table");
+        const thead = document.createElement("thead");
+        const hr = document.createElement("tr");
+        const th0 = document.createElement("th");
+        th0.textContent = "Reading";
+        hr.appendChild(th0);
+        regions.forEach(r=>{
+          const th = document.createElement("th");
+          th.textContent = r;
+          hr.appendChild(th);
+        });
+        thead.appendChild(hr);
+        const tbody = document.createElement("tbody");
 
-      const valueExtent = d3.extent(flatData, d => d.value);
-      const colorScale = d3.scaleSequential()
-        .domain([0, d3.max(flatData, d => d.value)])
-        .interpolator(d3.interpolateBlues);
-
-      const xAxis = d3.axisBottom(xScale);
-      const yAxis = d3.axisLeft(yScale);
-
-      const xAxisGroup = g.append("g")
-        .attr("class", "axis")
-        .attr("transform", `translate(0, ${innerHeight})`)
-        .call(xAxis);
-
-      xAxisGroup.selectAll("text")
-        .attr("transform", "rotate(-40)")
-        .style("text-anchor", "end")
-        .attr("dx", "-0.6em")
-        .attr("dy", "0.2em");
-
-      const yAxisGroup = g.append("g")
-        .attr("class", "axis")
-        .call(yAxis);
-
-      g.append("text")
-        .attr("class", "x-axis-label")
-        .attr("x", innerWidth / 2)
-        .attr("y", innerHeight + 78)
-        .attr("text-anchor", "middle")
-        .text("Model");
-
-      g.append("text")
-        .attr("class", "y-axis-label")
-        .attr("transform", "rotate(-90)")
-        .attr("x", -innerHeight / 2)
-        .attr("y", -96)
-        .attr("text-anchor", "middle")
-        .text("Attack");
-
-      const initialTransition = d3.transition().duration(900).ease(d3.easeCubicOut);
-
-      g.selectAll(".heatmap-cell")
-        .data(flatData)
-        .enter()
-        .append("rect")
-        .attr("class", "heatmap-cell")
-        .attr("x", d => xScale(d.model))
-        .attr("y", d => yScale(d.attack))
-        .attr("width", xScale.bandwidth())
-        .attr("height", yScale.bandwidth())
-        .attr("rx", 3)
-        .attr("ry", 3)
-        .attr("fill", d => colorScale(d.value))
-        .attr("opacity", 0)
-        .on("mouseover", function (event, d) {
-          d3.select(this).attr("opacity", 1);
-          const html =
-            `<strong>Attack:</strong> ${d.attack}<br>` +
-            `<strong>Model:</strong> ${d.model}<br>` +
-            `<strong>Accuracy:</strong> ${d.value.toFixed(2)}%`;
-          showTooltip(html, event);
-        })
-        .on("mousemove", function (event) {
-          tooltip.style("left", (event.pageX + 12) + "px")
-                 .style("top", (event.pageY + 12) + "px");
-        })
-        .on("mouseout", function () {
-          d3.select(this).attr("opacity", 0.95);
-          hideTooltip();
-        })
-        .transition(initialTransition)
-        .attr("opacity", 0.95);
-
-      g.selectAll(".cell-value")
-        .data(flatData)
-        .enter()
-        .append("text")
-        .attr("class", "cell-value")
-        .attr("x", d => xScale(d.model) + xScale.bandwidth() / 2)
-        .attr("y", d => yScale(d.attack) + yScale.bandwidth() / 2 + 3)
-        .attr("text-anchor", "middle")
-        .attr("font-size", 8)
-        .attr("fill", d => d.value > 70 ? "#f9fafb" : "#1f2933")
-        .text(d => d.value.toFixed(1));
-    }
+        readingKeys.forEach(key=>{
+          const tr = document.createElement("tr");
+          const tdKey = document.createElement("td");
+          tdKey.innerHTML = `<span class="key">${titleCaseKey(key)}</span><br><span class="muted">${key}</span>`;
+          tr.appendChild(tdKey);
+          regions.forEach(r=>{
+            const td = document.createElement("td");
+            let val = readings[key] && readings[key][r];
+            if (val === null || val === undefined || Number.isNaN(val)) {
+              td.textContent = "-";
+              td.className = "muted";
+            } else {
+              const n = Number(val);
+              td.textContent = Number.isFinite(n) ? (Math.round(n * 100) / 100).toString() : String(val);
+            }
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+        table.appendChild(thead);
+        table.appendChild(tbody);
+        return table;
+      }
+      function formatSGT(isoString){
+        try {
+          const dt = new Date(isoString);
+          return new Intl.DateTimeFormat("en-SG", {
+            timeZone: "Asia/Singapore",
+            year: "numeric", month: "short", day: "2-digit",
+            hour: "2-digit", minute: "2-digit", second: "2-digit",
+            hour12: false
+          }).format(dt);
+        } catch { return isoString; }
+      }
+      async function fetchData(){
+        setStatus("load", "<strong>Loading</strong>… fetching latest data");
+        metaEl.textContent = "";
+        placeholder && (placeholder.textContent = "Fetching…");
+        try {
+          const url = API + (API.includes("?") ? "&" : "?") + "_ts=" + Date.now();
+          const resp = await fetch(url, { cache: "no-store" });
+          if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+          const data = await resp.json();
+          const item = (data.items && data.items[0]) || null;
+          if (!item || !item.readings) throw new Error("Malformed API response: missing readings");
+          const table = makeTable(item.readings);
+          tableWrap.innerHTML = "";
+          tableWrap.appendChild(table);
+          const ts = item.timestamp || item.update_timestamp || "";
+          const apiStatus = data.api_info && data.api_info.status ? String(data.api_info.status) : "unknown";
+          setStatus(apiStatus === "healthy" ? "ok" : "load",
+                    `API status: <strong>${apiStatus}</strong>`);
+          metaEl.textContent = ts ? `Last update (SGT): ${formatSGT(ts)}` : "";
+        } catch (err){
+          console.error(err);
+          setStatus("err", `<strong>Error</strong> fetching data`);
+          tableWrap.innerHTML = "";
+          const pre = document.createElement("pre");
+          pre.style.whiteSpace = "pre-wrap";
+          pre.style.padding = "16px";
+          pre.textContent = "Failed to load PSI readings.\n" + (err && err.message ? err.message : String(err));
+          tableWrap.appendChild(pre);
+        }
+      }
+      refreshBtn && refreshBtn.addEventListener("click", fetchData);
+      fetchData();
+    })();
   </script>
 </body>
 </html>
